@@ -15,27 +15,27 @@
         <EditText
             android:id="@+id/usernameText"
             android:inputType="text"
-            android:hint="Username..."
+            android:hint="@string/userNameHint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/passText"
             android:inputType="textPassword"
-            android:hint="Password..."
+            android:hint="@string/passwordHint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     
         <Button
             android:id="@+id/loginButton"
-            android:text="Login"
-            android:layout_gravity="right"
+            android:text="@string/loginButton"
+            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     
         <Button
             android:id="@+id/regButton"
-            android:text="Register"
-            android:layout_gravity="right"
+            android:text="@string/registerButton"
+            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
