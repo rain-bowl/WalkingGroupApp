@@ -18,4 +18,6 @@
     <string name="password_title">Password:</string>
     <string name="username_input_hint">Username...</string>
     <string name="password_input_hint">Password...</string>
+    <string name="password_confirm_title">Confirm Password:</string>
+    <string name="create_new_account">Create account</string>
 </resources>

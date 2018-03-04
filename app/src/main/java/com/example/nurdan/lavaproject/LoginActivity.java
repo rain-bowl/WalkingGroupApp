@@ -19,7 +19,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        createLogInBtns();
 
+    }
+
+    public void createLogInBtns(){
         Button loginButton = findViewById(R.id.loginButton);
         Button registerButton = findViewById(R.id.regButton);
 
@@ -33,6 +37,14 @@ public class LoginActivity extends AppCompatActivity {
                 String pass = passText.getText().toString();
 
                 // send user and pass to server
+            }
+        });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent register = RegisterActivity.registerActIntent(getApplicationContext());
+                startActivity(register);
             }
         });
     }
