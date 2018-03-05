@@ -19,13 +19,19 @@ public class RegisterActivity extends AppCompatActivity {
         new runASYNC().execute();
 
     }
+
+    //Code needs to run in an async thread. The two cannot be mixed!
+    //I'm calling some simple Log commands to debug.
+    //Everything is "hardwired" at this point but its just for testing purposes. I will
+    //Change it up when i can. If you want to read up on what I have done, try looking up
+    //some asyncTask examples/documentation.
     private class runASYNC extends AsyncTask<Void, Void, String>{
         @Override
         protected String doInBackground(Void... voids) {
            RestApiInteractions test = new RestApiInteractions();
            try{
-               String resp = test.createNewUser("testMan","1234","testMan@gmail.com");
-                           Log.d("POSTEXEC", "onPostExecute: " + resp);
+               String resp = test.createNewUser("testMan","1234","testManfasf@gmail.com");
+                           Log.d("POSTEXEC", "onPostExecuteRET: " + resp);
                return resp;
            }
            catch (Exception e){
