@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+
 import ApplicationLogic.RestApiInteractions;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -16,9 +18,9 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        new runASYNC().execute();
 
     }
+
 
     //Code needs to run in an async thread. The two cannot be mixed!
     //I'm calling some simple Log commands to debug.
@@ -45,6 +47,8 @@ public class RegisterActivity extends AppCompatActivity {
             Log.d("POSTEXEC", "onPostExecute: " + s);
         }
     }
+
+    //Static intent method to access activity
    public static Intent registerActIntent(Context actContext){
        return new Intent(actContext, RegisterActivity.class);
 
