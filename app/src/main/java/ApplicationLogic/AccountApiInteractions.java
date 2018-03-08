@@ -26,12 +26,16 @@ import static android.content.ContentValues.TAG;
 
 public class AccountApiInteractions {
     private final String baseURL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443";
-    private String bearerTokens;
+    private String bearerToken;
+    private int userID;
+
+    //Creates a single user using the inputs
 public void createNewUser(String userName, String userPassword, String userEmailAddr, Context appContext){
+    //Initialize androidNetworking library with current activity context
             AndroidNetworking.initialize(appContext);
             final JSONObject jsonBody = new JSONObject();
+            //Create the json body to be attached
         try {
-           // jsonBody.put("email", userEmailAddr);
             jsonBody.put("password", userPassword);
             jsonBody.put("email", userEmailAddr);
             jsonBody.put("name",userName);
@@ -41,7 +45,7 @@ public void createNewUser(String userName, String userPassword, String userEmail
             Log.d(TAG, "createNewUser:Unexpected error");
             e.printStackTrace();
         }
-
+//Make POST call to server with attached json body
     AndroidNetworking.post(baseURL + "/users/signup")
             .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
             .addJSONObjectBody(jsonBody)
@@ -49,11 +53,14 @@ public void createNewUser(String userName, String userPassword, String userEmail
             .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
                 @Override
                 public void onResponse(Response okHttpResponse, JSONObject response) {
-                if(okHttpResponse.isSuccessful()){
-                    Log.d(TAG, "onResponse: SUCCESS yAAAYY "+okHttpResponse.code());
+                    try {
+                        userID = response.getInt("id");
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    Log.d(TAG, "onResponse: SUCCESS yAAAYY " + okHttpResponse.code());
                     Log.d(TAG, "onResponse: JsonBody " + response.toString());
-                }
-                else Log.d(TAG, "onResponse: "+ okHttpResponse.code());
                 }
                 @Override
                 public void onError(ANError anError) {
@@ -65,8 +72,9 @@ public void createNewUser(String userName, String userPassword, String userEmail
             });
     }
 
+    //Handles the login of a user. Sets the bearer token on success.
     public void userLogIn(String email, String password, final Context appContext){
-        final String bearerToken;
+
         AndroidNetworking.initialize(appContext);
         final JSONObject jsonBody = new JSONObject();
         try{
@@ -85,8 +93,8 @@ public void createNewUser(String userName, String userPassword, String userEmail
         .getAsOkHttpResponse(new OkHttpResponseListener() {
             @Override
             public void onResponse(Response response) {
-               bearerTokens = response.header("Authorization");
-                Toast.makeText(appContext, bearerTokens, Toast.LENGTH_LONG).show();
+               bearerToken = response.header("Authorization");
+                Toast.makeText(appContext, bearerToken, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -94,7 +102,14 @@ public void createNewUser(String userName, String userPassword, String userEmail
                 Log.d(TAG, "onError: Error" + anError.getErrorDetail().toString());
             }
         });
-
+    }
+    //Recover bearer token on login
+    public String getBearerToken(){
+        return bearerToken;
+    }
+    //Recover user id
+    public int getUserID(){
+        return userID;
     }
 
 
