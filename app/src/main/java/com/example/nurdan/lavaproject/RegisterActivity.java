@@ -2,29 +2,23 @@ package com.example.nurdan.lavaproject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.androidnetworking.AndroidNetworking;
-
-import java.io.BufferedReader;
-
-import ApplicationLogic.RestApiInteractions;
+import ApplicationLogic.AccountApiInteractions;
 
 public class RegisterActivity extends AppCompatActivity {
     private String username;
     private String password;
     private String email;
     private Boolean passMatchFlag;
-    RestApiInteractions createUser = new RestApiInteractions();
+    AccountApiInteractions createUser = new AccountApiInteractions();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,7 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
     /*private class runASYNC extends AsyncTask<Void, Void, String>{
         @Override
         protected String doInBackground(Void... voids) {
-           RestApiInteractions test = new RestApiInteractions();
+           AccountApiInteractions test = new AccountApiInteractions();
            try{
                String resp = test.createNewUser("testMan12424234","1234","testManf424asf@gmail.com");
                            Log.d("POSTEXEC", "onPostExecuteRET: " + resp);

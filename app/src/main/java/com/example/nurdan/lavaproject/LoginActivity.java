@@ -1,5 +1,7 @@
 package com.example.nurdan.lavaproject;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -12,8 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+import ApplicationLogic.AccountApiInteractions;
 
+public class LoginActivity extends AppCompatActivity {
+    private AccountApiInteractions currInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +34,17 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameText = findViewById(R.id.usernameText);
         final EditText passText = findViewById(R.id.passText);
 
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String user = usernameText.getText().toString();
                 String pass = passText.getText().toString();
+                currInstance = new AccountApiInteractions();
+                currInstance.userLogIn(user, pass, getApplicationContext());
+                pass = "";
+                user = "";
 
-                // send user and pass to server
             }
         });
 
@@ -48,5 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
+    public static Intent loginActIntent(Context actContext){
+        return new Intent(actContext, LoginActivity.class);
+    }
 }
