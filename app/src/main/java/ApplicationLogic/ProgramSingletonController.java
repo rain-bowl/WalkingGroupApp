@@ -40,6 +40,15 @@ public class ProgramSingletonController {
         bearerToken = currInstance.getBearerToken();
         userID = currInstance.getDatabaseUserID(email, appContext);
     }
-
+    //Adds new user to be monitored by another
+    public void addUsrMonitor(int monitorID, int usrToBeMonitoredID, String bearerToken, Context appContext){
+        UserMonitor currInstance = new UserMonitor();
+        currInstance.addMonitoredUser(monitorID, usrToBeMonitoredID, bearerToken, appContext);
+    }
+    //Deletes a user from the list of monitored users
+    public void deleteMonitoredUsr(int monitorID, int dltdUser, String bearerToken, Context appContext){
+        UserMonitor currInstance = new UserMonitor();
+        currInstance.stopMonitoringUser(monitorID, dltdUser, bearerToken, appContext);
+    }
 
 }

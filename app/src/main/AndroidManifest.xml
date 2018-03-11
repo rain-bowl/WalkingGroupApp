@@ -23,7 +23,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".MainMenu" />
+        <activity android:name=".UserMonitorDisplay"></activity>
     </application>
 
 </manifest>
