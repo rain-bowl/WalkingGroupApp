@@ -9,8 +9,10 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.OkHttpResponseAndJSONArrayRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseAndJSONObjectRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseListener;
+import com.google.gson.JsonParseException;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import okhttp3.Response;
@@ -18,13 +20,15 @@ import okhttp3.Response;
 import static android.content.ContentValues.TAG;
 
 /*Class handles retrieval of information from the server which is directly related
-to the monitoring of users.
+to the monitoring of users or being monitored.
  */
 public class UserMonitor {
 private JSONArray returnArray;
 private boolean successFlag;
 private final String baseURL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443";
 private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
+/*This method adds a user to be monitored by another user.
+ */
     public void addMonitoredUser(int userID, int monitoredUserID, String bearerKey, Context appContext){
         AndroidNetworking.initialize(appContext);
         JSONObject jsonBody = new JSONObject();
@@ -82,7 +86,7 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 
 //Recovers users which are monitored by the current logged in user. Currently needs
 //some more work in particular, the case where it is not successful.
-    public JSONArray getMonitoredUsers(int userID, String bearerToken, Context appContext){
+    public JSONArray getMonitoredUsers(int userID, String bearerToken, Context appContext) throws JSONException{
         String URLPath = String.format("/users/%d/monitorsUsers", userID);
         AndroidNetworking.initialize(appContext);
         AndroidNetworking.get(baseURL + URLPath)
@@ -105,7 +109,31 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
             return returnArray;
         }
         else{
-            return returnArray;
+            throw new JSONException("Was not able to parse json responce");
         }
     }
+
+    public JSONArray getUsersWhoMonitor(int userID, String bearerToken, Context appContext){
+        String URLPath = String.format("/users/%d/monitoredByUsers", userID);
+        AndroidNetworking.initialize(appContext);
+        AndroidNetworking.get(baseURL + URLPath)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearerToken)
+                .build()
+                .getAsOkHttpResponseAndJSONArray(new OkHttpResponseAndJSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(Response okHttpResponse, JSONArray response) {
+                       successFlag = true;
+                       returnArray = response;
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+        return returnArray;
+    }
+
+
 }

@@ -29,7 +29,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-
+/* This method sets listeners for the user inputs in the activity. Additionally, it deals
+with the task of comparing both the initial password entered as well as the confirmation password
+which insures that the user has typed in the desired password with no mistakes.
+ */
     private void gatherUserInput(){
         final EditText usernameInput = (EditText) findViewById(R.id.usernameInput);
         final EditText passwordInput = (EditText) findViewById(R.id.passwordInput);
@@ -111,7 +114,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
+//Initializes the button. If the initial password and the confirmation passwords do not match, a toast is
+//displayed to let the user know.
     private void createButtons(){
         Button registerBtn = (Button) findViewById(R.id.createNewAcctBtn);
 

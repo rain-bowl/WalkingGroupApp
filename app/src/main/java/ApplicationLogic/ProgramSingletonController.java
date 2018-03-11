@@ -14,9 +14,10 @@ public class ProgramSingletonController {
     private static ProgramSingletonController instance;
 
     private  ProgramSingletonController(){
-        //Private instance to prevent anybody instantiating the singleton class without using official method
+        //Private constructor to prevent anybody instantiating the singleton class without using official method
     }
 
+    //Static method to return the current instance of this singleton class or create one if it does not exist
     public static ProgramSingletonController getCurrInstantce(){
         if(instance == null){
             return new ProgramSingletonController();
