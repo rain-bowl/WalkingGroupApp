@@ -15,10 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ApplicationLogic.AccountApiInteractions;
+import ApplicationLogic.ProgramSingletonController;
 
 public class LoginActivity extends AppCompatActivity {
-    private AccountApiInteractions currInstance;
-
+    private ProgramSingletonController localInstance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,12 +38,12 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                localInstance = ProgramSingletonController.getCurrInstantce();
                 String user = usernameText.getText().toString();
                 String pass = passText.getText().toString();
-                currInstance = new AccountApiInteractions();
-                currInstance.userLogIn(user, pass, getApplicationContext());
                 pass = "";
                 user = "";
+                localInstance.logIn(user,pass, getApplicationContext());
 
             }
         });

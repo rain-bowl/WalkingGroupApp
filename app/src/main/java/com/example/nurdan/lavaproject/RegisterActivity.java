@@ -12,13 +12,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import ApplicationLogic.AccountApiInteractions;
+import ApplicationLogic.ProgramSingletonController;
 
 public class RegisterActivity extends AppCompatActivity {
     private String username;
     private String password;
     private String email;
     private Boolean passMatchFlag;
-    AccountApiInteractions createUser = new AccountApiInteractions();
+    private ProgramSingletonController localInstance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +119,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (passMatchFlag) {
-                    createUser.createNewUser(username, password, email, getApplicationContext());
+                    localInstance = ProgramSingletonController.getCurrInstantce();
+                    localInstance.createNewUser(username, email, password, getApplicationContext());
                     password = "";
                 }
                 else {
