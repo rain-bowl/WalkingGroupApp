@@ -27,7 +27,7 @@ import static android.content.ContentValues.TAG;
 public class AccountApiInteractions {
     private final String baseURL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443";
     private String bearerToken;
-    private int userID;
+    private int userID = 0;
 
     //Creates a single user using the inputs
 public void createNewUser(String userName, String userPassword, String userEmailAddr, Context appContext){
@@ -95,6 +95,7 @@ public void createNewUser(String userName, String userPassword, String userEmail
             public void onResponse(Response response) {
                bearerToken = response.header("Authorization");
                 Toast.makeText(appContext, bearerToken, Toast.LENGTH_LONG).show();
+                Log.d(TAG, "onResponse: Success!");
             }
 
             @Override
@@ -103,6 +104,38 @@ public void createNewUser(String userName, String userPassword, String userEmail
             }
         });
     }
+    //Class which recovers a users ID number from the database. This is needed to implement the user monitoring.
+    public int getDatabaseUserID(String email, Context currContext){
+        AndroidNetworking.initialize(currContext);
+        String formattedEmail = email.replace("@", "%40");
+        AndroidNetworking.get(baseURL + "/users/byEmail?email=" + formattedEmail)
+        .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
+        .addHeaders("Authorization", bearerToken)
+        .build()
+        .getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    userID = response.getInt("id");
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(ANError anError) {
+
+            }
+        });
+        if(userID != 0) {
+            return userID;
+        }
+        else {
+            return -1;
+        }
+    }
+
     //Recover bearer token on login
     public String getBearerToken(){
         return bearerToken;

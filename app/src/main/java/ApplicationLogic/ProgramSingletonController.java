@@ -8,7 +8,7 @@ import org.json.JSONObject;
 // is done through here.
 public class ProgramSingletonController {
     private String bearerToken;
-    private String userID;
+    private int userID;
     private JSONObject jsonResponse;
     private AccountApiInteractions currInstance;
     private static ProgramSingletonController instance;
@@ -38,6 +38,7 @@ public class ProgramSingletonController {
         currInstance = new AccountApiInteractions();
         currInstance.userLogIn(email, password, appContext);
         bearerToken = currInstance.getBearerToken();
+        userID = currInstance.getDatabaseUserID(email, appContext);
     }
 
 
