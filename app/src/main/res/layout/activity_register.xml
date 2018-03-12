@@ -50,7 +50,7 @@
                 android:id="@+id/userEmailTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/fullname_title" />
+                android:text="@string/useremail_title" />
         </TableRow>
 
         <TableRow

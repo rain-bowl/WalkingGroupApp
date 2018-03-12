@@ -44,9 +44,14 @@ public class LoginActivity extends AppCompatActivity {
                 pass = "";
                 user = "";
                 localInstance.logIn(user,pass, getApplicationContext());
+                Intent intent=MapActivity.makeIntent(LoginActivity.this);
+                startActivity(intent);
 
             }
         });
+
+
+
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    public static Intent loginActIntent(Context actContext){
-        return new Intent(actContext, LoginActivity.class);
-    }
+    //public static Intent loginActIntent(Context actContext){
+        //return new Intent(actContext, MapActivity.class);
+    //}
 }

@@ -122,10 +122,13 @@ public class RegisterActivity extends AppCompatActivity {
                     localInstance = ProgramSingletonController.getCurrInstantce();
                     localInstance.createNewUser(username, email, password, getApplicationContext());
                     password = "";
+                    finish();
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_LONG).show();
+
                 }
+
             }
         });
     }

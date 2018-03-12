@@ -1,5 +1,7 @@
 package com.example.nurdan.lavaproject;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Parcelable;
@@ -133,6 +135,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             Log.e("Exception: %s", e.getMessage());
         }
     }
+
+    public static Intent makeIntent(Context context) {
+        return new Intent(context,MapActivity.class);
+    }
+
 
     private void getDeviceLocation() {
     /*
