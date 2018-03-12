@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -119,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (passMatchFlag) {
-                    localInstance = ProgramSingletonController.getCurrInstantce();
+                    localInstance = ProgramSingletonController.getCurrInstance();
                     localInstance.createNewUser(username, email, password, getApplicationContext());
                     password = "";
                     finish();

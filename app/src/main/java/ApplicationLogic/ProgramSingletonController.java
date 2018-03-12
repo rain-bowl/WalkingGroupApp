@@ -17,7 +17,7 @@ public class ProgramSingletonController {
         //Private instance to prevent anybody instantiating the singleton class without using official method
     }
 
-    public static ProgramSingletonController getCurrInstantce(){
+    public static ProgramSingletonController getCurrInstance(){
         if(instance == null){
             return new ProgramSingletonController();
         }
