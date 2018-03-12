@@ -31,7 +31,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private static final int DEFAULT_ZOOM = 18;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
-    private final LatLng mDefaultLocation = new LatLng(49, 123);
+    private final LatLng mDefaultLocation = new LatLng(0, 0);
     private Location mLastKnownLocation;
 
     @Override
