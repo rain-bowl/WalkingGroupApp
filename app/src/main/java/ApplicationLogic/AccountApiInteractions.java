@@ -6,6 +6,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
@@ -20,19 +22,20 @@ import org.json.JSONObject;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
+import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
 
 public class AccountApiInteractions {
     private final String baseURL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443";
-    private String bearerToken;
-    private int userID = 0;
+    private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
+    private  String bearerToken;
+    private int userID = -1;
 
     //Creates a single user using the inputs
 public void createNewUser(String userName, String userPassword, String userEmailAddr, Context appContext){
     //Initialize androidNetworking library with current activity context
-            AndroidNetworking.initialize(appContext);
             final JSONObject jsonBody = new JSONObject();
             //Create the json body to be attached
         try {
@@ -46,36 +49,33 @@ public void createNewUser(String userName, String userPassword, String userEmail
             e.printStackTrace();
         }
 //Make POST call to server with attached json body
-    AndroidNetworking.post(baseURL + "/users/signup")
-            .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
+     AndroidNetworking.initialize(appContext);
+    ANRequest signupRequest = AndroidNetworking.post(baseURL + "/users/signup")
+            .addHeaders("apiKey", apiKey)
             .addJSONObjectBody(jsonBody)
-            .build()
-            .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
-                @Override
-                public void onResponse(Response okHttpResponse, JSONObject response) {
-                    try {
-                        userID = response.getInt("id");
-                    }
-                    catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    Log.d(TAG, "onResponse: SUCCESS yAAAYY " + okHttpResponse.code());
-                    Log.d(TAG, "onResponse: JsonBody " + response.toString());
-                }
-                @Override
-                public void onError(ANError anError) {
-                    Log.d(TAG, "onError:"+ jsonBody.toString());
-                    Log.d(TAG, "onError: "+anError.getErrorBody());
-                    Log.d(TAG, "onError: "+ anError.getErrorDetail().toString());
+            .build();
 
-                }
-            });
+
+    ANResponse<JSONObject> serverResponse = signupRequest.executeForJSONObject();
+    if(serverResponse.isSuccess()){
+        JSONObject jsonResponseBody = serverResponse.getResult();
+        Log.d(TAG, "createNewUser: JSONRESPONSE" + jsonResponseBody);
+        try{
+        userID = jsonResponseBody.getInt("id");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        Log.d(TAG, "createNewUser: USER ID ON SUCCESS IS" + userID);
+    }
+    else {
+        Log.d(TAG, "createNewUser: ERROR" + serverResponse.getError());
+        Log.d(TAG, "createNewUser: ERRODETAIL" + serverResponse.getError().getErrorBody());
+    }
     }
 
     //Handles the login of a user. Sets the bearer token on success.
     public void userLogIn(String email, String password, final Context appContext){
-
-        AndroidNetworking.initialize(appContext);
         final JSONObject jsonBody = new JSONObject();
         try{
             jsonBody.put("email", email);
@@ -85,30 +85,49 @@ public void createNewUser(String userName, String userPassword, String userEmail
             e.printStackTrace();
         }
 
-        AndroidNetworking.post(baseURL + "/login")
-        .addHeaders("apiKey","F369E8E6-244B-4672-B8A8-1E44A32CA496")
-        .setContentType("application/json")
-        .addJSONObjectBody(jsonBody)
-        .build()
-        .getAsOkHttpResponse(new OkHttpResponseListener() {
-            @Override
-            public void onResponse(Response response) {
-               bearerToken = response.header("Authorization");
-                Toast.makeText(appContext, bearerToken, Toast.LENGTH_LONG).show();
-                Log.d(TAG, "onResponse: Success!");
-            }
+    AndroidNetworking.initialize(appContext);
+    ANRequest request = AndroidNetworking.post(baseURL + "/login")
+            .addHeaders("apiKey", apiKey)
+            .addJSONObjectBody(jsonBody)
+            .build();
 
-            @Override
-            public void onError(ANError anError) {
-                Log.d(TAG, "onError: Error" + anError.getErrorDetail().toString());
-            }
-        });
+    ANResponse<OkHttpResponseListener> responseListenerANResponse = request.executeForOkHttpResponse();
+    if(responseListenerANResponse.isSuccess()){
+        Log.d(TAG, "userLogIn: Response Good " + responseListenerANResponse.getOkHttpResponse().code());
+        bearerToken = responseListenerANResponse.getOkHttpResponse().header("Authorization");
+    }
+    else {
+        Log.d(TAG, "userLogIn: Response Error" + responseListenerANResponse.getError());
+    }
+
+
     }
     //Class which recovers a users ID number from the database. This is needed to implement the user monitoring.
-    public int getDatabaseUserID(String email, Context currContext){
+    public int getDatabaseUserID(String email, Context currContext) {
+        Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
         AndroidNetworking.initialize(currContext);
         String formattedEmail = email.replace("@", "%40");
-        AndroidNetworking.get(baseURL + "/users/byEmail?email=" + formattedEmail)
+        Log.d(TAG, "getDatabaseUserID: Formatted email" + formattedEmail);
+        ANRequest getUserIDRequest = AndroidNetworking.get(baseURL + "/users/byEmail?email=" + formattedEmail)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearerToken)
+                .build();
+        ANResponse<JSONObject> serverResponse = getUserIDRequest.executeForJSONObject();
+        if (serverResponse.isSuccess()) {
+            JSONObject jsonServerResponse = serverResponse.getResult();
+            try {
+                userID = jsonServerResponse.getInt("id");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return userID;
+    }
+
+
+
+
+        /*AndroidNetworking.get(baseURL + "/users/byEmail?email=" + email)
         .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
         .addHeaders("Authorization", bearerToken)
         .build()
@@ -117,6 +136,7 @@ public void createNewUser(String userName, String userPassword, String userEmail
             public void onResponse(JSONObject response) {
                 try {
                     userID = response.getInt("id");
+                    Log.d(TAG, "onResponse: Response from server" + response.toString());
                 }
                 catch (Exception e){
                     e.printStackTrace();
@@ -125,7 +145,7 @@ public void createNewUser(String userName, String userPassword, String userEmail
 
             @Override
             public void onError(ANError anError) {
-
+                Log.d(TAG, "onError: Error Response from server " + anError.getErrorBody().toString());
             }
         });
         if(userID != 0) {
@@ -133,8 +153,8 @@ public void createNewUser(String userName, String userPassword, String userEmail
         }
         else {
             return -1;
-        }
-    }
+        }*/
+
 
     //Recover bearer token on login
     public String getBearerToken(){
@@ -146,26 +166,5 @@ public void createNewUser(String userName, String userPassword, String userEmail
     }
 
 
-    //old class. Kept here in case shit hits the fan
-   /* public String createNewUser(String userName, String password, String emailAddr) throws IOException, JSONException{
-        serverURL = new URL("https://cmpt276-1177-bf.cmpt.sfu.ca:8443/users/signup");
-        webConnection = (HttpsURLConnection) serverURL.openConnection();
-        webConnection.setRequestMethod("POST");
-        webConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-        webConnection.setRequestProperty("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496");
-        JSONObject data = new JSONObject();
-        data.put("name", userName);
-        data.put("email", emailAddr);
-        data.put("password", password);
 
-       webConnection.setDoOutput(true);
-       webConnection.setDoInput(true);
-       OutputStreamWriter outputWriter = new OutputStreamWriter(webConnection.getOutputStream());
-       outputWriter.write(data.toString());
-       outputWriter.flush();
-       outputWriter.close();
-
-
-       return Integer.toString(webConnection.getResponseCode());
-    }*/
 }

@@ -129,6 +129,7 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 
                     @Override
                     public void onError(ANError anError) {
+                        Log.d(TAG, "onError: Error with retrieving monitored users" + anError.getErrorBody().toString());
 
                     }
                 });

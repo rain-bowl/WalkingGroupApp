@@ -2,6 +2,7 @@ package com.example.nurdan.lavaproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -122,14 +123,9 @@ which insures that the user has typed in the desired password with no mistakes.
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (passMatchFlag) {
-                    localInstance = ProgramSingletonController.getCurrInstantce();
-                    localInstance.createNewUser(username, email, password, getApplicationContext());
-                    password = "";
-                }
-                else {
-                    Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_LONG).show();
-                }
+                asyncRunner currInstance = new asyncRunner();
+                currInstance.execute();
+
             }
         });
     }
@@ -141,30 +137,18 @@ which insures that the user has typed in the desired password with no mistakes.
 
     }
 
-//Code needs to run in an async thread. The two cannot be mixed!
-    //I'm calling some simple Log commands to debug.
-    //Everything is "hardwired" at this point but its just for testing purposes. I will
-    //Change it up when i can. If you want to read up on what I have done, try looking up
-    //some asyncTask examples/documentation.
-    /*private class runASYNC extends AsyncTask<Void, Void, String>{
-        @Override
-        protected String doInBackground(Void... voids) {
-           AccountApiInteractions test = new AccountApiInteractions();
-           try{
-               String resp = test.createNewUser("testMan12424234","1234","testManf424asf@gmail.com");
-                           Log.d("POSTEXEC", "onPostExecuteRET: " + resp);
-               return resp;
-           }
-           catch (Exception e){
-                           Log.d("POSTEXEC", "onPostExecute: " + e);
-               return e.toString();
-           }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Log.d("POSTEXEC", "onPostExecute: " + s);
-        }
-    }*/
-
+private class asyncRunner extends AsyncTask<Void,Void,Void>{
+    @Override
+    protected Void doInBackground(Void... voids) {
+        if (passMatchFlag) {
+                    localInstance = ProgramSingletonController.getCurrInstantce();
+                    localInstance.createNewUser(username, email, password, getApplicationContext());
+                    password = "";
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_LONG).show();
+                }
+        return null;
+    }
+}
 }

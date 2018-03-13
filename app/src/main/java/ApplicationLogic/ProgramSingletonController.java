@@ -1,8 +1,13 @@
 package ApplicationLogic;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.ArrayAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import static android.content.ContentValues.TAG;
 
 // This class control the entire program and any interaction between UI and the application logic
 // is done through here.
@@ -39,7 +44,21 @@ public class ProgramSingletonController {
         currInstance = new AccountApiInteractions();
         currInstance.userLogIn(email, password, appContext);
         bearerToken = currInstance.getBearerToken();
+        Log.d(TAG, "logIn: Programsingletonberer " + bearerToken);
         userID = currInstance.getDatabaseUserID(email, appContext);
+        Log.d(TAG, "logIn: UserIDTEST" + userID);
+       // UserMonitor newinstance = new UserMonitor();
+        /*try{
+            Log.d(TAG, "logIn: Userid test " + userID);
+            JSONArray arr = newinstance.getMonitoredUsers(userID, bearerToken, appContext);
+            Log.d(TAG, "logIn: Getting users who are being monitored by this user" + arr.toString());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+*/
+
+
     }
     //Adds new user to be monitored by another
     public void addUsrMonitor(int monitorID, int usrToBeMonitoredID, String bearerToken, Context appContext){
