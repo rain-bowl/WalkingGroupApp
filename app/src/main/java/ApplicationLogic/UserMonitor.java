@@ -5,6 +5,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.OkHttpResponseAndJSONArrayRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseAndJSONObjectRequestListener;
@@ -53,7 +55,7 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 
                     @Override
                     public void onError(ANError anError) {
-                        Log.d(TAG, "onError: Error:"+ anError.getResponse().toString());
+                        Log.d(TAG, "onError: Error:"+ anError.getResponse());
                     }
                 });
 
@@ -88,29 +90,27 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 //some more work in particular, the case where it is not successful.
     public JSONArray getMonitoredUsers(int userID, String bearerToken, Context appContext) throws JSONException{
         String URLPath = String.format("/users/%d/monitorsUsers", userID);
+        Log.d(TAG, "getMonitoredUsers: Formatted URL" + URLPath);
+        JSONArray monitorUsersArr = null;
+
         AndroidNetworking.initialize(appContext);
-        AndroidNetworking.get(baseURL + URLPath)
+        Log.d(TAG, "getMonitoredUsers: Bearer token" + bearerToken);
+        ANRequest monitoredUsersServerReq = AndroidNetworking.get(baseURL + URLPath)
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
-                .build()
-                .getAsOkHttpResponseAndJSONArray(new OkHttpResponseAndJSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(Response okHttpResponse, JSONArray response) {
-                       successFlag = true;
-                       returnArray = response;
-                    }
+                .build();
 
-                    @Override
-                    public void onError(ANError anError) {
+        ANResponse<JSONArray> serverResponse = monitoredUsersServerReq.executeForJSONArray();
+        if(serverResponse.isSuccess()){
+          monitorUsersArr = serverResponse.getResult();
+            Log.d(TAG, "getMonitoredUsers:Success Server response to request" + monitorUsersArr);
+        }
+        else {
+            Log.d(TAG, "getMonitoredUsers: Error when retrieving monitored users " + serverResponse.getError().toString());
+        }
+        return monitorUsersArr;
 
-                    }
-                });
-        if (successFlag == true) {
-            return returnArray;
-        }
-        else{
-            throw new JSONException("Was not able to parse json responce");
-        }
+
     }
 
     public JSONArray getUsersWhoMonitor(int userID, String bearerToken, Context appContext){

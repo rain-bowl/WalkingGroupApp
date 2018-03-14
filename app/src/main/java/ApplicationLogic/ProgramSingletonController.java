@@ -1,11 +1,16 @@
 package ApplicationLogic;
 
 import android.content.Context;
+import android.text.Layout;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.example.nurdan.lavaproject.R;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
@@ -41,22 +46,13 @@ public class ProgramSingletonController {
 
     //Logs user into their account
     public void logIn(String email, String password, Context appContext){
+       JSONArray tempArr;
         currInstance = new AccountApiInteractions();
         currInstance.userLogIn(email, password, appContext);
         bearerToken = currInstance.getBearerToken();
         Log.d(TAG, "logIn: Programsingletonberer " + bearerToken);
         userID = currInstance.getDatabaseUserID(email, appContext);
-        Log.d(TAG, "logIn: UserIDTEST" + userID);
-       // UserMonitor newinstance = new UserMonitor();
-        /*try{
-            Log.d(TAG, "logIn: Userid test " + userID);
-            JSONArray arr = newinstance.getMonitoredUsers(userID, bearerToken, appContext);
-            Log.d(TAG, "logIn: Getting users who are being monitored by this user" + arr.toString());
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-*/
+        Log.d(TAG, "logIn: UserIDTEST" + userID   );
 
 
     }
@@ -71,4 +67,40 @@ public class ProgramSingletonController {
         currInstance.stopMonitoringUser(monitorID, dltdUser, bearerToken, appContext);
     }
 
+
+    // Method to get users who are monitored by the currently logged in user.
+    public ArrayAdapter<String> getUsersMonitored(Context appContext){
+         JSONArray tempArr = null;
+        UserMonitor currInstance = new UserMonitor();
+        try{
+           tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        if(tempArr != null) {
+            return createUserList(tempArr, appContext);
+        }
+        else return null;
+    }
+
+
+    private ArrayAdapter<String> createUserList(JSONArray jsonArr, Context appContext){
+        JSONObject tempJSONObject;
+        ArrayList<String> tempUserStorage = new ArrayList<>();
+        ArrayAdapter<String> tempArrAdapter;
+       for(int i = 0; i < jsonArr.length(); i++){
+           try {
+               tempJSONObject = jsonArr.getJSONObject(i);
+               tempUserStorage.add(tempJSONObject.getString("name"));
+           }
+           catch (Exception e){
+               e.printStackTrace();
+           }
+       }
+       tempArrAdapter = new ArrayAdapter<String>(appContext, android.R.layout.activity_list_item,tempUserStorage);
+       return tempArrAdapter;
+
+    }
 }

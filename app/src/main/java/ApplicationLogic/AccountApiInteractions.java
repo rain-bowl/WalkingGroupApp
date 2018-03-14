@@ -127,33 +127,6 @@ public void createNewUser(String userName, String userPassword, String userEmail
 
 
 
-        /*AndroidNetworking.get(baseURL + "/users/byEmail?email=" + email)
-        .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
-        .addHeaders("Authorization", bearerToken)
-        .build()
-        .getAsJSONObject(new JSONObjectRequestListener() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    userID = response.getInt("id");
-                    Log.d(TAG, "onResponse: Response from server" + response.toString());
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(ANError anError) {
-                Log.d(TAG, "onError: Error Response from server " + anError.getErrorBody().toString());
-            }
-        });
-        if(userID != 0) {
-            return userID;
-        }
-        else {
-            return -1;
-        }*/
 
 
     //Recover bearer token on login
