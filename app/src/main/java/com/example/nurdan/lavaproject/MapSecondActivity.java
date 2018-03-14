@@ -14,6 +14,11 @@ public class MapSecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_second);
         setupBackbtn();
+        setupListView();
+    }
+
+    //may need the data from the server to inside list to view how many groups in there
+    private void setupListView() {
     }
 
     private void setupBackbtn() {
