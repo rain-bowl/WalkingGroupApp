@@ -36,4 +36,7 @@
     <string name="Groupstitle">Groups</string>
     <string name="JoinTitle">Join</string>
     <string name="FindTitle">Finding</string>
+    <string name="BACK">BACK</string>
+    <string name="Joiningroup">Join</string>
+    <string name="removeGroups">Remove</string>
 </resources>

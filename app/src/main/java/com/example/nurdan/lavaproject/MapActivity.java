@@ -10,6 +10,11 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -34,6 +39,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private final LatLng mDefaultLocation = new LatLng(0, 0);
     private Location mLastKnownLocation;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +47,22 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
         getLocationPermission();
         initializeMapFrag();
+        setupTitlebtn();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+    }
+
+    private void setupTitlebtn() {
+        RadioButton WalkingGroupTitle=(RadioButton)findViewById(R.id.WalkingGroupList);
+        WalkingGroupTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MapActivity.this,"Working on Groups",Toast.LENGTH_LONG).show();
+                Intent intent=MapSecondActivity.makeIntent(MapActivity.this);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void initializeMapFrag() {
