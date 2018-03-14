@@ -52,7 +52,7 @@
                 android:id="@+id/usernameInputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/username_title"
+                android:text="@string/useremailname"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 tools:layout_editor_absoluteX="84dp"
                 tools:layout_editor_absoluteY="16dp" />
@@ -66,7 +66,7 @@
                 android:id="@+id/usernameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/username_input_hint"
+                android:hint="@string/useremail_input_hint"
                 android:inputType="text" />
         </TableRow>
 
