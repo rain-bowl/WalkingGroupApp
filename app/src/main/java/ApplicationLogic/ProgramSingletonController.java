@@ -86,6 +86,22 @@ public class ProgramSingletonController {
     }
 
 
+    public ArrayAdapter<String> getUsersWhoMonitorThis(Context appContext){
+        JSONArray tempArr = null;
+        UserMonitor currInstance = new UserMonitor();
+        try{
+            tempArr = currInstance.getUsersWhoMonitor(userID, bearerToken, appContext);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        if (tempArr != null){
+            return createUserList(tempArr, appContext);
+        }
+        else return null;
+    }
+
+
     private ArrayAdapter<String> createUserList(JSONArray jsonArr, Context appContext){
         JSONObject tempJSONObject;
         ArrayList<String> tempUserStorage = new ArrayList<>();

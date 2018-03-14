@@ -115,7 +115,23 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 
     public JSONArray getUsersWhoMonitor(int userID, String bearerToken, Context appContext){
         String URLPath = String.format("/users/%d/monitoredByUsers", userID);
+        JSONArray users = null;
         AndroidNetworking.initialize(appContext);
+        ANRequest usersWhoMonitorRequest = AndroidNetworking.get(baseURL + URLPath)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearerToken)
+                .build();
+        ANResponse<JSONArray> serverResponse = usersWhoMonitorRequest.executeForJSONArray();
+        if (serverResponse.isSuccess()){
+           users = serverResponse.getResult();
+        }
+        else {
+            Log.d(TAG, "getUsersWhoMonitor: Error from server" + serverResponse.getError());
+        }
+        return users;
+
+
+        /*
         AndroidNetworking.get(baseURL + URLPath)
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
@@ -134,6 +150,7 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
                     }
                 });
         return returnArray;
+     */
     }
 
 
