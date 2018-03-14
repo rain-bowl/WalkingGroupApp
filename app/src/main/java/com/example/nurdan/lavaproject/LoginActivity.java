@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,27 +32,17 @@ public class LoginActivity extends AppCompatActivity {
         Button loginButton = findViewById(R.id.loginButton);
         Button registerButton = findViewById(R.id.regButton);
 
-        final EditText usernameText = findViewById(R.id.usernameText);
-        final EditText passText = findViewById(R.id.passText);
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                localInstance = ProgramSingletonController.getCurrInstantce();
-                String user = usernameText.getText().toString();
-                String pass = passText.getText().toString();
-                pass = "";
-                user = "";
-                localInstance.logIn(user,pass, getApplicationContext());
-                Intent intent=MapActivity.makeIntent(LoginActivity.this);
-                startActivity(intent);
+        async test = new async();
+        test.execute();
+
 
             }
         });
-
-
-
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +52,28 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    //public static Intent loginActIntent(Context actContext){
-        //return new Intent(actContext, MapActivity.class);
-    //}
+    public static Intent loginActIntent(Context actContext){
+        return new Intent(actContext, LoginActivity.class);
+    }
+
+    private class async extends AsyncTask<Void,Void,Void>{
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                final EditText usernameText = findViewById(R.id.usernameText);
+                final EditText passText = findViewById(R.id.passText);
+                localInstance = ProgramSingletonController.getCurrInstantce();
+                String user = usernameText.getText().toString();
+                String pass = passText.getText().toString();
+                localInstance.logIn(user,pass, getApplicationContext());
+                pass = "";
+                user = "";
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                Toast.makeText(getApplicationContext(), "Thread ran", Toast.LENGTH_LONG).show();
+            }
+    }
 }
