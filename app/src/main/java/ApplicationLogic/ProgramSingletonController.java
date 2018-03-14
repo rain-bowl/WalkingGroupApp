@@ -71,7 +71,7 @@ public class ProgramSingletonController {
 
 
     // Method to get users who are monitored by the currently logged in user.
-    public ArrayAdapter<String> getUsersMonitored(Context appContext){
+    public ArrayList<String> getUsersMonitored(Context appContext){
         Log.d(TAG, "getUsersMonitored: USERID" + this.userID);
         Log.d(TAG, "getUsersMonitored: TOKENBEARER " + this.bearerToken);
          JSONArray tempArr = null;
@@ -90,7 +90,7 @@ public class ProgramSingletonController {
     }
 
 
-    public ArrayAdapter<String> getUsersWhoMonitorThis(Context appContext){
+    public ArrayList<String> getUsersWhoMonitorThis(Context appContext){
         JSONArray tempArr = null;
         UserMonitor currInstance = new UserMonitor();
         try{
@@ -106,7 +106,7 @@ public class ProgramSingletonController {
     }
 
 
-    private ArrayAdapter<String> createUserList(JSONArray jsonArr, Context appContext){
+    private ArrayList<String> createUserList(JSONArray jsonArr, Context appContext){
         JSONObject tempJSONObject;
         ArrayList<String> tempUserStorage = new ArrayList<>();
         ArrayAdapter<String> tempArrAdapter;
@@ -119,8 +119,6 @@ public class ProgramSingletonController {
                e.printStackTrace();
            }
        }
-       tempArrAdapter = new ArrayAdapter<String>(appContext, android.R.layout.activity_list_item,tempUserStorage);
-       return tempArrAdapter;
-
+        return tempUserStorage;
     }
 }
