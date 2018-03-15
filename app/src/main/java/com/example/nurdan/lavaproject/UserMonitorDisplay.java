@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
 
@@ -22,16 +23,20 @@ public class UserMonitorDisplay extends AppCompatActivity {
         setContentView(R.layout.activity_user_monitor_display);
         setUpListView();
     }
+    private void setUpToolBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.monitorToolBar);
+        setSupportActionBar(toolbar);
+    }
 
     //Static class to return an intent used in navigating application.
     public static Intent createUserMonitorIntent(Context currContext){
         return new Intent(currContext, UserMonitorDisplay.class);
     }
-private void setUpListView(){
-    getMntrUsers getMonitorees = new getMntrUsers();
-    getUsrsMntrThis getMonitors = new getUsrsMntrThis();
-    getMonitorees.execute();
-    getMonitors.execute();
+    private void setUpListView(){
+        getMntrUsers getMonitorees = new getMntrUsers();
+        getUsrsMntrThis getMonitors = new getUsrsMntrThis();
+        getMonitorees.execute();
+        getMonitors.execute();
 
 
 }
