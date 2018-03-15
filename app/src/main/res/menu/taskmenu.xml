@@ -2,12 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_refresh"
-        android:orderInCategory="100"
-        app:showAsAction="always"
-        android:title="Refresh"/>
+        android:id="@+id/add_monitor_user"
+        android:title="Add monitor user">
+    </item>
     <item
-        android:id="@+id/action_settings"
-        android:title="Settings">
+        android:id="@+id/delete_monitor_user"
+        android:title="Delete monitor user">
     </item>
 </menu>

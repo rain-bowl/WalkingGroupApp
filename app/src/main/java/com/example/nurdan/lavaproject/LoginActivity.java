@@ -72,8 +72,12 @@ public class LoginActivity extends AppCompatActivity {
                 user = "";
                 if(successFlag){
                     Log.d("AsyncLogin", "onPostExecute: I got here");
-                    Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
-                    startActivity(mainMenu);
+                    //Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
+                    //startActivity(mainMenu);
+                    Intent intent = new Intent(LoginActivity.this, MainMenu.class);// New activity
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish(); // Call once you redirect to another activity
                 }
                 else{
                     Log.d("UIERROR", "doInBackground: failed login from ui");
