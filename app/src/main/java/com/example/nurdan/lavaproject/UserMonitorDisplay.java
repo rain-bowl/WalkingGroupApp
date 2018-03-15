@@ -2,20 +2,25 @@ package com.example.nurdan.lavaproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
+import ApplicationLogic.UserMonitor;
 
 public class UserMonitorDisplay extends AppCompatActivity {
     ProgramSingletonController currInstanceSingleton = ProgramSingletonController.getCurrInstantce();
@@ -46,16 +51,14 @@ public class UserMonitorDisplay extends AppCompatActivity {
         getUsrsMntrThis getMonitors = new getUsrsMntrThis();
         getMonitorees.execute();
         getMonitors.execute();
-
-
-}
+    }
 
 private class getMntrUsers extends AsyncTask<Void,Void,Void>{
     ListView displayMntrdUser;
     ArrayList<String> retrievedUsers;
     @Override
     protected Void doInBackground(Void... voids) {
-         displayMntrdUser = (ListView) findViewById(R.id.usersMonitoredView);
+        displayMntrdUser = (ListView) findViewById(R.id.usersMonitoredView);
         retrievedUsers = currInstanceSingleton.getUsersMonitored(getApplicationContext());
 
         return null;
@@ -67,11 +70,23 @@ private class getMntrUsers extends AsyncTask<Void,Void,Void>{
         if(retrievedUsers.isEmpty()){
             retrievedUsers.add("There are no users currently monitored");
              ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
-        displayMntrdUser.setAdapter(listViewAdapter);
+            displayMntrdUser.setAdapter(listViewAdapter);
         }
         else{
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
-        displayMntrdUser.setAdapter(listViewAdapter);
+            ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
+            displayMntrdUser.setAdapter(listViewAdapter);
+
+
+            displayMntrdUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        String username = parent.getItemAtPosition(position).toString();
+                        Toast.makeText(UserMonitorDisplay.this, "POS: " + username, Toast.LENGTH_SHORT).show();
+
+
+                }
+            });
         }
 
     }

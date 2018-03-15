@@ -77,9 +77,9 @@ public class LoginActivity extends AppCompatActivity {
                 pass = "";
                 user = "";
                 if(successFlag){
+                    SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+                    prefs.edit().putBoolean("isLoggedIn", false).apply();
                     Log.d("AsyncLogin", "onPostExecute: I got here");
-                    //Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
-                    //startActivity(mainMenu);
                     Intent intent = new Intent(LoginActivity.this, MainMenu.class);// New activity
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
