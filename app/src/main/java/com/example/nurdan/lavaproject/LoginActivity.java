@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 final EditText usernameText = findViewById(R.id.usernameText);
                 final EditText passText = findViewById(R.id.passText);
-                localInstance = ProgramSingletonController.getCurrInstantce();
+                localInstance = ProgramSingletonController.getCurrInstance();
                 String user = usernameText.getText().toString();
                 String pass = passText.getText().toString();
                 successFlag = localInstance.logIn(user,pass, getApplicationContext());

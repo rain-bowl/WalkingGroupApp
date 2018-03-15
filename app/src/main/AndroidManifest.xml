@@ -49,9 +49,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
+        <activity android:name=".MapSecondActivity" />
+        <activity android:name=".GroupActivity" />
         <activity android:name=".MainMenu" />
         <activity android:name=".UserMonitorDisplay"></activity>
-        <activity android:name=".MapSecondActivity"></activity>
     </application>
 
 </manifest>

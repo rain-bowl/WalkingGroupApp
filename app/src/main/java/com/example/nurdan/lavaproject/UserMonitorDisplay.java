@@ -26,7 +26,7 @@ import ApplicationLogic.UserMonitor;
 
 public class UserMonitorDisplay extends AppCompatActivity {
     ProgressBar displayProgress;
-    ProgramSingletonController currInstanceSingleton = ProgramSingletonController.getCurrInstantce();
+    ProgramSingletonController currInstanceSingleton = ProgramSingletonController.getCurrInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -31,7 +31,7 @@
     <string name="NearBy">NearBy</string>
     <string name="Group">Groups</string>
     <string name="Join">Join</string>
-    <string name="FindGroups">Finding</string>
+    <string name="Create">Create</string>
     <string name="AZ">Join</string>
     <string name="Category">Groups</string>
     <string name="Popular">Finding</string>
@@ -47,4 +47,6 @@
     <string name="usrMonitors">User Monitor</string>
     <string name="usersWhoMonitorYou">Users who are monitoring you:</string>
     <string name="usersWhoYouMonitor">Users monitored:</string>
+    <string name="group_name">Group Name</string>
+    <string name="create_group">Create Group</string>
 </resources>

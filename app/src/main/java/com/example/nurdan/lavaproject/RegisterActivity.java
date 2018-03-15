@@ -141,7 +141,7 @@ private class asyncRunner extends AsyncTask<Void,Void,Void>{
     @Override
     protected Void doInBackground(Void... voids) {
         if (passMatchFlag) {
-                    localInstance = ProgramSingletonController.getCurrInstantce();
+                    localInstance = ProgramSingletonController.getCurrInstance();
                     localInstance.createNewUser(username, email, password, getApplicationContext());
                     password = "";
                 }
