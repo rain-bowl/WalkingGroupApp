@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,11 +20,14 @@ import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
 
 public class LoginActivity extends AppCompatActivity {
+    ProgressBar loginProgress;
     private ProgramSingletonController localInstance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        loginProgress = findViewById(R.id.loginProgressBar);
+        loginProgress.setVisibility(View.GONE);
         createLogInBtns();
 
     }
@@ -37,8 +41,9 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-        async test = new async();
-        test.execute();
+                loginProgress.setVisibility(View.VISIBLE);
+                async test = new async();
+                test.execute();
 
 
             }
@@ -61,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... voids) {
 
+
                 final EditText usernameText = findViewById(R.id.usernameText);
                 final EditText passText = findViewById(R.id.passText);
                 localInstance = ProgramSingletonController.getCurrInstantce();
@@ -80,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                     finish(); // Call once you redirect to another activity
                 }
                 else{
+                    Toast.makeText(getApplicationContext(), "Could not log in!", Toast.LENGTH_LONG).show();
                     Log.d("UIERROR", "doInBackground: failed login from ui");
                 }
                return null;
@@ -87,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Void aVoid) {
-
+            loginProgress.setVisibility(View.GONE);
             }
     }
 }
