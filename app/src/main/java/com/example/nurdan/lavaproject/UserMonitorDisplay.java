@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
@@ -21,11 +23,18 @@ public class UserMonitorDisplay extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_monitor_display);
+        setUpToolBar();
         setUpListView();
     }
     private void setUpToolBar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.monitorToolBar);
         setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.taskmenu, menu);
+        return true;
     }
 
     //Static class to return an intent used in navigating application.

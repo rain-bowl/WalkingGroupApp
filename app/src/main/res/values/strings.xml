@@ -24,7 +24,6 @@
     <string name="password_input_hint">Password…</string>
     <string name="password_confirm_title">Confirm Password:</string>
     <string name="create_new_account">Create account</string>
-    <string name="register_here">Register Here</string>
     <string name="logout">Logout</string>
     <string name="mngGroups">Manage Groups</string>
     <string name="usrMonitors">User Monitor</string>
