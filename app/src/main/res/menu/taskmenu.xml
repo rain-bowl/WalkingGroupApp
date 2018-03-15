@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/add_monitor_user"
+        android:title="Add monitor user">
+    </item>
+    <item
+        android:id="@+id/delete_monitor_user"
+        android:title="Delete monitor user">
+    </item>
+</menu>
