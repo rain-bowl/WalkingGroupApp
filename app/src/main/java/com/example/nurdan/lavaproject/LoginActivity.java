@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private class async extends AsyncTask<Void,Void,Void>{
+        Boolean successFlag;
             @Override
             protected Void doInBackground(Void... voids) {
 
@@ -65,15 +66,24 @@ public class LoginActivity extends AppCompatActivity {
                 localInstance = ProgramSingletonController.getCurrInstantce();
                 String user = usernameText.getText().toString();
                 String pass = passText.getText().toString();
-                localInstance.logIn(user,pass, getApplicationContext());
+                successFlag = localInstance.logIn(user,pass, getApplicationContext());
+                Log.d("AsyncLogIn", "doInBackground: SuccessFlag" + successFlag);
                 pass = "";
                 user = "";
-                return null;
+                if(successFlag){
+                    Log.d("AsyncLogin", "onPostExecute: I got here");
+                    Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
+                    startActivity(mainMenu);
+                }
+                else{
+                    Log.d("UIERROR", "doInBackground: failed login from ui");
+                }
+               return null;
             }
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                Toast.makeText(getApplicationContext(), "Thread ran", Toast.LENGTH_LONG).show();
+
             }
     }
 }

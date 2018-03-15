@@ -28,4 +28,6 @@
     <string name="logout">Logout</string>
     <string name="mngGroups">Manage Groups</string>
     <string name="usrMonitors">User Monitor</string>
+    <string name="usersWhoMonitorYou">Users who are monitoring you:</string>
+    <string name="usersWhoYouMonitor">Users monitored:</string>
 </resources>

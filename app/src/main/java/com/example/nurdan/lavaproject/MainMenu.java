@@ -1,5 +1,6 @@
 package com.example.nurdan.lavaproject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ public class MainMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+        createBtns();
     }
 
     private void createBtns(){
@@ -41,5 +43,8 @@ public class MainMenu extends AppCompatActivity {
 
             }
         });
+    }
+    public static Intent mainMenuIntent(Context currActivityContext){
+        return new Intent(currActivityContext, MainMenu.class);
     }
 }

@@ -21,6 +21,7 @@ public class ProgramSingletonController {
     private int userID;
     private JSONObject jsonResponse;
     private AccountApiInteractions currInstance;
+    Boolean logInStatus = false;
     private static ProgramSingletonController instance;
 
     private  ProgramSingletonController(){
@@ -30,7 +31,8 @@ public class ProgramSingletonController {
     //Static method to return the current instance of this singleton class or create one if it does not exist
     public static ProgramSingletonController getCurrInstantce(){
         if(instance == null){
-            return new ProgramSingletonController();
+            instance = new ProgramSingletonController();
+            return instance;
         }
         else{
             return instance;
@@ -45,15 +47,15 @@ public class ProgramSingletonController {
     }
 
     //Logs user into their account
-    public void logIn(String email, String password, Context appContext){
+    public Boolean logIn(String email, String password, Context appContext){
        JSONArray tempArr;
         currInstance = new AccountApiInteractions();
-        currInstance.userLogIn(email, password, appContext);
-        bearerToken = currInstance.getBearerToken();
-        Log.d(TAG, "logIn: Programsingletonberer " + bearerToken);
-        userID = currInstance.getDatabaseUserID(email, appContext);
-        Log.d(TAG, "logIn: UserIDTEST" + userID   );
-
+        logInStatus = currInstance.userLogIn(email, password, appContext);
+        this.bearerToken = currInstance.getBearerToken();
+        Log.d(TAG, "logIn: Programsingletonberer " + this.bearerToken);
+        this.userID = currInstance.getDatabaseUserID(email, appContext);
+        Log.d(TAG, "logIn: UserIDTEST " + this.userID   );
+        return logInStatus;
 
     }
     //Adds new user to be monitored by another
@@ -69,7 +71,9 @@ public class ProgramSingletonController {
 
 
     // Method to get users who are monitored by the currently logged in user.
-    public ArrayAdapter<String> getUsersMonitored(Context appContext){
+    public ArrayList<String> getUsersMonitored(Context appContext){
+        Log.d(TAG, "getUsersMonitored: USERID" + this.userID);
+        Log.d(TAG, "getUsersMonitored: TOKENBEARER " + this.bearerToken);
          JSONArray tempArr = null;
         UserMonitor currInstance = new UserMonitor();
         try{
@@ -86,7 +90,7 @@ public class ProgramSingletonController {
     }
 
 
-    public ArrayAdapter<String> getUsersWhoMonitorThis(Context appContext){
+    public ArrayList<String> getUsersWhoMonitorThis(Context appContext){
         JSONArray tempArr = null;
         UserMonitor currInstance = new UserMonitor();
         try{
@@ -102,7 +106,7 @@ public class ProgramSingletonController {
     }
 
 
-    private ArrayAdapter<String> createUserList(JSONArray jsonArr, Context appContext){
+    private ArrayList<String> createUserList(JSONArray jsonArr, Context appContext){
         JSONObject tempJSONObject;
         ArrayList<String> tempUserStorage = new ArrayList<>();
         ArrayAdapter<String> tempArrAdapter;
@@ -115,8 +119,6 @@ public class ProgramSingletonController {
                e.printStackTrace();
            }
        }
-       tempArrAdapter = new ArrayAdapter<String>(appContext, android.R.layout.activity_list_item,tempUserStorage);
-       return tempArrAdapter;
-
+        return tempUserStorage;
     }
 }

@@ -75,7 +75,7 @@ public void createNewUser(String userName, String userPassword, String userEmail
     }
 
     //Handles the login of a user. Sets the bearer token on success.
-    public void userLogIn(String email, String password, final Context appContext){
+    public Boolean userLogIn(String email, String password, final Context appContext){
         final JSONObject jsonBody = new JSONObject();
         try{
             jsonBody.put("email", email);
@@ -92,12 +92,19 @@ public void createNewUser(String userName, String userPassword, String userEmail
             .build();
 
     ANResponse<OkHttpResponseListener> responseListenerANResponse = request.executeForOkHttpResponse();
-    if(responseListenerANResponse.isSuccess()){
-        Log.d(TAG, "userLogIn: Response Good " + responseListenerANResponse.getOkHttpResponse().code());
+    if(responseListenerANResponse.isSuccess()) {
+        if (responseListenerANResponse.getOkHttpResponse().code() == 200){
+            Log.d(TAG, "userLogIn: Response Good " + responseListenerANResponse.getOkHttpResponse().code());
         bearerToken = responseListenerANResponse.getOkHttpResponse().header("Authorization");
+        return true;
+    }
+        else{
+            return false;
+        }
     }
     else {
         Log.d(TAG, "userLogIn: Response Error" + responseListenerANResponse.getError());
+        return false;
     }
 
 
