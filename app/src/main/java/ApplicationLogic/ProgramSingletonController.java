@@ -32,7 +32,7 @@ public class ProgramSingletonController {
     }
 
     //Static method to return the current instance of this singleton class or create one if it does not exist
-    public static ProgramSingletonController getCurrInstantce(){
+    public static ProgramSingletonController getCurrInstance(){
         if(instance == null){
             instance = new ProgramSingletonController();
             return instance;

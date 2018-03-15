@@ -61,23 +61,10 @@ public class MapActivity extends FragmentActivity implements
 
         getLocationPermission();
         initializeMapFrag();
-        setupTitlebtn();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
-    private void setupTitlebtn() {
-        RadioButton WalkingGroupTitle=(RadioButton)findViewById(R.id.WalkingGroupList);
-        WalkingGroupTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MapActivity.this,"Working on Groups",Toast.LENGTH_LONG).show();
-                Intent intent=MapSecondActivity.makeIntent(MapActivity.this);
-                startActivity(intent);
-            }
-        });
-
-    }
 
     private void initializeMapFrag() {
         if (mLocationPermissionGranted) {
