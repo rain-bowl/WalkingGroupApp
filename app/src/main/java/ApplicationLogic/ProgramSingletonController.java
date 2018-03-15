@@ -1,6 +1,9 @@
 package ApplicationLogic;
 
 import android.content.Context;
+import android.graphics.Point;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
@@ -41,15 +44,31 @@ public class ProgramSingletonController {
         userID = currInstance.getDatabaseUserID(email, appContext);
     }
 
+    public int getUserID(){
+        currInstance = new AccountApiInteractions();
+        return currInstance.getUserID();
+    }
 
 
     /* group functions */
     /* need to implement/test */
 
-    //create new group
-    public void createNewGroup(String groupDescription, int leaderID, Context appContext){
+    //input latlng
+    public void inputLatLng(LatLng point, Context context) {
         currInstance = new AccountApiInteractions();
-        currInstance.createNewGroup(groupDescription, leaderID, appContext);
+        currInstance.inputLatLng(point, context);
+    }
+
+    //get group starting latlng
+    public LatLng returnLatLng(Context context) {
+        currInstance = new AccountApiInteractions();
+        return currInstance.returnLatLng(context);
+    }
+
+        //create new group
+    public void createNewGroup(String groupDescription, int leaderID, LatLng point, Context appContext){
+        currInstance = new AccountApiInteractions();
+        currInstance.createNewGroup(groupDescription, leaderID, point, appContext);
         bearerToken = currInstance.getBearerToken();
     }
 

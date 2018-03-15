@@ -13,11 +13,15 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseAndJSONArrayRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseAndJSONObjectRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseListener;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.net.ssl.HttpsURLConnection;
 
 import okhttp3.Response;
@@ -30,6 +34,7 @@ public class AccountApiInteractions {
     private int userID = 0;
     private int groupID = 0;
     private JSONObject groupDetails;
+    private List<LatLng> listOfPoints = new ArrayList<>();
 
     //Creates a single user using the inputs
 public void createNewUser(String userName, String userPassword, String userEmailAddr, Context appContext){
@@ -151,8 +156,18 @@ public void createNewUser(String userName, String userPassword, String userEmail
 
     /*  classes for group implementation:    */
 
+    //input initial latlng
+    public void inputLatLng(LatLng point, Context context) {
+        listOfPoints.add(point);
+    }
+
+    //return latlng
+    public LatLng returnLatLng(Context context) {
+        return listOfPoints.get(0);
+    }
+
     // create new group
-    public void createNewGroup(String groupDescription, int leaderID, Context appContext){
+    public void createNewGroup(String groupDescription, int leaderID, LatLng point, Context appContext){
         //Initialize androidNetworking library with current activity context
         AndroidNetworking.initialize(appContext);
         final JSONObject jsonBody = new JSONObject();
@@ -160,7 +175,9 @@ public void createNewUser(String userName, String userPassword, String userEmail
         try {
             jsonBody.put("group description", groupDescription);
             jsonBody.put("routeLatArray", new JSONArray());
+            jsonBody.put("routeLatArray", point.latitude);
             jsonBody.put("routeLngArray", new JSONArray());
+            jsonBody.put("routeLngArray", point.longitude);
             jsonBody.put("leader", leaderID);
             jsonBody.put("memberUsers", new JSONArray());
         }
