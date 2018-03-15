@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -23,10 +25,19 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+import ApplicationLogic.AccountApiInteractions;
+import ApplicationLogic.ProgramSingletonController;
+
+public class MapActivity extends FragmentActivity implements
+        OnMapReadyCallback,
+        GoogleMap.OnMapClickListener,
+        GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnInfoWindowClickListener{
 
     private GoogleMap mMap;
     private static final String TAG = MapActivity.class.getSimpleName();
@@ -38,6 +49,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     private final LatLng mDefaultLocation = new LatLng(0, 0);
     private Location mLastKnownLocation;
+    private ProgramSingletonController localInstance = ProgramSingletonController.getCurrInstance();
+
+
 
 
     @Override
@@ -47,23 +61,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
         getLocationPermission();
         initializeMapFrag();
-        setupTitlebtn();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
-    private void setupTitlebtn() {
-        RadioButton WalkingGroupTitle=(RadioButton)findViewById(R.id.WalkingGroupList);
-        WalkingGroupTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MapActivity.this,"Working on Groups",Toast.LENGTH_LONG).show();
-                Intent intent=MapSecondActivity.makeIntent(MapActivity.this);
-                startActivity(intent);
-            }
-        });
-
-    }
 
     private void initializeMapFrag() {
         if (mLocationPermissionGranted) {
@@ -77,10 +78,44 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setOnMapClickListener(this);
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
 
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
+    }
+
+    @Override
+    public void onMapClick(LatLng point) {
+        mMap.clear();
+        localInstance.inputLatLng(point, this);
+        mMap.addMarker(new MarkerOptions().position(point).title("Tap to Create New Group").draggable(true));
+    }
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        marker.showInfoWindow();
+        return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(this, "Info window clicked",
+                Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, GroupActivity.class));
+    }
+
+    private void createGroupMarkers(){
+        localInstance.getGroupList(getApplicationContext());
+        //todo:
+    }
+
+    private void createMarker(LatLng point, String markerName){
+        mMap.addMarker(new MarkerOptions()
+                .position(point)
+                .title(markerName));
     }
 
     private void getLocationPermission() {
@@ -141,7 +176,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     public static Intent makeIntent(Context context) {
         return new Intent(context,MapActivity.class);
     }
-
 
     private void getDeviceLocation() {
     /*

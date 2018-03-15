@@ -12,25 +12,24 @@
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:scrollbars="vertical"
         class="com.google.android.gms.maps.SupportMapFragment"/>
 
     <RadioGroup
         android:id="@+id/Walking_group_list_selector"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="30dp"
         android:orientation="horizontal"
         android:background="#80000000"
         android:padding="4dp" >
 
         <RadioButton
-            android:id="@+id/Walkingfinding"
+            android:id="@+id/create_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_horizontal|center_vertical"
-            android:text="@string/FindTitle" />
+            android:text="@string/Create" />
 
         <View
             android:id="@+id/VerticalLine"
@@ -39,7 +38,7 @@
             android:background="#aaa" />
 
         <RadioButton
-            android:id="@+id/WalkingJoin"
+            android:id="@+id/join_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -52,14 +51,6 @@
             android:layout_height="match_parent"
             android:background="#aaa" />
 
-        <RadioButton
-            android:id="@+id/WalkingGroupList"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="@string/Groupstitle" />
-
         <View
 
             android:layout_width="1dip"
@@ -67,7 +58,15 @@
              />
 
         <RadioButton
-            android:id="@+id/WalkingNearBy"
+            android:id="@+id/groupList_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/Groupstitle" />
+
+        <RadioButton
+            android:id="@+id/nearby_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center_horizontal|center_vertical"
