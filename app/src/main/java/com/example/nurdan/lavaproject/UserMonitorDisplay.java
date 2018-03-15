@@ -11,10 +11,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
@@ -23,11 +25,14 @@ import ApplicationLogic.ProgramSingletonController;
 import ApplicationLogic.UserMonitor;
 
 public class UserMonitorDisplay extends AppCompatActivity {
+    ProgressBar displayProgress;
     ProgramSingletonController currInstanceSingleton = ProgramSingletonController.getCurrInstantce();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_monitor_display);
+        displayProgress = findViewById(R.id.displayProgress);
+        displayProgress.setVisibility(View.GONE);
         setUpToolBar();
         setUpListView();
     }
@@ -58,6 +63,7 @@ private class getMntrUsers extends AsyncTask<Void,Void,Void>{
     ArrayList<String> retrievedUsers;
     @Override
     protected Void doInBackground(Void... voids) {
+        displayProgress.setVisibility(View.VISIBLE);
         displayMntrdUser = (ListView) findViewById(R.id.usersMonitoredView);
         retrievedUsers = currInstanceSingleton.getUsersMonitored(getApplicationContext());
 
@@ -69,7 +75,7 @@ private class getMntrUsers extends AsyncTask<Void,Void,Void>{
         Log.d("USERDISPLAY", "onPostExecute:Got here ");
         if(retrievedUsers.isEmpty()){
             retrievedUsers.add("There are no users currently monitored");
-             ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
+            ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
             displayMntrdUser.setAdapter(listViewAdapter);
         }
         else{
@@ -114,6 +120,7 @@ private class getUsrsMntrThis extends AsyncTask<Void,Void,Void>{
            listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
            displayMonitors.setAdapter(listViewAdapter);
        }
+       displayProgress.setVisibility(View.GONE);
     }
 }
 

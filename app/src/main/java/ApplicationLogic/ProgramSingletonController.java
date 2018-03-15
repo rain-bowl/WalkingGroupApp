@@ -59,9 +59,11 @@ public class ProgramSingletonController {
 
     }
     //Adds new user to be monitored by another
-    public void addUsrMonitor(int monitorID, int usrToBeMonitoredID, String bearerToken, Context appContext){
+    public void addUsrMonitor(int monitorID, String userEmail, String bearerToken, Context appContext){
+        AccountApiInteractions getId = new AccountApiInteractions();
         UserMonitor currInstance = new UserMonitor();
-        currInstance.addMonitoredUser(monitorID, usrToBeMonitoredID, bearerToken, appContext);
+        int tempUsrID = getId.getDatabaseUserID(userEmail, appContext);
+        currInstance.addMonitoredUser(monitorID, tempUsrID, bearerToken, appContext);
     }
     //Deletes a user from the list of monitored users
     public void deleteMonitoredUsr(int monitorID, int dltdUser, String bearerToken, Context appContext){
