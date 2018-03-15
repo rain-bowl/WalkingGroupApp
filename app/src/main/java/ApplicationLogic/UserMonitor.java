@@ -32,7 +32,7 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 /*This method adds a user to be monitored by another user.
  */
     public void addMonitoredUser(int userID, int monitoredUserID, String bearerKey, Context appContext){
-        AndroidNetworking.initialize(appContext);
+
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("id", monitoredUserID);
@@ -40,24 +40,26 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
         catch (Exception e){
             e.printStackTrace();
         }
-        AndroidNetworking.post(baseURL + "/users/" + userID + "/monitorsUsers")
-                .setContentType("application/json")
+        AndroidNetworking.initialize(appContext);
+        ANRequest addRequest = AndroidNetworking.post(baseURL + "/users/" + userID + "/monitorsUsers")
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerKey)
                 .addJSONObjectBody(jsonBody)
-                .build()
-                .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(Response okHttpResponse, JSONObject response) {
-                        Log.d(TAG, "onResponse: Success");
-                        Log.d(TAG, "onResponse: Response" + response.toString());
-                    }
+                .build();
+        ANResponse<OkHttpResponseListener> serverResponse = addRequest.executeForOkHttpResponse();
+        if (serverResponse.isSuccess()){
+            if(serverResponse.getOkHttpResponse().code() == 201){
+                Log.d(TAG, "addMonitoredUser: Success in adding user");
+            }
+            else{
+                Log.d(TAG, "addMonitoredUser: Could not add user");
+            }
+        }
+        else {
+            Log.d(TAG, "addMonitoredUser: Request Error" + serverResponse.getError());
+        }
 
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.d(TAG, "onError: Error:"+ anError.getResponse());
-                    }
-                });
+
 
     }
 
@@ -68,22 +70,22 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
     public void stopMonitoringUser(int userID, int removedUserId, String bearerKey, Context appContext){
         String accessURL = String.format("/users/%d/monitorsUsers/%d", userID, removedUserId);
         AndroidNetworking.initialize(appContext);
-        AndroidNetworking.delete(baseURL + accessURL)
+        ANRequest stopMntrRequest = AndroidNetworking.delete(baseURL + accessURL)
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerKey)
-                .build()
-                .getAsOkHttpResponse(new OkHttpResponseListener() {
-                    @Override
-                    public void onResponse(Response response) {
-                        Log.d(TAG, "onResponse: Success!");
-                        Log.d(TAG, "onResponse: " + response.code());
-                    }
+                .build();
 
-                    @Override
-                    public void onError(ANError anError) {
+        ANResponse<OkHttpResponseListener> serverResponse = stopMntrRequest.executeForOkHttpResponse();
+        if (serverResponse.isSuccess()){
+            if(serverResponse.getOkHttpResponse().code() == 204){
+                Log.d(TAG, "stopMonitoringUser: Successful removal");
+            }
+        }
+        else {
+            Log.d(TAG, "stopMonitoringUser: Error with request");
+        }
 
-                    }
-                });
+
     }
 
 //Recovers users which are monitored by the current logged in user. Currently needs
@@ -130,27 +132,6 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
         }
         return users;
 
-
-        /*
-        AndroidNetworking.get(baseURL + URLPath)
-                .addHeaders("apiKey", apiKey)
-                .addHeaders("Authorization", bearerToken)
-                .build()
-                .getAsOkHttpResponseAndJSONArray(new OkHttpResponseAndJSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(Response okHttpResponse, JSONArray response) {
-                       successFlag = true;
-                       returnArray = response;
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.d(TAG, "onError: Error with retrieving monitored users" + anError.getErrorBody().toString());
-
-                    }
-                });
-        return returnArray;
-     */
     }
 
 
