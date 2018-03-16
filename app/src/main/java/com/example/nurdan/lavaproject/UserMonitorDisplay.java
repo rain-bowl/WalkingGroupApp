@@ -1,14 +1,17 @@
 package com.example.nurdan.lavaproject;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.view.View;
@@ -39,6 +42,23 @@ public class UserMonitorDisplay extends AppCompatActivity {
     private void setUpToolBar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.monitorToolBar);
         setSupportActionBar(toolbar);
+
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.add_monitor_user:
+                AppCompatDialogFragment addUserFragment = new AddUserDialog();
+                addUserFragment.show(getSupportFragmentManager(), "addUsr");
+                break;
+            case R.id.delete_monitor_user:
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

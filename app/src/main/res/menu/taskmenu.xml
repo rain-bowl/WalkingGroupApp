@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/add_monitor_user"
-        android:title="Add monitor user">
+        android:title="Add Users">
     </item>
     <item
         android:id="@+id/delete_monitor_user"
-        android:title="Delete monitor user">
+        android:title="Delete Users">
     </item>
 </menu>
