@@ -17,14 +17,22 @@ public class MainMenu extends AppCompatActivity {
     }
 
     private void createBtns(){
-        Button mngGroups = (Button) findViewById(R.id.mngGroups);
-        Button usrMonitor = (Button) findViewById(R.id.usrMonitor);
-        Button usrLogout = (Button) findViewById(R.id.usrLogout);
+        Button mapBtn = findViewById(R.id.mapbtn);
+        Button mngGroups = findViewById(R.id.mngGroups);
+        Button usrMonitor = findViewById(R.id.usrMonitor);
+        Button usrLogout = findViewById(R.id.usrLogout);
+
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MapActivity.class));
+            }
+        });
 
         mngGroups.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
             }
         });
 

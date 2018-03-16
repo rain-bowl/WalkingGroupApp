@@ -2,11 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LavaProject.iml" filepath="$PROJECT_DIR$/LavaProject.iml" />
       <module fileurl="file://C:\Users\Rainbow\AndroidStudioProjects\walkinggroupapp\LavaProject.iml" filepath="C:\Users\Rainbow\AndroidStudioProjects\walkinggroupapp\LavaProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/walkinggroup.iml" filepath="$PROJECT_DIR$/walkinggroup.iml" />
+      <module fileurl="file://C:\Users\Rainbow\AndroidStudioProjects\walkinggroupapp\app\app.iml" filepath="C:\Users\Rainbow\AndroidStudioProjects\walkinggroupapp\app\app.iml" />
+      <module fileurl="file://C:\Users\Rainbow\AndroidStudioProjects\walkinggroupapp\walkinggroup.iml" filepath="C:\Users\Rainbow\AndroidStudioProjects\walkinggroupapp\walkinggroup.iml" />
       <module fileurl="file://$PROJECT_DIR$/walkinggroupapp.iml" filepath="$PROJECT_DIR$/walkinggroupapp.iml" />
+      <module fileurl="file://C:\Users\Rainbow\AndroidStudioProjects\walkinggroupapp\walkinggroupapp.iml" filepath="C:\Users\Rainbow\AndroidStudioProjects\walkinggroupapp\walkinggroupapp.iml" />
     </modules>
   </component>
 </project>

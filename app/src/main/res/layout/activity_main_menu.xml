@@ -59,10 +59,22 @@
         android:layout_marginStart="97dp"
         android:layout_marginLeft="97dp"
         android:layout_marginTop="36dp"
-        android:text="Title PlaceHolder"
+        android:text="@string/walking_group_project"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/mapbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="148dp"
+        android:layout_marginStart="148dp"
+        android:text="@string/title_activity_map"
+        app:layout_constraintBottom_toTopOf="@+id/usrMonitor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

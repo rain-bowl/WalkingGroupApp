@@ -24,11 +24,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import java.security.acl.Group;
+import java.util.ArrayList;
 
 import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
@@ -49,8 +53,9 @@ public class MapActivity extends FragmentActivity implements
 
     private final LatLng mDefaultLocation = new LatLng(0, 0);
     private Location mLastKnownLocation;
-    private ProgramSingletonController localInstance = ProgramSingletonController.getCurrInstance();
+    ArrayList<LatLng> MarkerPoints;
 
+    private ProgramSingletonController localInstance = ProgramSingletonController.getCurrInstance();
 
 
 
@@ -58,13 +63,40 @@ public class MapActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        MarkerPoints = new ArrayList<>();
 
         getLocationPermission();
         initializeMapFrag();
+        makeListBtn();
+        makeCreateBtn();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
+    private void makeListBtn () {
+        Button list = findViewById(R.id.listGroupBtn);
+        list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
+            }
+        });
+    }
+
+    private void makeCreateBtn () {
+        Button list = findViewById(R.id.createGroupBtn);
+        list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MarkerPoints.size() == 2) {
+                    startActivity(new Intent(getApplicationContext(), GroupActivity.class));
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Please select start and destination", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
 
     private void initializeMapFrag() {
         if (mLocationPermissionGranted) {
@@ -89,9 +121,28 @@ public class MapActivity extends FragmentActivity implements
 
     @Override
     public void onMapClick(LatLng point) {
-        mMap.clear();
-        localInstance.inputLatLng(point, this);
-        mMap.addMarker(new MarkerOptions().position(point).title("Tap to Create New Group").draggable(true));
+        if (MarkerPoints.size() > 2) {
+            MarkerPoints.clear();
+            mMap.clear();
+        }
+
+        MarkerPoints.add(point);
+        MarkerOptions options = new MarkerOptions();
+        options.position(point);
+
+        if (MarkerPoints.size() == 1) {
+            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            mMap.addMarker(options.title("Tap 'Create Group' to create: Blue = Start"));
+            LatLng origin = MarkerPoints.get(0);
+            localInstance.inputLatLng(origin, this);
+        }
+
+        else if (MarkerPoints.size() == 2) {
+            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            mMap.addMarker(options.title("Tap 'Create Group' to create: Green = End"));
+            LatLng dest = MarkerPoints.get(1);
+            localInstance.inputLatLng(dest, this);
+        }
     }
 
     @Override
@@ -102,14 +153,12 @@ public class MapActivity extends FragmentActivity implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this, "Info window clicked",
-                Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, GroupActivity.class));
+//        startActivity(new Intent(this, GroupActivity.class));
     }
 
     private void createGroupMarkers(){
         localInstance.getGroupList(getApplicationContext());
-        //todo:
+        //todo: use cluster markers (googel it)
     }
 
     private void createMarker(LatLng point, String markerName){

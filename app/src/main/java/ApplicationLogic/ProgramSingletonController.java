@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -22,10 +23,12 @@ import static android.content.ContentValues.TAG;
 public class ProgramSingletonController {
     private String bearerToken;
     private int userID;
+    private String userEmail;
     private JSONObject jsonResponse;
     private AccountApiInteractions currInstance;
     Boolean logInStatus = false;
     private static ProgramSingletonController instance;
+    private List<LatLng> listOfPoints = new ArrayList<>();
 
     private  ProgramSingletonController(){
         //Private constructor to prevent anybody instantiating the singleton class without using official method
@@ -42,10 +45,42 @@ public class ProgramSingletonController {
         }
     }
 
+    public int getUserID(){
+        currInstance = new AccountApiInteractions();
+        return currInstance.getUserID();
+    }
+
+    public String getBearerToken(){
+        currInstance = new AccountApiInteractions();
+        return currInstance.getBearerToken();
+    }
+
+    //used for test, can delete
+    /*
+    //saves curr email, bearer toekn
+    private void saveEmail(String email, String token, Context context){
+        userEmail = email;
+        bearerToken = token;
+    }
+
+    private String getEmail(Context context){
+        return userEmail;
+    }
+
+
+    public int getCurrUserID(Context appContext){
+        currInstance = new AccountApiInteractions();
+        userEmail = getEmail(appContext);
+        int tempUserID = currInstance.getDatabaseUserID(userEmail, appContext);
+        return tempUserID;
+    }
+
+    */
 
     //Creates a new user
     public void createNewUser(String name, String email, String password, Context appContext){
         currInstance = new AccountApiInteractions();
+
         currInstance.createNewUser(name, password, email, appContext);
     }
 
@@ -58,8 +93,8 @@ public class ProgramSingletonController {
         Log.d(TAG, "logIn: Programsingletonberer " + this.bearerToken);
         this.userID = currInstance.getDatabaseUserID(email, appContext);
         Log.d(TAG, "logIn: UserIDTEST " + this.userID   );
+        //saveEmail(email, this.bearerToken, appContext);
         return logInStatus;
-
     }
     //Adds new user to be monitored by another
     public void addUsrMonitor(int monitorID, String userEmail, String bearerToken, Context appContext){
@@ -74,10 +109,6 @@ public class ProgramSingletonController {
         currInstance.stopMonitoringUser(monitorID, dltdUser, bearerToken, appContext);
     }
 
-    public int getUserID(){
-        currInstance = new AccountApiInteractions();
-        return currInstance.getUserID();
-    }
 
     // Method to get users who are monitored by the currently logged in user.
     public ArrayList<String> getUsersMonitored(Context appContext){
@@ -136,20 +167,21 @@ public class ProgramSingletonController {
 
     //input latlng
     public void inputLatLng(LatLng point, Context context) {
-        currInstance = new AccountApiInteractions();
-        currInstance.inputLatLng(point, context);
+        if (listOfPoints.size() == 2){
+            listOfPoints.clear();
+        }
+        listOfPoints.add(point);
     }
 
     //get group starting latlng
-    public LatLng returnLatLng(Context context) {
-        currInstance = new AccountApiInteractions();
-        return currInstance.returnLatLng(context);
+    public List<LatLng> returnLatLng(Context context) {
+        return listOfPoints;
     }
 
         //create new group
-    public void createNewGroup(String groupDescription, int leaderID, LatLng point, Context appContext){
+    public void createNewGroup(String groupDescription, int leaderID, LatLng start, LatLng dest, Context appContext){
         currInstance = new AccountApiInteractions();
-        currInstance.createNewGroup(groupDescription, leaderID, point, appContext);
+        currInstance.createNewGroup(groupDescription, leaderID, start, dest, appContext);
         bearerToken = currInstance.getBearerToken();
     }
 
@@ -161,10 +193,10 @@ public class ProgramSingletonController {
     }
 
     //get list of all groups
-    public void getGroupList(Context appContext){
+    public JSONArray getGroupList(Context appContext){
         currInstance = new AccountApiInteractions();
-        currInstance.getGroupList(appContext);
         bearerToken = currInstance.getBearerToken();
+        return currInstance.getGroupList(appContext);
     }
 
     //update existing group info

@@ -35,7 +35,7 @@
     <string name="AZ">Join</string>
     <string name="Category">Groups</string>
     <string name="Popular">Finding</string>
-    <string name="Groupstitle">Groups</string>
+    <string name="viewGroups">View Groups</string>
     <string name="JoinTitle">Join</string>
     <string name="FindTitle">Finding</string>
     <string name="BACK">BACK</string>
@@ -47,6 +47,10 @@
     <string name="usrMonitors">User Monitor</string>
     <string name="usersWhoMonitorYou">Users who are monitoring you:</string>
     <string name="usersWhoYouMonitor">Users monitored:</string>
+    <string name="userHint">I would like to add...</string>
+    <string name="monitorUsrCheckbox">another user to monitor</string>
+    <string name="monitorMeUsrCheckbox">another user to monitor me</string>
     <string name="group_name">Group Name</string>
     <string name="create_group">Create Group</string>
+    <string name="walking_group_project">Walking Group Project</string>
 </resources>
