@@ -29,4 +29,7 @@
     <string name="usrMonitors">User Monitor</string>
     <string name="usersWhoMonitorYou">Users who are monitoring you:</string>
     <string name="usersWhoYouMonitor">Users monitored:</string>
+    <string name="userHint">I would like to add...</string>
+    <string name="monitorUsrCheckbox">another user to monitor</string>
+    <string name="monitorMeUsrCheckbox">another user to monitor me</string>
 </resources>
