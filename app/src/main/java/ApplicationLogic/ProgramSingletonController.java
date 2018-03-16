@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -26,6 +27,7 @@ public class ProgramSingletonController {
     private AccountApiInteractions currInstance;
     Boolean logInStatus = false;
     private static ProgramSingletonController instance;
+    private List<LatLng> listOfPoints = new ArrayList<>();
 
     private  ProgramSingletonController(){
         //Private constructor to prevent anybody instantiating the singleton class without using official method
@@ -136,14 +138,13 @@ public class ProgramSingletonController {
 
     //input latlng
     public void inputLatLng(LatLng point, Context context) {
-        currInstance = new AccountApiInteractions();
-        currInstance.inputLatLng(point, context);
+        listOfPoints.clear();
+        listOfPoints.add(point);
     }
 
     //get group starting latlng
     public LatLng returnLatLng(Context context) {
-        currInstance = new AccountApiInteractions();
-        return currInstance.returnLatLng(context);
+        return listOfPoints.get(0);
     }
 
         //create new group
@@ -161,10 +162,10 @@ public class ProgramSingletonController {
     }
 
     //get list of all groups
-    public void getGroupList(Context appContext){
+    public JSONArray getGroupList(Context appContext){
         currInstance = new AccountApiInteractions();
-        currInstance.getGroupList(appContext);
         bearerToken = currInstance.getBearerToken();
+        return currInstance.getGroupList(appContext);
     }
 
     //update existing group info

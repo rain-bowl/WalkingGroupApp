@@ -2,7 +2,12 @@ package ApplicationLogic;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -15,6 +20,8 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseAndJSONArrayRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseAndJSONObjectRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseListener;
+import com.example.nurdan.lavaproject.R;
+import com.example.nurdan.lavaproject.UserMonitorDisplay;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -36,49 +43,49 @@ public class AccountApiInteractions {
     private String bearerToken;
     private int groupID = 0;
     private JSONObject groupDetails;
-    private List<LatLng> listOfPoints = new ArrayList<>();
     private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
     private int userID = -1;
+    private JSONArray groupList;
 
-    //Creates a single user using the inputs
-public void createNewUser(String userName, String userPassword, String userEmailAddr, Context appContext){
-    //Initialize androidNetworking library with current activity context
-            final JSONObject jsonBody = new JSONObject();
-            //Create the json body to be attached
-        try {
-            jsonBody.put("password", userPassword);
-            jsonBody.put("email", userEmailAddr);
-            jsonBody.put("name",userName);
+        //Creates a single user using the inputs
+    public void createNewUser(String userName, String userPassword, String userEmailAddr, Context appContext){
+        //Initialize androidNetworking library with current activity context
+                final JSONObject jsonBody = new JSONObject();
+                //Create the json body to be attached
+            try {
+                jsonBody.put("password", userPassword);
+                jsonBody.put("email", userEmailAddr);
+                jsonBody.put("name",userName);
 
-        }
-        catch (Exception e){
-            Log.d(TAG, "createNewUser:Unexpected error");
-            e.printStackTrace();
-        }
-//Make POST call to server with attached json body
-     AndroidNetworking.initialize(appContext);
-    ANRequest signupRequest = AndroidNetworking.post(baseURL + "/users/signup")
-            .addHeaders("apiKey", apiKey)
-            .addJSONObjectBody(jsonBody)
-            .build();
+            }
+            catch (Exception e){
+                Log.d(TAG, "createNewUser:Unexpected error");
+                e.printStackTrace();
+            }
+    //Make POST call to server with attached json body
+         AndroidNetworking.initialize(appContext);
+        ANRequest signupRequest = AndroidNetworking.post(baseURL + "/users/signup")
+                .addHeaders("apiKey", apiKey)
+                .addJSONObjectBody(jsonBody)
+                .build();
 
 
-    ANResponse<JSONObject> serverResponse = signupRequest.executeForJSONObject();
-    if(serverResponse.isSuccess()){
-        JSONObject jsonResponseBody = serverResponse.getResult();
-        Log.d(TAG, "createNewUser: JSONRESPONSE" + jsonResponseBody);
-        try{
-        userID = jsonResponseBody.getInt("id");
+        ANResponse<JSONObject> serverResponse = signupRequest.executeForJSONObject();
+        if(serverResponse.isSuccess()){
+            JSONObject jsonResponseBody = serverResponse.getResult();
+            Log.d(TAG, "createNewUser: JSONRESPONSE" + jsonResponseBody);
+            try{
+            userID = jsonResponseBody.getInt("id");
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            Log.d(TAG, "createNewUser: USER ID ON SUCCESS IS" + userID);
         }
-        catch (Exception e){
-            e.printStackTrace();
+        else {
+            Log.d(TAG, "createNewUser: ERROR" + serverResponse.getError());
+            Log.d(TAG, "createNewUser: ERRODETAIL" + serverResponse.getError().getErrorBody());
         }
-        Log.d(TAG, "createNewUser: USER ID ON SUCCESS IS" + userID);
-    }
-    else {
-        Log.d(TAG, "createNewUser: ERROR" + serverResponse.getError());
-        Log.d(TAG, "createNewUser: ERRODETAIL" + serverResponse.getError().getErrorBody());
-    }
     }
 
     //Handles the login of a user. Sets the bearer token on success.
@@ -156,22 +163,12 @@ public void createNewUser(String userName, String userPassword, String userEmail
 
     /*  classes for group implementation:    */
 
-    //input initial latlng
-    public void inputLatLng(LatLng point, Context context) {
-        listOfPoints.add(point);
-    }
 
-    //return latlng
-    public LatLng returnLatLng(Context context) {
-        return listOfPoints.get(0);
-    }
 
     // create new group
     public void createNewGroup(String groupDescription, int leaderID, LatLng point, Context appContext){
-        //Initialize androidNetworking library with current activity context
-        AndroidNetworking.initialize(appContext);
         final JSONObject jsonBody = new JSONObject();
-        //Create the json body to be attached
+
         try {
             jsonBody.put("group description", groupDescription);
             jsonBody.put("routeLatArray", new JSONArray());
@@ -187,6 +184,7 @@ public void createNewUser(String userName, String userPassword, String userEmail
         }
 
         //Make POST call to server with attached json body
+        AndroidNetworking.initialize(appContext);
         AndroidNetworking.post(baseURL + "/groups")
                 .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
                 .addHeaders("Authorization", bearerToken)
@@ -214,9 +212,12 @@ public void createNewUser(String userName, String userPassword, String userEmail
     }
 
     //gets list of all groups
-    public void getGroupList(Context currContext){
+    public JSONArray getGroupList(Context currContext){
+        int currID = 0;
         AndroidNetworking.initialize(currContext);
-        AndroidNetworking.get(baseURL + "/groups")
+
+
+        AndroidNetworking.get(baseURL + "/groups/" + currID)
                 .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
                 .addHeaders("Authorization", bearerToken)
                 .build()
@@ -224,7 +225,8 @@ public void createNewUser(String userName, String userPassword, String userEmail
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            groupDetails = response.getJSONObject("id");
+                            groupList.put(response);
+
                         }
                         catch (Exception e){
                             e.printStackTrace();
@@ -237,7 +239,9 @@ public void createNewUser(String userName, String userPassword, String userEmail
                         Log.d(TAG, "onError: " + anError.getErrorDetail());
                     }
                 });
+        return groupList;
     }
+
 
     //gets group's details through groupID
     public void getGroupDetails(int groupID, Context currContext){
@@ -415,8 +419,5 @@ public void createNewUser(String userName, String userPassword, String userEmail
                     }
                 });
     }
-
-
-
 
 }

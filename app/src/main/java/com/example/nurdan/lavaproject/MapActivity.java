@@ -61,10 +61,20 @@ public class MapActivity extends FragmentActivity implements
 
         getLocationPermission();
         initializeMapFrag();
+        makeListBtn();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
+    private void makeListBtn () {
+        Button list = findViewById(R.id.listGroupBtn);
+        list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
+            }
+        });
+    }
 
     private void initializeMapFrag() {
         if (mLocationPermissionGranted) {
