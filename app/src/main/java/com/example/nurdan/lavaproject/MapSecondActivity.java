@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -17,39 +18,49 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ApplicationLogic.ProgramSingletonController;
 
 public class MapSecondActivity extends AppCompatActivity {
     private ListView groupList;
     private ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
+    private List<String> nameList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_second);
         setupBackbtn();
-//        setupListView();
+        setupListView();
     }
 
     //may need the data from the server to inside list to view how many groups in there
     private void setupListView(){
-        groupList = findViewById(R.id.groupListview);
+        groupList = findViewById(R.id.groupListView);
 
+        JSONArray original = currInstance.getGroupList(getApplicationContext());
 
-        JSONArray jArr = currInstance.getGroupList(this);
-       // String output = null;
-      /*  try {
-            output = jArr.getString("group description");
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (original == null) {
+            original = new JSONArray();
         }
-*/
-        int length = jArr .length();
-        ArrayList<String> groupList = new ArrayList<>();
-     //   groupList.add(output);
 
-    //    Toast.makeText(this, output, Toast.LENGTH_LONG).show();
+        for (int i = 0; i < original.length(); i++) {
+            JSONObject childJSONObject = null;
+            try {
+                childJSONObject = original.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                nameList.add(childJSONObject.getString("groupDescription"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, nameList);
+        groupList.setAdapter(adapter);
     }
 
     private void setupBackbtn() {

@@ -21,13 +21,15 @@ public class GroupActivity extends AppCompatActivity {
     private List<LatLng> startEnd;
     private LatLng start;
     private LatLng end;
+    private String bearerToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
         localInstance = ProgramSingletonController.getCurrInstance();
-        leaderID = localInstance.getUserID();
+        leaderID = localInstance.getUserID(); //.getCurrUserID(getApplicationContext());
+        bearerToken = localInstance.getBearerToken(); //.getBearerToken(getApplicationContext());
 
         startEnd = localInstance.returnLatLng(getApplicationContext());
         if (startEnd == null) {
@@ -44,11 +46,11 @@ public class GroupActivity extends AppCompatActivity {
         Toast.makeText(this, "end:" + endLatLng, Toast.LENGTH_LONG).show();
 
         createBtn();
+        setupBackbtn();
     }
 
     public void createBtn(){
         Button createButton = findViewById(R.id.create_btn);
-
         final EditText group = findViewById(R.id.groupName);
 
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +58,18 @@ public class GroupActivity extends AppCompatActivity {
             public void onClick(View view) {
                 localInstance = ProgramSingletonController.getCurrInstance();
                 groupName = group.getText().toString();
+                Toast.makeText(getApplicationContext(), groupName, Toast.LENGTH_LONG).show();
                 localInstance.createNewGroup(groupName, leaderID, start, end, getApplicationContext());
+                startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
+            }
+        });
+    }
+
+    private void setupBackbtn() {
+        Button btn = findViewById(R.id.back_btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 finish();
             }
         });

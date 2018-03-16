@@ -23,6 +23,7 @@ import static android.content.ContentValues.TAG;
 public class ProgramSingletonController {
     private String bearerToken;
     private int userID;
+    private String userEmail;
     private JSONObject jsonResponse;
     private AccountApiInteractions currInstance;
     Boolean logInStatus = false;
@@ -44,10 +45,42 @@ public class ProgramSingletonController {
         }
     }
 
+    public int getUserID(){
+        currInstance = new AccountApiInteractions();
+        return currInstance.getUserID();
+    }
+
+    public String getBearerToken(){
+        currInstance = new AccountApiInteractions();
+        return currInstance.getBearerToken();
+    }
+
+    //used for test, can delete
+    /*
+    //saves curr email, bearer toekn
+    private void saveEmail(String email, String token, Context context){
+        userEmail = email;
+        bearerToken = token;
+    }
+
+    private String getEmail(Context context){
+        return userEmail;
+    }
+
+
+    public int getCurrUserID(Context appContext){
+        currInstance = new AccountApiInteractions();
+        userEmail = getEmail(appContext);
+        int tempUserID = currInstance.getDatabaseUserID(userEmail, appContext);
+        return tempUserID;
+    }
+
+    */
 
     //Creates a new user
     public void createNewUser(String name, String email, String password, Context appContext){
         currInstance = new AccountApiInteractions();
+
         currInstance.createNewUser(name, password, email, appContext);
     }
 
@@ -60,8 +93,8 @@ public class ProgramSingletonController {
         Log.d(TAG, "logIn: Programsingletonberer " + this.bearerToken);
         this.userID = currInstance.getDatabaseUserID(email, appContext);
         Log.d(TAG, "logIn: UserIDTEST " + this.userID   );
+        //saveEmail(email, this.bearerToken, appContext);
         return logInStatus;
-
     }
     //Adds new user to be monitored by another
     public void addUsrMonitor(int monitorID, String userEmail, String bearerToken, Context appContext){
@@ -76,10 +109,6 @@ public class ProgramSingletonController {
         currInstance.stopMonitoringUser(monitorID, dltdUser, bearerToken, appContext);
     }
 
-    public int getUserID(){
-        currInstance = new AccountApiInteractions();
-        return currInstance.getUserID();
-    }
 
     // Method to get users who are monitored by the currently logged in user.
     public ArrayList<String> getUsersMonitored(Context appContext){

@@ -2,6 +2,7 @@ package ApplicationLogic;
 
 
 import android.content.Context;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -168,15 +169,19 @@ public class AccountApiInteractions {
     // create new group
     public void createNewGroup(String groupDescription, int leaderID, LatLng start, LatLng dest, Context appContext){
         final JSONObject jsonBody = new JSONObject();
+        bearerToken = getBearerToken();
 
         try {
-            jsonBody.put("group description", groupDescription);
-            jsonBody.put("routeLatArray", new JSONArray());
-            jsonBody.put("routeLatArray", start.latitude);
-            jsonBody.put("routeLatArray", dest.latitude);
-            jsonBody.put("routeLngArray", new JSONArray());
-            jsonBody.put("routeLngArray", start.longitude);
-            jsonBody.put("routeLngArray", dest.longitude);
+            JSONArray LatArray = new JSONArray();
+            JSONArray LngArray = new JSONArray();
+
+            jsonBody.put("groupDescription", groupDescription);
+            LatArray.put(start.latitude);
+            LatArray.put(dest.latitude);
+            jsonBody.put("routeLatArray", LatArray);
+            LngArray.put(start.longitude);
+            LngArray.put(dest.longitude);
+            jsonBody.put("routeLngArray", LngArray);
             jsonBody.put("leader", leaderID);
             jsonBody.put("memberUsers", new JSONArray());
         }
@@ -206,41 +211,42 @@ public class AccountApiInteractions {
                     }
                     @Override
                     public void onError(ANError anError) {
-                        Log.d(TAG, "onError:"+ jsonBody.toString());
-                        Log.d(TAG, "onError: "+anError.getErrorBody());
-                        Log.d(TAG, "onError: "+ anError.getErrorDetail());
+                        Log.d(TAG, "onError: bearertoken: " + bearerToken);
+                        Log.d(TAG, "onError: UserID: " + userID);
+                        Log.d(TAG, "onError: body:"+ jsonBody.toString());
+                        Log.d(TAG, "onError: errorbody: "+ anError.getErrorBody());
+                        Log.d(TAG, "onError: detail: "+ anError.getErrorDetail());
                     }
                 });
     }
 
     //gets list of all groups
     public JSONArray getGroupList(Context currContext){
-        int currID = 0;
         AndroidNetworking.initialize(currContext);
-
-
-        AndroidNetworking.get(baseURL + "/groups/" + currID)
-                .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
-                .addHeaders("Authorization", bearerToken)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            groupList.put(response);
-
+        for (int currID = 0; currID < groupID; currID++){
+            AndroidNetworking.get(baseURL + "/groups/" + currID)
+                    .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
+                    .addHeaders("Authorization", bearerToken)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                groupList.put(response);
+                                Log.d(TAG, "onResponse: why"+ response.toString());
+                            }
+                            catch (Exception e){
+                                e.printStackTrace();
+                            }
+                            Log.d(TAG, "onResponse: JsonBody " + response.toString());
                         }
-                        catch (Exception e){
-                            e.printStackTrace();
+                        @Override
+                        public void onError(ANError anError) {
+                            Log.d(TAG, "onError: " + anError.getErrorBody());
+                            Log.d(TAG, "onError: " + anError.getErrorDetail());
                         }
-                        Log.d(TAG, "onResponse: JsonBody " + response.toString());
-                    }
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.d(TAG, "onError: " + anError.getErrorBody());
-                        Log.d(TAG, "onError: " + anError.getErrorDetail());
-                    }
-                });
+                    });
+        }
         return groupList;
     }
 
@@ -284,7 +290,7 @@ public class AccountApiInteractions {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            response.put("group description", newDescription);
+                            response.put("groupDescription", newDescription);
                             response.put("routeLatArray", latitude);
                             response.put("routeLngArray", longitude);
                         }
