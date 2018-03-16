@@ -24,11 +24,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import java.util.ArrayList;
 
 import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
@@ -49,6 +52,8 @@ public class MapActivity extends FragmentActivity implements
 
     private final LatLng mDefaultLocation = new LatLng(0, 0);
     private Location mLastKnownLocation;
+    ArrayList<LatLng> MarkerPoints;
+
     private ProgramSingletonController localInstance = ProgramSingletonController.getCurrInstance();
 
 
@@ -58,6 +63,7 @@ public class MapActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        MarkerPoints = new ArrayList<>();
 
         getLocationPermission();
         initializeMapFrag();
@@ -99,9 +105,26 @@ public class MapActivity extends FragmentActivity implements
 
     @Override
     public void onMapClick(LatLng point) {
-        mMap.clear();
-        localInstance.inputLatLng(point, this);
-        mMap.addMarker(new MarkerOptions().position(point).title("Tap to Create New Group").draggable(true));
+        if (MarkerPoints.size() > 2) {
+            MarkerPoints.clear();
+            mMap.clear();
+        }
+
+        MarkerPoints.add(point);
+        MarkerOptions options = new MarkerOptions();
+        options.position(point);
+
+        if (MarkerPoints.size() == 1) {
+            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            mMap.addMarker(options.title("Tap to Create New Group: Blue = Start"));
+            LatLng origin = MarkerPoints.get(0);
+            localInstance.inputLatLng(origin, this);
+        } else if (MarkerPoints.size() == 2) {
+            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            mMap.addMarker(options.title("Green = End"));
+            LatLng dest = MarkerPoints.get(1);
+            localInstance.inputLatLng(dest, this);
+        }
     }
 
     @Override
@@ -114,6 +137,7 @@ public class MapActivity extends FragmentActivity implements
     public void onInfoWindowClick(Marker marker) {
         Toast.makeText(this, "Info window clicked",
                 Toast.LENGTH_SHORT).show();
+        // todo: make gorup through button, not clicking infowindow
         startActivity(new Intent(this, GroupActivity.class));
     }
 

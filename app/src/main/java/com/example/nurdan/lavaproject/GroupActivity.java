@@ -10,13 +10,17 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.List;
+
 import ApplicationLogic.ProgramSingletonController;
 
 public class GroupActivity extends AppCompatActivity {
     private ProgramSingletonController localInstance;
     private String groupName;
     private int leaderID;
-    private LatLng point;
+    private List<LatLng> startEnd;
+    private LatLng start;
+    private LatLng end;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +28,21 @@ public class GroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group);
         localInstance = ProgramSingletonController.getCurrInstance();
         leaderID = localInstance.getUserID();
-        // todo: fix returnlatlng
-        point = localInstance.returnLatLng(getApplicationContext());
-        String input = point.toString();
-        Toast.makeText(this, input, Toast.LENGTH_LONG).show();
 
-        if (point == null) {
-            point = new LatLng(0, 0);
+        startEnd = localInstance.returnLatLng(getApplicationContext());
+        if (startEnd == null) {
+            start = new LatLng(0, 0);
+            end = new LatLng(0, 0);
         }
+        start = startEnd.get(0);
+        end = startEnd.get(1);
+
+        String startLatLng = start.toString();
+        Toast.makeText(this, "start:" + startLatLng, Toast.LENGTH_LONG).show();
+
+        String endLatLng = end.toString();
+        Toast.makeText(this, "end:" + endLatLng, Toast.LENGTH_LONG).show();
+
         createBtn();
     }
 
@@ -45,7 +56,7 @@ public class GroupActivity extends AppCompatActivity {
             public void onClick(View view) {
                 localInstance = ProgramSingletonController.getCurrInstance();
                 groupName = group.getText().toString();
-                localInstance.createNewGroup(groupName, leaderID, point, getApplicationContext());
+                localInstance.createNewGroup(groupName, leaderID, start, end, getApplicationContext());
                 finish();
             }
         });

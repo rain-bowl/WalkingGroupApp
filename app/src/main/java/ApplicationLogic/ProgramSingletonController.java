@@ -138,19 +138,21 @@ public class ProgramSingletonController {
 
     //input latlng
     public void inputLatLng(LatLng point, Context context) {
-        listOfPoints.clear();
+        if (listOfPoints.size() == 2){
+            listOfPoints.clear();
+        }
         listOfPoints.add(point);
     }
 
     //get group starting latlng
-    public LatLng returnLatLng(Context context) {
-        return listOfPoints.get(0);
+    public List<LatLng> returnLatLng(Context context) {
+        return listOfPoints;
     }
 
         //create new group
-    public void createNewGroup(String groupDescription, int leaderID, LatLng point, Context appContext){
+    public void createNewGroup(String groupDescription, int leaderID, LatLng start, LatLng dest, Context appContext){
         currInstance = new AccountApiInteractions();
-        currInstance.createNewGroup(groupDescription, leaderID, point, appContext);
+        currInstance.createNewGroup(groupDescription, leaderID, start, dest, appContext);
         bearerToken = currInstance.getBearerToken();
     }
 

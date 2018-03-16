@@ -166,15 +166,17 @@ public class AccountApiInteractions {
 
 
     // create new group
-    public void createNewGroup(String groupDescription, int leaderID, LatLng point, Context appContext){
+    public void createNewGroup(String groupDescription, int leaderID, LatLng start, LatLng dest, Context appContext){
         final JSONObject jsonBody = new JSONObject();
 
         try {
             jsonBody.put("group description", groupDescription);
             jsonBody.put("routeLatArray", new JSONArray());
-            jsonBody.put("routeLatArray", point.latitude);
+            jsonBody.put("routeLatArray", start.latitude);
+            jsonBody.put("routeLatArray", dest.latitude);
             jsonBody.put("routeLngArray", new JSONArray());
-            jsonBody.put("routeLngArray", point.longitude);
+            jsonBody.put("routeLngArray", start.longitude);
+            jsonBody.put("routeLngArray", dest.longitude);
             jsonBody.put("leader", leaderID);
             jsonBody.put("memberUsers", new JSONArray());
         }
