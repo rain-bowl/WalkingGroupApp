@@ -237,4 +237,9 @@ public class ProgramSingletonController {
         currInstance.removeGroupMember(groupID, memberID, appContext);
         bearerToken = currInstance.getBearerToken();
     }
+
+     //Simple method which discards bearer token to log user out.
+    public void userLogout(){
+        bearerToken = null;
+    }
 }

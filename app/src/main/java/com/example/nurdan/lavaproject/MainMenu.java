@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import ApplicationLogic.ProgramSingletonController;
+// Class simply creates and contains listeners to help user navigate the application.
 public class MainMenu extends AppCompatActivity {
 
     @Override
@@ -44,10 +46,14 @@ public class MainMenu extends AppCompatActivity {
 
             }
         });
-
+        //Logs out user by discarding currently saved bearer token and returns them to the log in menu
         usrLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ProgramSingletonController currInstence = ProgramSingletonController.getCurrInstance();
+                currInstence.userLogout();
+                Intent logoutIntent = LoginActivity.loginActIntent(getApplicationContext());
+                startActivity(logoutIntent);
 
             }
         });

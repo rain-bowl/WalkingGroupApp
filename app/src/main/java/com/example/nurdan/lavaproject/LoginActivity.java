@@ -86,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                     finish(); // Call once you redirect to another activity
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Could not log in!", Toast.LENGTH_LONG).show();
                     Log.d("UIERROR", "doInBackground: failed login from ui");
                 }
                return null;

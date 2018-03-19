@@ -147,7 +147,7 @@ public class AccountApiInteractions {
         }
         return userID;
     }
-
+    //Retreives the user information based on their email.
      public User getDatabaseUserProfile(String email, Context currContext) {
         Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
         AndroidNetworking.initialize(currContext);
@@ -466,5 +466,6 @@ public class AccountApiInteractions {
                     }
                 });
     }
+
 
 }
