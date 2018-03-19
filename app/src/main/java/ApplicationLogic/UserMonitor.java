@@ -31,7 +31,7 @@ private final String baseURL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443";
 private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 /*This method adds a user to be monitored by another user.
  */
-    public void addMonitoredUser(int userID, int monitoredUserID, String bearerKey, Context appContext){
+    public Boolean addMonitoredUser(int userID, int monitoredUserID, String bearerKey, Context appContext){
 
         JSONObject jsonBody = new JSONObject();
         try {
@@ -50,16 +50,47 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
         if (serverResponse.isSuccess()){
             if(serverResponse.getOkHttpResponse().code() == 201){
                 Log.d(TAG, "addMonitoredUser: Success in adding user");
+                return true;
             }
             else{
                 Log.d(TAG, "addMonitoredUser: Could not add user");
+                return false;
             }
         }
         else {
             Log.d(TAG, "addMonitoredUser: Request Error" + serverResponse.getError());
+            return false;
         }
 
 
+
+    }
+    public Boolean addUsrToMonitorYou(int userId, int monitorID, String bearer, Context appContext){
+        Boolean successFlag;
+        AndroidNetworking.initialize(appContext);
+        JSONObject jsonBody = new JSONObject();
+        try{
+            jsonBody.put("id", monitorID);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        ANRequest addMonitorRequest = AndroidNetworking.post(baseURL + "/users/" + userId + "/monitoredByUsers")
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearer)
+                .addJSONObjectBody(jsonBody)
+                .build();
+
+        ANResponse<OkHttpResponseListener> serverResponse = addMonitorRequest.executeForOkHttpResponse();
+        if(serverResponse.isSuccess()){
+            if(serverResponse.getOkHttpResponse().code() == 201){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        return null;
 
     }
 

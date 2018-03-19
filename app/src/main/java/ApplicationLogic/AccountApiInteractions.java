@@ -110,14 +110,14 @@ public void createNewUser(String userName, String userPassword, String userEmail
 
     }
     //Class which recovers a users ID number from the database. This is needed to implement the user monitoring.
-    public int getDatabaseUserID(String email, Context currContext) {
-        Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
+    public int getDatabaseUserID(String email, Context currContext, String bearer) {
+        Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearer);
         AndroidNetworking.initialize(currContext);
         String formattedEmail = email.replace("@", "%40");
         Log.d(TAG, "getDatabaseUserID: Formatted email" + formattedEmail);
         ANRequest getUserIDRequest = AndroidNetworking.get(baseURL + "/users/byEmail?email=" + formattedEmail)
                 .addHeaders("apiKey", apiKey)
-                .addHeaders("Authorization", bearerToken)
+                .addHeaders("Authorization", bearer)
                 .build();
         ANResponse<JSONObject> serverResponse = getUserIDRequest.executeForJSONObject();
         if (serverResponse.isSuccess()) {
