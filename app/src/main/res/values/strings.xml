@@ -39,6 +39,9 @@
     <string name="userSchoolTeacher">Current school teacher</string>
     <string name="userEmergencyContactInfo">Emergenc contact instructions</string>
     <string name="nextBtnText">Next</string>
+    <string name="userInstruction">All of the information on this page is optional but it is highly recommended that you fill it out!
+    If you do not wish to add any extra information then simply click Register which is at the bottom of the page. All information seen here
+    can be edited at a later time as well.</string>
     
     
     

@@ -3,6 +3,9 @@ package com.example.nurdan.lavaproject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,15 +28,22 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        gatherUserInput();
-        createButtons();
+        replaceFragment(new MandatoryRegisterInformationFragment());
+
 
     }
 
+    public void replaceFragment(Fragment fragmentClass){
+        FragmentTransaction fTInstance = getSupportFragmentManager().beginTransaction();
+        fTInstance.replace(R.id.fragmentContainer, fragmentClass);
+        fTInstance.commit();
+}
 /* This method sets listeners for the user inputs in the activity. Additionally, it deals
 with the task of comparing both the initial password entered as well as the confirmation password
 which insures that the user has typed in the desired password with no mistakes.
  */
+
+/*
     private void gatherUserInput(){
         final EditText usernameInput = (EditText) findViewById(R.id.usernameInput);
         final EditText passwordInput = (EditText) findViewById(R.id.passwordInput);
@@ -129,7 +139,7 @@ which insures that the user has typed in the desired password with no mistakes.
             }
         });
     }
-
+*/
 
     //Static intent method to access activity
    public static Intent registerActIntent(Context actContext){
