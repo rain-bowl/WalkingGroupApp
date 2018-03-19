@@ -17,7 +17,8 @@ import android.widget.EditText;
  */
 
 public class NonMandatoryRegisterInfoFragment extends Fragment{
-    String address, cellphone, homePhone, grade, teacherName, emergencyInfo, birthYear, birthMonth;
+    String address, cellphone, homePhone, grade, teacherName, emergencyInfo;
+    int birthYear, birthMonth;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,12 +47,12 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+            birthYear = Integer.getInteger(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-            birthYear = s.toString();
+            birthYear = Integer.getInteger(s.toString());
             }
         });
 
@@ -64,12 +65,12 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+            birthMonth = Integer.getInteger(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                birthMonth = s.toString();
+                birthMonth = Integer.getInteger(s.toString());
             }
         });
 
@@ -178,6 +179,7 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
         newUserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Boolean flag;
                 ((RegisterActivity)getActivity()).addJson("birthYear", birthYear);
                 ((RegisterActivity)getActivity()).addJson("birthMonth", birthMonth);
                 ((RegisterActivity)getActivity()).addJson("address", address);
@@ -186,6 +188,8 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
                 ((RegisterActivity)getActivity()).addJson("grade", grade);
                 ((RegisterActivity)getActivity()).addJson("teacherName", teacherName);
                 ((RegisterActivity)getActivity()).addJson("emergencyContactInfo", emergencyInfo);
+                ((RegisterActivity)getActivity()).executeRegisterAction();
+
 
             }
         });

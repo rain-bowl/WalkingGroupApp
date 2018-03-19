@@ -49,20 +49,9 @@ public class AccountApiInteractions {
     private JSONArray groupList;
 
         //Creates a single user using the inputs
-    public void createNewUser(String userName, String userPassword, String userEmailAddr, Context appContext){
-        //Initialize androidNetworking library with current activity context
-                final JSONObject jsonBody = new JSONObject();
-                //Create the json body to be attached
-            try {
-                jsonBody.put("password", userPassword);
-                jsonBody.put("email", userEmailAddr);
-                jsonBody.put("name",userName);
-
-            }
-            catch (Exception e){
-                Log.d(TAG, "createNewUser:Unexpected error");
-                e.printStackTrace();
-            }
+    public Boolean createNewUser(JSONObject jsonBody, Context appContext){
+      Boolean successFlag;
+        Log.d(TAG, "createNewUser: Json Body recieved " + jsonBody.toString());
     //Make POST call to server with attached json body
          AndroidNetworking.initialize(appContext);
         ANRequest signupRequest = AndroidNetworking.post(baseURL + "/users/signup")
@@ -72,21 +61,26 @@ public class AccountApiInteractions {
 
 
         ANResponse<JSONObject> serverResponse = signupRequest.executeForJSONObject();
-        if(serverResponse.isSuccess()){
-            JSONObject jsonResponseBody = serverResponse.getResult();
-            Log.d(TAG, "createNewUser: JSONRESPONSE" + jsonResponseBody);
-            try{
-            userID = jsonResponseBody.getInt("id");
+        if(serverResponse.isSuccess()) {
+            if (serverResponse.getOkHttpResponse().code() == 201) {
+                JSONObject jsonResponseBody = serverResponse.getResult();
+                Log.d(TAG, "createNewUser: JSONRESPONSE" + jsonResponseBody);
+                try {
+                    userID = jsonResponseBody.getInt("id");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG, "createNewUser: USER ID ON SUCCESS IS" + userID);
+                return true;
             }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-            Log.d(TAG, "createNewUser: USER ID ON SUCCESS IS" + userID);
+            return false;
         }
         else {
-            Log.d(TAG, "createNewUser: ERROR" + serverResponse.getError());
-            Log.d(TAG, "createNewUser: ERRODETAIL" + serverResponse.getError().getErrorBody());
+            Log.d(TAG, "createNewUser: ERROR" + serverResponse.getError().getErrorBody());
+            Log.d(TAG, "createNewUser: ERRODETAIL " + serverResponse.getError().getErrorDetail().toString());
+            Log.d(TAG, "createNewUser: More Detail " + serverResponse.getError().getResponse().toString());
         }
+        return false;
     }
 
     //Handles the login of a user. Sets the bearer token on success.

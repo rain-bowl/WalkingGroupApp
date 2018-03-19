@@ -83,10 +83,9 @@ public class ProgramSingletonController {
     */
 
     //Creates a new user
-    public void createNewUser(String name, String email, String password, Context appContext){
+    public Boolean createNewUser(JSONObject jsonBody, Context appContext){
         currInstance = new AccountApiInteractions();
-
-        currInstance.createNewUser(name, password, email, appContext);
+        return currInstance.createNewUser(jsonBody, appContext);
     }
 
     //Logs user into their account
