@@ -10,24 +10,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
 
 public class RegisterActivity extends AppCompatActivity {
-    private String username;
-    private String password;
-    private String email;
-    private Boolean passMatchFlag;
     private ProgramSingletonController localInstance;
+    JSONObject serverCallBody;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        serverCallBody = new JSONObject();
         replaceFragment(new MandatoryRegisterInformationFragment());
 
 
@@ -37,6 +38,21 @@ public class RegisterActivity extends AppCompatActivity {
         FragmentTransaction fTInstance = getSupportFragmentManager().beginTransaction();
         fTInstance.replace(R.id.fragmentContainer, fragmentClass);
         fTInstance.commit();
+}
+
+public void addJson(String key, String content){
+        try{
+            if(content != null){
+                serverCallBody.put(key, content);
+            }
+            else {
+                serverCallBody.put(key, "Not provided");
+            }
+            Log.d("Tag", "addJson: Show jsonObject contents " + serverCallBody.toString());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 }
 /* This method sets listeners for the user inputs in the activity. Additionally, it deals
 with the task of comparing both the initial password entered as well as the confirmation password
@@ -147,7 +163,7 @@ which insures that the user has typed in the desired password with no mistakes.
 
     }
 
-private class asyncRunner extends AsyncTask<Void,Void,Void>{
+/*private class asyncRunner extends AsyncTask<Void,Void,Void>{
     @Override
     protected Void doInBackground(Void... voids) {
         if (passMatchFlag) {
@@ -160,5 +176,5 @@ private class asyncRunner extends AsyncTask<Void,Void,Void>{
                 }
         return null;
     }
-}
+}*/
 }
