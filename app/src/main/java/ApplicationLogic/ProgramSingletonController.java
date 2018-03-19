@@ -29,6 +29,8 @@ public class ProgramSingletonController {
     Boolean logInStatus = false;
     private static ProgramSingletonController instance;
     private List<LatLng> listOfPoints = new ArrayList<>();
+    private User currLoggedInUser;
+
 
     private  ProgramSingletonController(){
         //Private constructor to prevent anybody instantiating the singleton class without using official method
@@ -90,9 +92,11 @@ public class ProgramSingletonController {
         currInstance = new AccountApiInteractions();
         logInStatus = currInstance.userLogIn(email, password, appContext);
         this.bearerToken = currInstance.getBearerToken();
-        Log.d(TAG, "logIn: Programsingletonberer " + this.bearerToken);
-        this.userID = currInstance.getDatabaseUserID(email, appContext);
+        Log.d(TAG, "logIn: Program singleton bearer token " + this.bearerToken);
+        this.currLoggedInUser = currInstance.getDatabaseUserProfile(email, appContext);
+        this.userID = currLoggedInUser.getID();
         Log.d(TAG, "logIn: UserIDTEST " + this.userID   );
+        Log.d(TAG, "logIn: MONITORED BY TEST " +currLoggedInUser.getMonitorsOtherUsers());
         //saveEmail(email, this.bearerToken, appContext);
         return logInStatus;
     }

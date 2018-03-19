@@ -134,11 +134,13 @@ public class AccountApiInteractions {
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
                 .build();
+
+
         ANResponse<JSONObject> serverResponse = getUserIDRequest.executeForJSONObject();
         if (serverResponse.isSuccess()) {
             JSONObject jsonServerResponse = serverResponse.getResult();
             try {
-                userID = jsonServerResponse.getInt("id");
+              userID = jsonServerResponse.getInt("id");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -146,6 +148,43 @@ public class AccountApiInteractions {
         return userID;
     }
 
+     public User getDatabaseUserProfile(String email, Context currContext) {
+        Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
+        AndroidNetworking.initialize(currContext);
+        String formattedEmail = email.replace("@", "%40");
+        Log.d(TAG, "getDatabaseUserID: Formatted email" + formattedEmail);
+        ANRequest getUserIDRequest = AndroidNetworking.get(baseURL + "/users/byEmail?email=" + formattedEmail)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearerToken)
+                .build();
+
+
+        User currUser = new User();
+        ANResponse<JSONObject> serverResponse = getUserIDRequest.executeForJSONObject();
+        if (serverResponse.isSuccess()) {
+            JSONObject jsonServerResponse = serverResponse.getResult();
+            try {
+               currUser.setID(jsonServerResponse.getInt("id"));
+               currUser.setName(jsonServerResponse.getString("name"));
+               currUser.setEmailAddress(jsonServerResponse.getString("email"));
+               currUser.setBirthyear(jsonServerResponse.getInt("birthYear"));
+               currUser.setBirthmonth(jsonServerResponse.getInt("birthMonth"));
+               currUser.setUserAddress(jsonServerResponse.getString("address"));
+               currUser.setCellPhoneNumber(jsonServerResponse.getString("cellPhone"));
+               currUser.setHomePhoneNumber(jsonServerResponse.getString("homePhone"));
+               currUser.setGrade(jsonServerResponse.getString("grade"));
+               currUser.setTeacherName(jsonServerResponse.getString("teacherName"));
+               currUser.setEmergencyContactInfoInstruction(jsonServerResponse.getString("emergencyContactInfo"));
+               currUser.setMonitoredByUsers(jsonServerResponse.getJSONArray("monitoredByUsers"));
+               currUser.setMonitorsOtherUsers(jsonServerResponse.getJSONArray("monitorsUsers"));
+               currUser.setMemberOfGroups(jsonServerResponse.getJSONArray("memberOfGroups"));
+               currUser.setLeaderOfGroups(jsonServerResponse.getJSONArray("leadsGroups"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return currUser;
+    }
 
 
 
