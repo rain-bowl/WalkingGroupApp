@@ -108,7 +108,7 @@ public class ProgramSingletonController {
         currInstance.addMonitoredUser(monitorID, tempUsrID, bearerToken, appContext);
     }
     //Deletes a user from the list of monitored users
-    public void deleteMonitoredUsr(int monitorID, int dltdUser, String bearerToken, Context appContext){
+    public void deleteMonitoredUsr(int monitorID, int dltdUser, Context appContext){
         UserMonitor currInstance = new UserMonitor();
         currInstance.stopMonitoringUser(monitorID, dltdUser, bearerToken, appContext);
     }

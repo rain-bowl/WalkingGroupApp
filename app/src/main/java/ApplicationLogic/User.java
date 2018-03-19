@@ -10,20 +10,28 @@ public class User {
     int ID;
     String emailAddress;
     String name;
-    int birthyear;
-    int birthmonth;
-    String userAddress;
-    String cellPhoneNumber;
-    String homePhoneNumber;
-    String grade;
-    String teacherName;
-    String emergencyContactInfoInstruction;
+    Object birthyear;
+    Object birthmonth;
+    Object userAddress;
+    Object cellPhoneNumber;
+    Object homePhoneNumber;
+    Object grade;
+    Object teacherName;
+    Object emergencyContactInfoInstruction;
     JSONArray monitoredByUsers;
     JSONArray monitorsOtherUsers;
     JSONArray memberOfGroups;
     JSONArray leaderOfGroups;
     JSONObject lastGpsLocation;
-    String userHref;
+    Object userHref;
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 
     public String getEmailAddress() {
         return emailAddress;
@@ -41,67 +49,67 @@ public class User {
         this.name = name;
     }
 
-    public int getBirthyear() {
+    public Object getBirthyear() {
         return birthyear;
     }
 
-    public void setBirthyear(int birthyear) {
+    public void setBirthyear(Object birthyear) {
         this.birthyear = birthyear;
     }
 
-    public int getBirthmonth() {
+    public Object getBirthmonth() {
         return birthmonth;
     }
 
-    public void setBirthmonth(int birthmonth) {
+    public void setBirthmonth(Object birthmonth) {
         this.birthmonth = birthmonth;
     }
 
-    public String getUserAddress() {
+    public Object getUserAddress() {
         return userAddress;
     }
 
-    public void setUserAddress(String userAddress) {
+    public void setUserAddress(Object userAddress) {
         this.userAddress = userAddress;
     }
 
-    public String getCellPhoneNumber() {
+    public Object getCellPhoneNumber() {
         return cellPhoneNumber;
     }
 
-    public void setCellPhoneNumber(String cellPhoneNumber) {
+    public void setCellPhoneNumber(Object cellPhoneNumber) {
         this.cellPhoneNumber = cellPhoneNumber;
     }
 
-    public String getHomePhoneNumber() {
+    public Object getHomePhoneNumber() {
         return homePhoneNumber;
     }
 
-    public void setHomePhoneNumber(String homePhoneNumber) {
+    public void setHomePhoneNumber(Object homePhoneNumber) {
         this.homePhoneNumber = homePhoneNumber;
     }
 
-    public String getGrade() {
+    public Object getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(Object grade) {
         this.grade = grade;
     }
 
-    public String getTeacherName() {
+    public Object getTeacherName() {
         return teacherName;
     }
 
-    public void setTeacherName(String teacherName) {
+    public void setTeacherName(Object teacherName) {
         this.teacherName = teacherName;
     }
 
-    public String getEmergencyContactInfoInstruction() {
+    public Object getEmergencyContactInfoInstruction() {
         return emergencyContactInfoInstruction;
     }
 
-    public void setEmergencyContactInfoInstruction(String emergencyContactInfoInstruction) {
+    public void setEmergencyContactInfoInstruction(Object emergencyContactInfoInstruction) {
         this.emergencyContactInfoInstruction = emergencyContactInfoInstruction;
     }
 
@@ -145,22 +153,13 @@ public class User {
         this.lastGpsLocation = lastGpsLocation;
     }
 
-    public String getUserHref() {
+    public Object getUserHref() {
         return userHref;
     }
 
-    public void setUserHref(String userHref) {
+    public void setUserHref(Object userHref) {
         this.userHref = userHref;
     }
-
-
-    public int getID() {
-        return ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-
 }
+
+
