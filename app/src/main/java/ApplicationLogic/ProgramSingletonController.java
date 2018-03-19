@@ -56,6 +56,9 @@ public class ProgramSingletonController {
         currInstance = new AccountApiInteractions();
         return currInstance.getBearerToken();
     }
+    public User getCurrLoggedInUser(){
+        return this.currLoggedInUser;
+    }
 
     //used for test, can delete
     /*
