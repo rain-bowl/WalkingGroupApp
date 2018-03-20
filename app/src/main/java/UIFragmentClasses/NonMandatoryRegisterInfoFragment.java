@@ -1,4 +1,4 @@
-package com.example.nurdan.lavaproject;
+package UIFragmentClasses;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.nurdan.lavaproject.R;
+import com.example.nurdan.lavaproject.RegisterActivity;
 
 /**
  * Created by yavor on 19/03/18.

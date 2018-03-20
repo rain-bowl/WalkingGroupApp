@@ -1,4 +1,4 @@
-package com.example.nurdan.lavaproject;
+package UIFragmentClasses;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.nurdan.lavaproject.R;
+
 /**
  * Created by yavor on 15/03/18.
  */
 
-public class AddUserDialog extends AppCompatDialogFragment{
+public class AddUserDialogFragment extends AppCompatDialogFragment{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity())

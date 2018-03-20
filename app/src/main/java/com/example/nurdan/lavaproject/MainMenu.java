@@ -23,6 +23,7 @@ public class MainMenu extends AppCompatActivity {
         Button mngGroups = findViewById(R.id.mngGroups);
         Button usrMonitor = findViewById(R.id.usrMonitor);
         Button usrLogout = findViewById(R.id.usrLogout);
+        Button usrProfile = findViewById(R.id.profileBtn);
 
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +47,14 @@ public class MainMenu extends AppCompatActivity {
 
             }
         });
+        usrProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent userProfile = UserProfile.userProfileIntent(getApplicationContext());
+                startActivity(userProfile);
+            }
+        });
+
         //Logs out user by discarding currently saved bearer token and returns them to the log in menu
         usrLogout.setOnClickListener(new View.OnClickListener() {
             @Override
