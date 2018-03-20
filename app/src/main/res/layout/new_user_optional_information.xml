@@ -54,7 +54,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="number" />
                 </TableRow>
 
                 <TableRow
@@ -90,7 +90,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="number" />
                 </TableRow>
 
                 <TableRow
@@ -122,7 +122,7 @@
                     android:layout_height="match_parent">
 
                     <EditText
-                        android:id="@+id/homePhoneInput"
+                        android:id="@+id/addressInput"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -194,7 +194,7 @@
                     android:layout_height="match_parent">
 
                     <EditText
-                        android:id="@+id/addressInput"
+                        android:id="@+id/homePhoneInput"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -230,7 +230,7 @@
                     android:layout_height="match_parent">
 
                     <EditText
-                        android:id="@+id/userTeacherInput"
+                        android:id="@+id/userGradeInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -258,7 +258,7 @@
                     android:layout_height="match_parent">
 
                     <EditText
-                        android:id="@+id/userGradeInput"
+                        android:id="@+id/userTeacherInput"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"

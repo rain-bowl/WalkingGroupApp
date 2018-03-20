@@ -50,12 +50,15 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-            birthYear = Integer.getInteger(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-            birthYear = Integer.getInteger(s.toString());
+                try {
+                    birthYear = Integer.parseInt(s.toString());
+                }
+                catch (Exception e){
+                }
             }
         });
 
@@ -68,12 +71,16 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-            birthMonth = Integer.getInteger(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                birthMonth = Integer.getInteger(s.toString());
+              try {
+                  birthMonth = Integer.parseInt(s.toString());
+              }
+              catch (Exception e){
+
+              }
             }
         });
 

@@ -110,7 +110,10 @@ public class MandatoryRegisterInformationFragment extends Fragment{
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userPassword.compareTo(userConfirmPassword) == 0) {
+                if(userName == null || userEmail == null || userPassword == null || userConfirmPassword == null){
+                    Toast.makeText(getContext(), R.string.missingFields, Toast.LENGTH_LONG).show();
+                }
+                else if(userPassword.compareTo(userConfirmPassword) == 0) {
                     ((RegisterActivity) getActivity()).addJson("name", userName);
                     ((RegisterActivity) getActivity()).addJson("email", userEmail);
                     ((RegisterActivity) getActivity()).addJson("password", userPassword);
