@@ -82,6 +82,10 @@ public class ProgramSingletonController {
 
     */
 
+    public User getLoggedInUserProfile(){
+        return this.currLoggedInUser;
+    }
+
     //Creates a new user
     public Boolean createNewUser(JSONObject jsonBody, Context appContext){
         currInstance = new AccountApiInteractions();

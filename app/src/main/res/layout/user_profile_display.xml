@@ -9,16 +9,16 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="558dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:divider="@android:drawable/presence_invisible"
             android:gravity="center"
             android:orientation="vertical"
             android:showDividers="beginning|middle|end"
@@ -34,8 +34,8 @@
 
                     <TextView
                         android:id="@+id/birthYearTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
                         android:text="@string/birthYear" />
                 </TableRow>
 
@@ -50,13 +50,6 @@
                         android:ems="10"></TextView>
                 </TableRow>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
             </TableLayout>
 
             <TableLayout
@@ -69,8 +62,8 @@
 
                     <TextView
                         android:id="@+id/birthMonthTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
                         android:text="@string/birthMonth" />
                 </TableRow>
 
@@ -96,8 +89,8 @@
 
                     <TextView
                         android:id="@+id/homePhoneTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
                         android:text="@string/userAddress" />
                 </TableRow>
 
@@ -106,7 +99,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/homePhoneInput"
+                        android:id="@+id/addressInput"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"></TextView>
                 </TableRow>
@@ -123,8 +116,8 @@
 
                     <TextView
                         android:id="@+id/cellPhoneTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
                         android:text="@string/userCellPhone" />
                 </TableRow>
 
@@ -150,8 +143,8 @@
 
                     <TextView
                         android:id="@+id/addressTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
                         android:text="@string/userHomePhone" />
                 </TableRow>
 
@@ -160,20 +153,13 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/addressInput"
+                        android:id="@+id/homePhoneInput"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:inputType="textPersonName" />
                 </TableRow>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
             </TableLayout>
 
             <TableLayout
@@ -186,8 +172,8 @@
 
                     <TextView
                         android:id="@+id/userTeacherTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
                         android:text="@string/userSchoolGrade" />
                 </TableRow>
 
@@ -196,11 +182,10 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/userTeacherInput"
+                        android:id="@+id/userGradeInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        ></TextView>
+                        android:ems="10"></TextView>
                 </TableRow>
             </TableLayout>
 
@@ -214,8 +199,8 @@
 
                     <TextView
                         android:id="@+id/userGradeTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
                         android:text="@string/userSchoolTeacher" />
                 </TableRow>
 
@@ -224,7 +209,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/userGradeInput"
+                        android:id="@+id/userTeacherInput"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -242,8 +227,8 @@
 
                     <TextView
                         android:id="@+id/userEmergencyTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="250dp"
+                        android:layout_height="40dp"
                         android:text="@string/userEmergencyContactInfo" />
                 </TableRow>
 

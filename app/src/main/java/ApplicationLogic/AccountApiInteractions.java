@@ -152,7 +152,8 @@ public class AccountApiInteractions {
                 .addHeaders("Authorization", bearerToken)
                 .build();
 
-
+        //Creates an instance of user class, fills its fields and sends it off to the singleton method
+         //for access by all other classes
         User currUser = new User();
         ANResponse<JSONObject> serverResponse = getUserIDRequest.executeForJSONObject();
         if (serverResponse.isSuccess()) {
@@ -161,18 +162,19 @@ public class AccountApiInteractions {
                currUser.setID(jsonServerResponse.getInt("id"));
                currUser.setName(jsonServerResponse.getString("name"));
                currUser.setEmailAddress(jsonServerResponse.getString("email"));
-               currUser.setBirthyear(jsonServerResponse.get("birthYear"));
-               currUser.setBirthmonth(jsonServerResponse.get("birthMonth"));
-               currUser.setUserAddress(jsonServerResponse.get("address"));
-               currUser.setCellPhoneNumber(jsonServerResponse.get("cellPhone"));
-               currUser.setHomePhoneNumber(jsonServerResponse.get("homePhone"));
-               currUser.setGrade(jsonServerResponse.get("grade"));
-               currUser.setTeacherName(jsonServerResponse.get("teacherName"));
-               currUser.setEmergencyContactInfoInstruction(jsonServerResponse.get("emergencyContactInfo"));
+               currUser.setBirthyear(jsonServerResponse.getInt("birthYear"));
+               currUser.setBirthmonth(jsonServerResponse.getInt("birthMonth"));
+               currUser.setUserAddress(jsonServerResponse.getString("address"));
+               currUser.setCellPhoneNumber(jsonServerResponse.getString("cellPhone"));
+               currUser.setHomePhoneNumber(jsonServerResponse.getString("homePhone"));
+               currUser.setGrade(jsonServerResponse.getString("grade"));
+               currUser.setTeacherName(jsonServerResponse.getString("teacherName"));
+               currUser.setEmergencyContactInfoInstruction(jsonServerResponse.getString("emergencyContactInfo"));
                currUser.setMonitoredByUsers(jsonServerResponse.getJSONArray("monitoredByUsers"));
                currUser.setMonitorsOtherUsers(jsonServerResponse.getJSONArray("monitorsUsers"));
                currUser.setMemberOfGroups(jsonServerResponse.getJSONArray("memberOfGroups"));
                currUser.setLeaderOfGroups(jsonServerResponse.getJSONArray("leadsGroups"));
+                Log.d(TAG, "getDatabaseUserProfile: USER INFO RECIEVED " + currUser.getBirthyear());
             } catch (Exception e) {
                 e.printStackTrace();
             }
