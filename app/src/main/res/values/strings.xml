@@ -47,6 +47,9 @@
 
     <string name="editInfo">Edit information</string>
     <string name="submitInfo">Submit changes</string>
+    <string name="editMenu">Edit</string>
+    <string name="backMenu">Back</string>
+    <string name="mainMenu">Main Menu</string>
 
     <!-- Strings related to groups -->
     <string name="NearBy">NearBy</string>
