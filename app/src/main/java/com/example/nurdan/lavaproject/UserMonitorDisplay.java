@@ -9,15 +9,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ProgressBar;
 
@@ -54,6 +58,20 @@ public class UserMonitorDisplay extends AppCompatActivity {
                 addUserFragment.show(getSupportFragmentManager(), "addUsr");
                 break;
             case R.id.delete_monitor_user:
+                ListView users = findViewById(R.id.usersMonitoredView);
+                SparseBooleanArray checked = users.getCheckedItemPositions();
+                if(checked == null) {
+                    Toast.makeText(this,"Select user to delete", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                StringBuffer selectedUsers = new StringBuffer();
+                for(int i = 0, len = checked.size(); i < len; i++) {
+                    if(checked.valueAt(i) == true) {
+                        String s = ((TextView) users.getChildAt(i)).getText().toString();
+                        selectedUsers = selectedUsers.append(" " + s);
+                    }
+                }
+                Toast.makeText(this, "Selected items are " + selectedUsers.toString(), Toast.LENGTH_SHORT).show();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -99,20 +117,35 @@ private class getMntrUsers extends AsyncTask<Void,Void,Void>{
             displayMntrdUser.setAdapter(listViewAdapter);
         }
         else{
-            ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
-            displayMntrdUser.setAdapter(listViewAdapter);
-
-
-            displayMntrdUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_multiple_choice, retrievedUsers);
+            displayMntrdUser.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+            displayMntrdUser.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                }
 
-                        String username = parent.getItemAtPosition(position).toString();
-                        Toast.makeText(UserMonitorDisplay.this, "POS: " + username, Toast.LENGTH_SHORT).show();
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
 
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
 
                 }
             });
+
+            displayMntrdUser.setAdapter(listViewAdapter);
         }
 
     }
