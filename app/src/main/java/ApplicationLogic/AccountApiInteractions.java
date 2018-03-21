@@ -81,7 +81,7 @@ public class AccountApiInteractions {
             catch (Exception e){
                 e.printStackTrace();
             }
-            Log.d(TAG, "createNewUser: USER ID ON SUCCESS IS" + userID);
+            Log.d(TAG, "createNewUser: USER ID ON SUCCESS IS " + userID);
         }
         else {
             Log.d(TAG, "createNewUser: ERROR" + serverResponse.getError());
@@ -126,10 +126,10 @@ public class AccountApiInteractions {
     }
     //Class which recovers a users ID number from the database. This is needed to implement the user monitoring.
     public int getDatabaseUserID(String email, Context currContext) {
-        Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
+        Log.d(TAG, "getDatabaseUserID: user's bearerToken: " + bearerToken);
         AndroidNetworking.initialize(currContext);
         String formattedEmail = email.replace("@", "%40");
-        Log.d(TAG, "getDatabaseUserID: Formatted email" + formattedEmail);
+        Log.d(TAG, "getDatabaseUserID: Formatted email: " + formattedEmail);
         ANRequest getUserIDRequest = AndroidNetworking.get(baseURL + "/users/byEmail?email=" + formattedEmail)
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
@@ -167,9 +167,9 @@ public class AccountApiInteractions {
 
 
     // create new group
-    public void createNewGroup(String groupDescription, int leaderID, LatLng start, LatLng dest, Context appContext){
+    public void createNewGroup(final String bearerToken, String groupDescription, int leaderID, LatLng start, LatLng dest, final Context appContext){
         final JSONObject jsonBody = new JSONObject();
-        bearerToken = getBearerToken();
+        //bearerToken = getBearerToken();
 
         try {
             JSONArray LatArray = new JSONArray();
@@ -211,6 +211,7 @@ public class AccountApiInteractions {
                     }
                     @Override
                     public void onError(ANError anError) {
+                        Toast.makeText(appContext, "Error: Group not created.", Toast.LENGTH_SHORT);
                         Log.d(TAG, "onError: bearertoken: " + bearerToken);
                         Log.d(TAG, "onError: UserID: " + userID);
                         Log.d(TAG, "onError: body:"+ jsonBody.toString());

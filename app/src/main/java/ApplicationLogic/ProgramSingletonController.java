@@ -179,10 +179,10 @@ public class ProgramSingletonController {
     }
 
         //create new group
-    public void createNewGroup(String groupDescription, int leaderID, LatLng start, LatLng dest, Context appContext){
+    public void createNewGroup(String bearerToken, String groupDescription, int leaderID, LatLng start, LatLng dest, Context appContext){
         currInstance = new AccountApiInteractions();
-        currInstance.createNewGroup(groupDescription, leaderID, start, dest, appContext);
-        bearerToken = currInstance.getBearerToken();
+        //bearerToken = currInstance.getBearerToken();
+        currInstance.createNewGroup(bearerToken, groupDescription, leaderID, start, dest, appContext);
     }
 
     //get group info

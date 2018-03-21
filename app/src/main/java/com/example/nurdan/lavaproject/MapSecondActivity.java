@@ -2,6 +2,7 @@ package com.example.nurdan.lavaproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -24,43 +26,68 @@ import ApplicationLogic.ProgramSingletonController;
 
 public class MapSecondActivity extends AppCompatActivity {
     private ListView groupList;
-    private ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
+    private ProgramSingletonController currInstance;
     private List<String> nameList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_second);
+        groupList = findViewById(R.id.groupListView);
+
         setupBackbtn();
-        setupListView();
+
+        setupListView Test = new setupListView();
+        Test.execute();
+        setPickGroup();
     }
 
     //may need the data from the server to inside list to view how many groups in there
-    private void setupListView(){
-        groupList = findViewById(R.id.groupListView);
+    //may change to radiogroup for easier access to join / delete
+    private class setupListView extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
 
-        JSONArray original = currInstance.getGroupList(getApplicationContext());
+            currInstance = ProgramSingletonController.getCurrInstance();
+            JSONArray original = currInstance.getGroupList(getApplicationContext());
 
-        if (original == null) {
-            original = new JSONArray();
-        }
-
-        for (int i = 0; i < original.length(); i++) {
-            JSONObject childJSONObject = null;
-            try {
-                childJSONObject = original.getJSONObject(i);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if (original == null) {
+                original = new JSONArray();
             }
-            try {
-                nameList.add(childJSONObject.getString("groupDescription"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, nameList);
-        groupList.setAdapter(adapter);
+            for (int i = 0; i < original.length(); i++) {
+                JSONObject childJSONObject = null;
+                try {
+                    childJSONObject = original.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    nameList.add(childJSONObject.getString("groupDescription"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, nameList);
+            groupList.setAdapter(adapter);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+        }
+    }
+
+    private void setPickGroup() {
+        groupList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int arg2, long arg3) {
+                Toast.makeText(getApplicationContext(), "delete item in position : " + arg2, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
     }
 
     private void setupBackbtn() {

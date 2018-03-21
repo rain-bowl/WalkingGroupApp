@@ -58,8 +58,8 @@ public class GroupActivity extends AppCompatActivity {
             public void onClick(View view) {
                 localInstance = ProgramSingletonController.getCurrInstance();
                 groupName = group.getText().toString();
-                Toast.makeText(getApplicationContext(), groupName, Toast.LENGTH_LONG).show();
-                localInstance.createNewGroup(groupName, leaderID, start, end, getApplicationContext());
+                Toast.makeText(getApplicationContext(), groupName + "BearerToken: " + bearerToken, Toast.LENGTH_LONG).show();
+                localInstance.createNewGroup(bearerToken, groupName, leaderID, start, end, getApplicationContext());
                 startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
             }
         });
