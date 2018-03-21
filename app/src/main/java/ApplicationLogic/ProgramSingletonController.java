@@ -90,18 +90,31 @@ public class ProgramSingletonController {
         currInstance = new AccountApiInteractions();
         logInStatus = currInstance.userLogIn(email, password, appContext);
         this.bearerToken = currInstance.getBearerToken();
-        Log.d(TAG, "logIn: Programsingletonberer " + this.bearerToken);
-        this.userID = currInstance.getDatabaseUserID(email, appContext);
+        Log.d(TAG, "logIn: Programsingleton bearer " + this.bearerToken);
+        this.userID = currInstance.getDatabaseUserID(email, appContext, this.bearerToken);
         Log.d(TAG, "logIn: UserIDTEST " + this.userID   );
         //saveEmail(email, this.bearerToken, appContext);
         return logInStatus;
     }
     //Adds new user to be monitored by another
-    public void addUsrMonitor(int monitorID, String userEmail, String bearerToken, Context appContext){
+    public Boolean addUsrMonitor(String userEmail,Context appContext){
+        Log.d(TAG, "addUsrMonitor: Beaerer Token " + this.bearerToken );
+        Boolean successFlag;
         AccountApiInteractions getId = new AccountApiInteractions();
         UserMonitor currInstance = new UserMonitor();
-        int tempUsrID = getId.getDatabaseUserID(userEmail, appContext);
-        currInstance.addMonitoredUser(monitorID, tempUsrID, bearerToken, appContext);
+        int tempUsrID = getId.getDatabaseUserID(userEmail, appContext, this.bearerToken);
+        successFlag = currInstance.addMonitoredUser(userID, tempUsrID, this.bearerToken, appContext);
+        return successFlag;
+    }
+
+    public Boolean addUsrMonitorYou(String userEmail, Context appContext){
+        Log.d(TAG, "addUsrMonitorYou: Bearer Token " + this.bearerToken);
+        Boolean successFlag;
+        AccountApiInteractions getMonitorID = new AccountApiInteractions();
+        UserMonitor currMonitorInstance = new UserMonitor();
+        int tempMonitorID = getMonitorID.getDatabaseUserID(userEmail, appContext, this.bearerToken);
+        successFlag = currMonitorInstance.addUsrToMonitorYou(userID, tempMonitorID, this.bearerToken, appContext);
+        return successFlag;
     }
     //Deletes a user from the list of monitored users
     public void deleteMonitoredUsr(int monitorID, int dltdUser, String bearerToken, Context appContext){
