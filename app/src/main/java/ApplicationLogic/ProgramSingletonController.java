@@ -92,14 +92,24 @@ public class ProgramSingletonController {
         return currInstance.createNewUser(jsonBody, appContext);
     }
 
+
+    public void setUserInfo(JSONObject newInformation){
+        currLoggedInUser.setJsonObject(newInformation);
+    }
+
+    public JSONObject getUserInfo(){
+        return currLoggedInUser.returnJsonUserInfo();
+    }
+
     //Logs user into their account
     public Boolean logIn(String email, String password, Context appContext){
        JSONArray tempArr;
+       this.currLoggedInUser = new User();
         currInstance = new AccountApiInteractions();
         logInStatus = currInstance.userLogIn(email, password, appContext);
         this.bearerToken = currInstance.getBearerToken();
         Log.d(TAG, "logIn: Program singleton bearer token " + this.bearerToken);
-        this.currLoggedInUser = currInstance.getDatabaseUserProfile(email, appContext);
+        currInstance.getDatabaseUserProfile(email, appContext);
         this.userID = currLoggedInUser.getID();
         Log.d(TAG, "logIn: UserIDTEST " + this.userID   );
         Log.d(TAG, "logIn: MONITORED BY TEST " +currLoggedInUser.getMonitorsOtherUsers());

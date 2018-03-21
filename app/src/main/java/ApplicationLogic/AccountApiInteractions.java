@@ -142,7 +142,7 @@ public class AccountApiInteractions {
         return userID;
     }
     //Retreives the user information based on their email.
-     public User getDatabaseUserProfile(String email, Context currContext) {
+     public void getDatabaseUserProfile(String email, Context currContext) {
         Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
         AndroidNetworking.initialize(currContext);
         String formattedEmail = email.replace("@", "%40");
@@ -154,11 +154,14 @@ public class AccountApiInteractions {
 
         //Creates an instance of user class, fills its fields and sends it off to the singleton method
          //for access by all other classes
-        User currUser = new User();
+
         ANResponse<JSONObject> serverResponse = getUserIDRequest.executeForJSONObject();
         if (serverResponse.isSuccess()) {
             JSONObject jsonServerResponse = serverResponse.getResult();
-            try {
+            ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
+            currInstance.setUserInfo(jsonServerResponse);
+
+/*            try {
                currUser.setID(jsonServerResponse.getInt("id"));
                currUser.setName(jsonServerResponse.getString("name"));
                currUser.setEmailAddress(jsonServerResponse.getString("email"));
@@ -175,11 +178,11 @@ public class AccountApiInteractions {
                currUser.setMemberOfGroups(jsonServerResponse.getJSONArray("memberOfGroups"));
                currUser.setLeaderOfGroups(jsonServerResponse.getJSONArray("leadsGroups"));
                 Log.d(TAG, "getDatabaseUserProfile: USER INFO RECIEVED " + currUser.getBirthyear());
+                currUser.setJsonObject(jsonServerResponse);
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
         }
-        return currUser;
     }
 
 

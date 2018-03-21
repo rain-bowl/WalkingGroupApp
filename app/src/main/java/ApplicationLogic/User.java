@@ -24,6 +24,38 @@ public class User {
     JSONArray leaderOfGroups;
     JSONObject lastGpsLocation;
     String userHref;
+    JSONObject userJsonInformation;
+
+
+    //Takes in json object and sets the user fields according to the information recieved. This is used throughout the entire application.
+     public void setJsonObject(JSONObject retrievedInfo){
+        try {
+            userJsonInformation = new JSONObject(retrievedInfo.toString());
+            ID = retrievedInfo.getInt("id");
+            emailAddress = retrievedInfo.getString("email");
+            name = retrievedInfo.getString("name");
+            birthyear = retrievedInfo.getInt("birthYear");
+            birthmonth = retrievedInfo.getInt("birthMonth");
+            userAddress = retrievedInfo.getString("address");
+            cellPhoneNumber = retrievedInfo.getString("cellPhone");
+            homePhoneNumber = retrievedInfo.getString("homePhone");
+            grade = retrievedInfo.getString("grade");
+            teacherName = retrievedInfo.getString("teacherName");
+            emergencyContactInfoInstruction = retrievedInfo.getString("emercencyContactInfo");
+            monitoredByUsers = retrievedInfo.getJSONArray("monitoredByUsers");
+            monitorsOtherUsers = retrievedInfo.getJSONArray("monitorsUsers");
+            memberOfGroups = retrievedInfo.getJSONArray("memberOfGroups");
+            leaderOfGroups = retrievedInfo.getJSONArray("leadsGroups");
+            userHref = retrievedInfo.getString("href");
+        }
+        catch (Exception e){
+
+        }
+    }
+
+     public JSONObject returnJsonUserInfo(){
+        return this.userJsonInformation;
+    }
 
     public int getID() {
         return ID;
@@ -160,6 +192,10 @@ public class User {
     public void setUserHref(String userHref) {
         this.userHref = userHref;
     }
+
+
+
+
 }
 
 

@@ -7,12 +7,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;;
+;
 
-import UIFragmentClasses.UserProfileEditInfoFragment;
+import UIFragmentClasses.userProfileEditInfoFragment;
 import UIFragmentClasses.userProfileDisplayFragment;
 
 public class UserProfile extends AppCompatActivity {
@@ -56,7 +55,7 @@ public class UserProfile extends AppCompatActivity {
             case R.id.editItem:
                 backItem.setVisible(true);
                 editItem.setVisible(false);
-                loadFragment(new UserProfileEditInfoFragment());
+                loadFragment(new userProfileEditInfoFragment());
                 break;
             case R.id.mainMenuItem:
                 Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
