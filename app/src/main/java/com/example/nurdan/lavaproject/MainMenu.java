@@ -24,6 +24,7 @@ public class MainMenu extends AppCompatActivity {
         Button usrMonitor = findViewById(R.id.usrMonitor);
         Button usrLogout = findViewById(R.id.usrLogout);
         Button usrProfile = findViewById(R.id.profileBtn);
+        Button messageInbox = findViewById(R.id.inboxAccessBtn);
 
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +65,14 @@ public class MainMenu extends AppCompatActivity {
                 Intent logoutIntent = LoginActivity.loginActIntent(getApplicationContext());
                 startActivity(logoutIntent);
 
+            }
+        });
+
+        messageInbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent inboxIntent = MessageInbox.getInboxIntent(getApplicationContext());
+                startActivity(inboxIntent);
             }
         });
     }

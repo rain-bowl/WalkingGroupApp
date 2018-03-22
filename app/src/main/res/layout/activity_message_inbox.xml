@@ -6,4 +6,12 @@
     android:layout_height="match_parent"
     tools:context="com.example.nurdan.lavaproject.MessageInbox">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/profileDisplayToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:minHeight="65dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 </android.support.constraint.ConstraintLayout>

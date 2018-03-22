@@ -71,6 +71,7 @@
     <string name="mngGroups">Manage Groups</string>
     <string name="usrMonitors">User Monitor</string>
     <string name="profileBtnTitle">Profile</string>
+    <string name="messageInboxBtn">Message Inbox</string>
 
     <!-- Strings related to monitoring/being monitored -->
     <string name="usersWhoMonitorYou">Users who are monitoring you:</string>
