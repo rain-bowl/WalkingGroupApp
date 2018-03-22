@@ -38,7 +38,7 @@ public class userProfileDisplayFragment extends Fragment{
         User userInstance = currInstance.getCurrLoggedInUser();
         JSONObject userInformation = currInstance.getUserInfo();
 
-        TextView name = view.findViewById(R.id.emailInput);
+        TextView name = view.findViewById(R.id.nameInput);
         TextView email = view.findViewById(R.id.emailInput);
         TextView birthYear = view.findViewById(R.id.birthYearInput);
         TextView birthMonth = view.findViewById(R.id.birthMonthInput);

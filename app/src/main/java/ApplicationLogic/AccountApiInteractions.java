@@ -141,6 +141,35 @@ public class AccountApiInteractions {
         }
         return userID;
     }
+
+
+    /*Sends of the provided JsonObject input to the server to edit the users information*/
+    public Boolean editDatabaseUserProfile(JSONObject jsonBody, Context currContext, int userID, String currBearer){
+        AndroidNetworking.initialize(currContext);
+        ANRequest sendUserInfo = AndroidNetworking.post(baseURL + "/users/" + userID)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currBearer)
+                .addApplicationJsonBody(jsonBody)
+                .build();
+
+        ANResponse<JSONObject> serverResponse = sendUserInfo.executeForJSONObject();
+        Log.d(TAG, "editDatabaseUserProfile: JSON BODY INPUT BEFORE SEND "+ jsonBody.toString());
+        if(serverResponse.isSuccess()){
+            Log.d(TAG, "editDatabaseUserProfile: Success in sneding edited information!!");
+            ProgramSingletonController controllerInstance = ProgramSingletonController.getCurrInstance();
+            JSONObject responseContent = serverResponse.getResult();
+            controllerInstance.setUserInfo(responseContent);
+            return true;
+        }
+        else {
+            Log.d(TAG, "editDatabaseUserProfile: Server error when modding info " + serverResponse.getError().getErrorBody());
+            Log.d(TAG, "editDatabaseUserProfile: More error info " + serverResponse.getError().getResponse().toString());
+        }
+
+        return false;
+    }
+
+
     //Retreives the user information based on their email.
      public void getDatabaseUserProfile(String email, Context currContext) {
         Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
@@ -197,7 +226,6 @@ public class AccountApiInteractions {
     public int getUserID(){
         return userID;
     }
-
 
 
     /*  classes for group implementation:    */

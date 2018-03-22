@@ -24,12 +24,16 @@ public class User {
     JSONArray leaderOfGroups;
     JSONObject lastGpsLocation;
     String userHref;
+    JSONArray unreadMessages;
+    JSONArray readMessages;
     JSONObject userJsonInformation;
 
 
     //Takes in json object and sets the user fields according to the information recieved. This is used throughout the entire application.
      public void setJsonObject(JSONObject retrievedInfo){
+
         try {
+
             userJsonInformation = new JSONObject(retrievedInfo.toString());
             ID = retrievedInfo.getInt("id");
             emailAddress = retrievedInfo.getString("email");
@@ -46,6 +50,9 @@ public class User {
             monitorsOtherUsers = retrievedInfo.getJSONArray("monitorsUsers");
             memberOfGroups = retrievedInfo.getJSONArray("memberOfGroups");
             leaderOfGroups = retrievedInfo.getJSONArray("leadsGroups");
+            lastGpsLocation = retrievedInfo.getJSONObject("lastGpsLocation");
+            unreadMessages = retrievedInfo.getJSONArray("unreadMessages");
+            readMessages = retrievedInfo.getJSONArray("readMessages");
             userHref = retrievedInfo.getString("href");
         }
         catch (Exception e){

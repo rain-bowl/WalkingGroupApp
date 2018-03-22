@@ -101,6 +101,14 @@ public class ProgramSingletonController {
         return currLoggedInUser.returnJsonUserInfo();
     }
 
+
+    public Boolean editUserInformation(JSONObject newInformation, Context currContext){
+        currInstance = new AccountApiInteractions();
+
+       currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
+        return null;
+    }
+
     //Logs user into their account
     public Boolean logIn(String email, String password, Context appContext){
        JSONArray tempArr;
