@@ -106,13 +106,26 @@ public class UserMonitorDisplay extends AppCompatActivity {
         getMonitors.execute();
     }
 
+    private void updateListView(ArrayList<String> retrievedUsers, int resourceID){
+        ListView displayMntrdUser = (ListView) findViewById(resourceID);;
+        if (retrievedUsers.isEmpty()) {
+                retrievedUsers.add("There are no users currently monitored");
+                ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
+                displayMntrdUser.setAdapter(listViewAdapter);
+            } else {
+                ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_multiple_choice, retrievedUsers);
+                displayMntrdUser.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+                displayMntrdUser.setAdapter(listViewAdapter);
+            }
+    }
+
     private class getMntrUsers extends AsyncTask<Void, Void, Void> {
         ListView displayMntrdUser;
         ArrayList<String> retrievedUsers;
 
         @Override
         protected Void doInBackground(Void... voids) {
-            displayProgress.setVisibility(View.VISIBLE);
+//            displayProgress.setVisibility(View.VISIBLE);
             displayMntrdUser = (ListView) findViewById(R.id.usersMonitoredView);
             retrievedUsers = currInstanceSingleton.getUsersMonitored(getApplicationContext());
 
@@ -122,7 +135,14 @@ public class UserMonitorDisplay extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.d("USERDISPLAY", "onPostExecute:Got here ");
-            if (retrievedUsers.isEmpty()) {
+            updateListView(retrievedUsers, R.id.usersMonitoredView);
+
+
+
+
+
+
+           /* if (retrievedUsers.isEmpty()) {
                 retrievedUsers.add("There are no users currently monitored");
                 ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
                 displayMntrdUser.setAdapter(listViewAdapter);
@@ -130,7 +150,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
                 ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_multiple_choice, retrievedUsers);
                 displayMntrdUser.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
                 displayMntrdUser.setAdapter(listViewAdapter);
-            }
+            }*/
 
         }
     }
