@@ -92,24 +92,7 @@ public class ProgramSingletonController {
         return currInstance.createNewUser(jsonBody, appContext);
     }
 
-
-    public void setUserInfo(JSONObject newInformation){
-        currLoggedInUser.setJsonObject(newInformation);
-    }
-
-    public JSONObject getUserInfo(){
-        return currLoggedInUser.returnJsonUserInfo();
-    }
-
-
-    public Boolean editUserInformation(JSONObject newInformation, Context currContext){
-        currInstance = new AccountApiInteractions();
-
-       currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
-        return null;
-    }
-
-    //Logs user into their account
+    //Logs user into their account and creates a new user instance to hold their details.
     public Boolean logIn(String email, String password, Context appContext){
        JSONArray tempArr;
        this.currLoggedInUser = new User();
@@ -124,6 +107,31 @@ public class ProgramSingletonController {
         //saveEmail(email, this.bearerToken, appContext);
         return logInStatus;
     }
+
+     //Simple method which discards bearer token to log user out.
+    public void userLogout(){
+        bearerToken = null;
+    }
+
+    //Sets the fields of the user class according to the information provided by the JsonObject. Used on logging in.
+    public void setUserInfo(JSONObject newInformation){
+        currLoggedInUser.setJsonObject(newInformation);
+    }
+
+    //Provides access to the JsonObject which contains all of the data of the current logged in user. Used for displaying it
+    //and editing it.
+    public JSONObject getUserInfo(){
+        return currLoggedInUser.returnJsonUserInfo();
+    }
+
+    //Networking method which sends a post request to server to edit user info.
+    public Boolean editUserInformation(JSONObject newInformation, Context currContext){
+        currInstance = new AccountApiInteractions();
+
+       currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
+        return null;
+    }
+
     //Adds new user to be monitored by another
     public void addUsrMonitor(int monitorID, String userEmail, String bearerToken, Context appContext){
         AccountApiInteractions getId = new AccountApiInteractions();
@@ -173,7 +181,8 @@ public class ProgramSingletonController {
         else return null;
     }
 
-
+    //Creates a list of users from the provided jsonArray and then stores them in an array list for easy access
+    //Used when displaying people in the user monitors.
     private ArrayList<String> createUserList(JSONArray jsonArr, Context appContext){
         JSONObject tempJSONObject;
         ArrayList<String> tempUserStorage = new ArrayList<>();
@@ -262,8 +271,5 @@ public class ProgramSingletonController {
         bearerToken = currInstance.getBearerToken();
     }
 
-     //Simple method which discards bearer token to log user out.
-    public void userLogout(){
-        bearerToken = null;
-    }
+
 }

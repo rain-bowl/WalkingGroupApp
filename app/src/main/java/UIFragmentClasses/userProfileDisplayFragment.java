@@ -12,18 +12,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.nurdan.lavaproject.R;
-
 import org.json.JSONObject;
-
 import ApplicationLogic.ProgramSingletonController;
 import ApplicationLogic.User;
-
 import static android.content.ContentValues.TAG;
 
 
-
+/*Holds logic for displaying the user profile information.
+It quite simply grabs the JSONObject through the singleton and sets all of the fields one by one.
+ */
 public class userProfileDisplayFragment extends Fragment{
 
     @Nullable
@@ -35,7 +33,6 @@ public class userProfileDisplayFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
-        User userInstance = currInstance.getCurrLoggedInUser();
         JSONObject userInformation = currInstance.getUserInfo();
 
         TextView name = view.findViewById(R.id.nameInput);
@@ -77,16 +74,7 @@ public class userProfileDisplayFragment extends Fragment{
 
 
 
-        //Setting text
-       /* birthYear.setText(String.valueOf(userInstance.getBirthyear()));
-        birthMonth.setText(String.valueOf(userInstance.getBirthmonth()));
-        address.setText(userInstance.getUserAddress());
-        homePhone.setText(userInstance.getHomePhoneNumber());
-        cellPhone.setText(userInstance.getCellPhoneNumber());
-        grade.setText(userInstance.getGrade());
-        teacher.setText(userInstance.getTeacherName());
-        emergencyInfo.setText(userInstance.getEmergencyContactInfoInstruction());
-        */
+
 
 
 

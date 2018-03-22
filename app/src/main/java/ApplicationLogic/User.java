@@ -59,11 +59,16 @@ public class User {
 
         }
     }
-
+    //Simply returns the Json object to be used.
      public JSONObject returnJsonUserInfo(){
         return this.userJsonInformation;
     }
 
+
+
+    //Setters and getters, might have to be removeed at a later point since they are currently
+    //useless due to the singleton not providing access to them. Additionally, simply sending
+    //the entire JSONObject will give us all the information required.
     public int getID() {
         return ID;
     }

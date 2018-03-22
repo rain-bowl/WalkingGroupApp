@@ -15,10 +15,10 @@ import android.widget.Toast;
 import com.example.nurdan.lavaproject.R;
 import com.example.nurdan.lavaproject.RegisterActivity;
 
-/**
- * Created by yavor on 19/03/18.
- */
 
+/*Fragment which handles the logic behind the input of mandatory information. It compares the passwords
+to check if they match and checks if all of the fields have been entered.
+ */
 public class MandatoryRegisterInformationFragment extends Fragment{
      String userName, userEmail, userPassword, userConfirmPassword;
     @Nullable

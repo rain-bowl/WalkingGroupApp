@@ -48,6 +48,8 @@ public class AccountApiInteractions {
     private int userID = -1;
     private JSONArray groupList;
 
+
+
         //Creates a single user using the inputs
     public Boolean createNewUser(JSONObject jsonBody, Context appContext){
       Boolean successFlag;
@@ -94,30 +96,30 @@ public class AccountApiInteractions {
             e.printStackTrace();
         }
 
-    AndroidNetworking.initialize(appContext);
-    ANRequest request = AndroidNetworking.post(baseURL + "/login")
-            .addHeaders("apiKey", apiKey)
-            .addJSONObjectBody(jsonBody)
-            .build();
+        AndroidNetworking.initialize(appContext);
+        ANRequest request = AndroidNetworking.post(baseURL + "/login")
+                .addHeaders("apiKey", apiKey)
+                .addJSONObjectBody(jsonBody)
+                .build();
 
-    ANResponse<OkHttpResponseListener> responseListenerANResponse = request.executeForOkHttpResponse();
-    if(responseListenerANResponse.isSuccess()) {
-        if (responseListenerANResponse.getOkHttpResponse().code() == 200){
-            Log.d(TAG, "userLogIn: Response Good " + responseListenerANResponse.getOkHttpResponse().code());
-        bearerToken = responseListenerANResponse.getOkHttpResponse().header("Authorization");
-        return true;
-    }
-        else{
-            return false;
+        ANResponse<OkHttpResponseListener> responseListenerANResponse = request.executeForOkHttpResponse();
+        if(responseListenerANResponse.isSuccess()) {
+            if (responseListenerANResponse.getOkHttpResponse().code() == 200){
+                Log.d(TAG, "userLogIn: Response Good " + responseListenerANResponse.getOkHttpResponse().code());
+                bearerToken = responseListenerANResponse.getOkHttpResponse().header("Authorization");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else {
+            Log.d(TAG, "userLogIn: Response Error" + responseListenerANResponse.getError());
+            return null;
         }
     }
-    else {
-        Log.d(TAG, "userLogIn: Response Error" + responseListenerANResponse.getError());
-        return false;
-    }
 
 
-    }
     //Class which recovers a users ID number from the database. This is needed to implement the user monitoring.
     public int getDatabaseUserID(String email, Context currContext) {
         Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
@@ -143,7 +145,7 @@ public class AccountApiInteractions {
     }
 
 
-    /*Sends of the provided JsonObject input to the server to edit the users information*/
+    /*Sends of the provided JsonObject input to the server to edit the users information. CURRENTLY NOT WORKING PROPERLY!!!*/
     public Boolean editDatabaseUserProfile(JSONObject jsonBody, Context currContext, int userID, String currBearer){
         AndroidNetworking.initialize(currContext);
         ANRequest sendUserInfo = AndroidNetworking.post(baseURL + "/users/" + userID)

@@ -13,10 +13,9 @@ import android.view.ViewGroup;
 
 import com.example.nurdan.lavaproject.R;
 
-/**
- * Created by yavor on 15/03/18.
- */
 
+//Simple class which contains the logic for the fragment which is responsible for adding users
+//to be monitored.
 public class AddUserDialogFragment extends AppCompatDialogFragment{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
