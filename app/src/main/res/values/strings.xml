@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lava Project</string>
+    <string name="app_name">Walking School Bus</string>
     <string name="title_activity_map">Map</string>
     <string name="title_activity_login">Sign in</string>
 
@@ -15,6 +15,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- Strings related to registering a new user and displaying user profile -->
     <string name="register_here">Register Here</string>
     <string name="fullname_title">Full Name:</string>
     <string name="username_title">Username:</string>
@@ -27,7 +29,29 @@
     <string name="useremail_title">user_email</string>
     <string name="useremailname">Email:</string>
     <string name="useremail_input_hint">Email...</string>
+    <string name="register">Register new account</string>
+    <string name="birthYear">Birth Year</string>
+    <string name="birthMonth">Birth Month</string>
+    <string name="userAddress">Address</string>
+    <string name="userCellPhone">Cell phone number</string>
+    <string name="userHomePhone">Home phone number</string>
+    <string name="userSchoolGrade">Current school grade</string>
+    <string name="userSchoolTeacher">Current school teacher</string>
+    <string name="userEmergencyContactInfo">Emergency contact instructions</string>
+    <string name="nextBtnText">Next</string>
+    <string name="userInstruction">All of the information on this page is optional but it is highly recommended that you fill it out!
+    If you do not wish to add any extra information then simply click Register which is at the bottom of the page. All information seen here
+    can be edited at a later time as well.</string>
+    <string name="passwordMismatch">The current passwords do not match!</string>
+    <string name="missingFields">Please fill out all of the fields!</string>
 
+    <string name="editInfo">Edit information</string>
+    <string name="submitInfo">Submit changes</string>
+    <string name="editMenu">Edit</string>
+    <string name="backMenu">Back</string>
+    <string name="mainMenu">Main Menu</string>
+
+    <!-- Strings related to groups -->
     <string name="NearBy">NearBy</string>
     <string name="Group">Groups</string>
     <string name="Join">Join</string>
@@ -42,15 +66,23 @@
     <string name="Joiningroup">Join</string>
     <string name="removeGroups">Remove</string>
 
+    <!-- Strings related to main menu -->
     <string name="logout">Logout</string>
     <string name="mngGroups">Manage Groups</string>
     <string name="usrMonitors">User Monitor</string>
+    <string name="profileBtnTitle">Profile</string>
+
+    <!-- Strings related to monitoring/being monitored -->
     <string name="usersWhoMonitorYou">Users who are monitoring you:</string>
     <string name="usersWhoYouMonitor">Users monitored:</string>
     <string name="userHint">I would like to add...</string>
     <string name="monitorUsrCheckbox">another user to monitor</string>
     <string name="monitorMeUsrCheckbox">another user to monitor me</string>
+
+
     <string name="group_name">Group Name</string>
     <string name="create_group">Create Group</string>
     <string name="walking_group_project">Walking Group Project</string>
+
+
 </resources>

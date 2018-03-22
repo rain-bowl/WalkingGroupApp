@@ -3,37 +3,76 @@ package com.example.nurdan.lavaproject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.util.Log;
 
-import ApplicationLogic.AccountApiInteractions;
+import org.json.JSONObject;
+
 import ApplicationLogic.ProgramSingletonController;
+import UIFragmentClasses.MandatoryRegisterInformationFragment;
 
 public class RegisterActivity extends AppCompatActivity {
-    private String username;
-    private String password;
-    private String email;
-    private Boolean passMatchFlag;
     private ProgramSingletonController localInstance;
+    JSONObject serverCallBody;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        gatherUserInput();
-        createButtons();
+        serverCallBody = new JSONObject();
+        replaceFragment(new MandatoryRegisterInformationFragment());
+
 
     }
 
+    public void replaceFragment(Fragment fragmentClass){
+        FragmentTransaction fTInstance = getSupportFragmentManager().beginTransaction();
+        fTInstance.replace(R.id.fragmentContainer, fragmentClass);
+        fTInstance.commit();
+}
+//Adds the provided key and provided object(either string or int) to the JsonObject which is used in creating a new user.
+public void addJson(String key, String content){
+        try{
+           if(content != null){
+                serverCallBody.put(key, content);
+            }
+            else {
+                serverCallBody.put(key, "Not provided");
+            }
+            Log.d("Tag", "addJson: Show jsonObject contents " + serverCallBody.toString());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+}
+//Overridden method to handle cases of input being an integer.
+public void addJson(String key, int content){
+        try{
+           if(content != 0){
+                serverCallBody.put(key, content);
+            }
+            else {
+                serverCallBody.put(key, 0);
+            }
+            Log.d("Tag", "addJson: Show jsonObject contents " + serverCallBody.toString());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+}
+
+public void executeRegisterAction(){
+    asyncRunner instance = new asyncRunner();
+    instance.execute();
+}
 /* This method sets listeners for the user inputs in the activity. Additionally, it deals
 with the task of comparing both the initial password entered as well as the confirmation password
 which insures that the user has typed in the desired password with no mistakes.
  */
+
+/*
     private void gatherUserInput(){
         final EditText usernameInput = (EditText) findViewById(R.id.usernameInput);
         final EditText passwordInput = (EditText) findViewById(R.id.passwordInput);
@@ -129,7 +168,7 @@ which insures that the user has typed in the desired password with no mistakes.
             }
         });
     }
-
+*/
 
     //Static intent method to access activity
    public static Intent registerActIntent(Context actContext){
@@ -137,18 +176,17 @@ which insures that the user has typed in the desired password with no mistakes.
 
     }
 
-private class asyncRunner extends AsyncTask<Void,Void,Void>{
+private class asyncRunner extends AsyncTask<Void,Void,Boolean>{
     @Override
-    protected Void doInBackground(Void... voids) {
-        if (passMatchFlag) {
-                    localInstance = ProgramSingletonController.getCurrInstance();
-                    localInstance.createNewUser(username, email, password, getApplicationContext());
-                    password = "";
-                }
-                else {
-                    Toast.makeText(getApplicationContext(),"Passwords do not match", Toast.LENGTH_LONG).show();
-                }
-        return null;
+    protected Boolean doInBackground(Void... voids) {
+        Boolean successFlag;
+        localInstance = ProgramSingletonController.getCurrInstance();
+        successFlag = localInstance.createNewUser(serverCallBody, getApplicationContext());
+        if(successFlag){
+            Intent successRegistration = LoginActivity.loginActIntent(getApplicationContext());
+            startActivity(successRegistration);
+        }
+        return true;
     }
 }
 }

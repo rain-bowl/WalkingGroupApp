@@ -115,6 +115,7 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 
     }
 
+    //Synchronous method to retrieve users who are monitoring the logged in user.
     public JSONArray getUsersWhoMonitor(int userID, String bearerToken, Context appContext){
         String URLPath = String.format("/users/%d/monitoredByUsers", userID);
         JSONArray users = null;

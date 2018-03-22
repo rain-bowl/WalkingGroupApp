@@ -1,20 +1,16 @@
 package com.example.nurdan.lavaproject;
 
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
@@ -23,9 +19,8 @@ import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
-import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
-import ApplicationLogic.UserMonitor;
+import UIFragmentClasses.AddUserDialogFragment;
 
 public class UserMonitorDisplay extends AppCompatActivity {
     ProgressBar displayProgress;
@@ -50,7 +45,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.add_monitor_user:
-                AppCompatDialogFragment addUserFragment = new AddUserDialog();
+                AppCompatDialogFragment addUserFragment = new AddUserDialogFragment();
                 addUserFragment.show(getSupportFragmentManager(), "addUsr");
                 break;
             case R.id.delete_monitor_user:

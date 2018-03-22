@@ -48,21 +48,12 @@ public class AccountApiInteractions {
     private int userID = -1;
     private JSONArray groupList;
 
-        //Creates a single user using the inputs
-    public void createNewUser(String userName, String userPassword, String userEmailAddr, Context appContext){
-        //Initialize androidNetworking library with current activity context
-                final JSONObject jsonBody = new JSONObject();
-                //Create the json body to be attached
-            try {
-                jsonBody.put("password", userPassword);
-                jsonBody.put("email", userEmailAddr);
-                jsonBody.put("name",userName);
 
-            }
-            catch (Exception e){
-                Log.d(TAG, "createNewUser:Unexpected error");
-                e.printStackTrace();
-            }
+
+        //Creates a single user using the inputs
+    public Boolean createNewUser(JSONObject jsonBody, Context appContext){
+      Boolean successFlag;
+        Log.d(TAG, "createNewUser: Json Body recieved " + jsonBody.toString());
     //Make POST call to server with attached json body
          AndroidNetworking.initialize(appContext);
         ANRequest signupRequest = AndroidNetworking.post(baseURL + "/users/signup")
@@ -72,21 +63,26 @@ public class AccountApiInteractions {
 
 
         ANResponse<JSONObject> serverResponse = signupRequest.executeForJSONObject();
-        if(serverResponse.isSuccess()){
-            JSONObject jsonResponseBody = serverResponse.getResult();
-            Log.d(TAG, "createNewUser: JSONRESPONSE" + jsonResponseBody);
-            try{
-            userID = jsonResponseBody.getInt("id");
+        if(serverResponse.isSuccess()) {
+            if (serverResponse.getOkHttpResponse().code() == 201) {
+                JSONObject jsonResponseBody = serverResponse.getResult();
+                Log.d(TAG, "createNewUser: JSONRESPONSE" + jsonResponseBody);
+                try {
+                    userID = jsonResponseBody.getInt("id");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG, "createNewUser: USER ID ON SUCCESS IS" + userID);
+                return true;
             }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-            Log.d(TAG, "createNewUser: USER ID ON SUCCESS IS" + userID);
+            return false;
         }
         else {
-            Log.d(TAG, "createNewUser: ERROR" + serverResponse.getError());
-            Log.d(TAG, "createNewUser: ERRODETAIL" + serverResponse.getError().getErrorBody());
+            Log.d(TAG, "createNewUser: ERROR" + serverResponse.getError().getErrorBody());
+            Log.d(TAG, "createNewUser: ERRODETAIL " + serverResponse.getError().getErrorDetail().toString());
+            Log.d(TAG, "createNewUser: More Detail " + serverResponse.getError().getResponse().toString());
         }
+        return false;
     }
 
     //Handles the login of a user. Sets the bearer token on success.
@@ -100,30 +96,30 @@ public class AccountApiInteractions {
             e.printStackTrace();
         }
 
-    AndroidNetworking.initialize(appContext);
-    ANRequest request = AndroidNetworking.post(baseURL + "/login")
-            .addHeaders("apiKey", apiKey)
-            .addJSONObjectBody(jsonBody)
-            .build();
+        AndroidNetworking.initialize(appContext);
+        ANRequest request = AndroidNetworking.post(baseURL + "/login")
+                .addHeaders("apiKey", apiKey)
+                .addJSONObjectBody(jsonBody)
+                .build();
 
-    ANResponse<OkHttpResponseListener> responseListenerANResponse = request.executeForOkHttpResponse();
-    if(responseListenerANResponse.isSuccess()) {
-        if (responseListenerANResponse.getOkHttpResponse().code() == 200){
-            Log.d(TAG, "userLogIn: Response Good " + responseListenerANResponse.getOkHttpResponse().code());
-        bearerToken = responseListenerANResponse.getOkHttpResponse().header("Authorization");
-        return true;
-    }
-        else{
-            return false;
+        ANResponse<OkHttpResponseListener> responseListenerANResponse = request.executeForOkHttpResponse();
+        if(responseListenerANResponse.isSuccess()) {
+            if (responseListenerANResponse.getOkHttpResponse().code() == 200){
+                Log.d(TAG, "userLogIn: Response Good " + responseListenerANResponse.getOkHttpResponse().code());
+                bearerToken = responseListenerANResponse.getOkHttpResponse().header("Authorization");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else {
+            Log.d(TAG, "userLogIn: Response Error" + responseListenerANResponse.getError());
+            return null;
         }
     }
-    else {
-        Log.d(TAG, "userLogIn: Response Error" + responseListenerANResponse.getError());
-        return false;
-    }
 
 
-    }
     //Class which recovers a users ID number from the database. This is needed to implement the user monitoring.
     public int getDatabaseUserID(String email, Context currContext) {
         Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
@@ -134,11 +130,13 @@ public class AccountApiInteractions {
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
                 .build();
+
+
         ANResponse<JSONObject> serverResponse = getUserIDRequest.executeForJSONObject();
         if (serverResponse.isSuccess()) {
             JSONObject jsonServerResponse = serverResponse.getResult();
             try {
-                userID = jsonServerResponse.getInt("id");
+              userID = jsonServerResponse.getInt("id");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -146,6 +144,77 @@ public class AccountApiInteractions {
         return userID;
     }
 
+
+    /*Sends of the provided JsonObject input to the server to edit the users information. CURRENTLY NOT WORKING PROPERLY!!!*/
+    public Boolean editDatabaseUserProfile(JSONObject jsonBody, Context currContext, int userID, String currBearer){
+        AndroidNetworking.initialize(currContext);
+        ANRequest sendUserInfo = AndroidNetworking.post(baseURL + "/users/" + userID)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currBearer)
+                .addApplicationJsonBody(jsonBody)
+                .build();
+
+        ANResponse<JSONObject> serverResponse = sendUserInfo.executeForJSONObject();
+        Log.d(TAG, "editDatabaseUserProfile: JSON BODY INPUT BEFORE SEND "+ jsonBody.toString());
+        if(serverResponse.isSuccess()){
+            Log.d(TAG, "editDatabaseUserProfile: Success in sneding edited information!!");
+            ProgramSingletonController controllerInstance = ProgramSingletonController.getCurrInstance();
+            JSONObject responseContent = serverResponse.getResult();
+            controllerInstance.setUserInfo(responseContent);
+            return true;
+        }
+        else {
+            Log.d(TAG, "editDatabaseUserProfile: Server error when modding info " + serverResponse.getError().getErrorBody());
+            Log.d(TAG, "editDatabaseUserProfile: More error info " + serverResponse.getError().getResponse().toString());
+        }
+
+        return false;
+    }
+
+
+    //Retreives the user information based on their email.
+     public void getDatabaseUserProfile(String email, Context currContext) {
+        Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
+        AndroidNetworking.initialize(currContext);
+        String formattedEmail = email.replace("@", "%40");
+        Log.d(TAG, "getDatabaseUserID: Formatted email" + formattedEmail);
+        ANRequest getUserIDRequest = AndroidNetworking.get(baseURL + "/users/byEmail?email=" + formattedEmail)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearerToken)
+                .build();
+
+        //Creates an instance of user class, fills its fields and sends it off to the singleton method
+         //for access by all other classes
+
+        ANResponse<JSONObject> serverResponse = getUserIDRequest.executeForJSONObject();
+        if (serverResponse.isSuccess()) {
+            JSONObject jsonServerResponse = serverResponse.getResult();
+            ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
+            currInstance.setUserInfo(jsonServerResponse);
+
+/*            try {
+               currUser.setID(jsonServerResponse.getInt("id"));
+               currUser.setName(jsonServerResponse.getString("name"));
+               currUser.setEmailAddress(jsonServerResponse.getString("email"));
+               currUser.setBirthyear(jsonServerResponse.getInt("birthYear"));
+               currUser.setBirthmonth(jsonServerResponse.getInt("birthMonth"));
+               currUser.setUserAddress(jsonServerResponse.getString("address"));
+               currUser.setCellPhoneNumber(jsonServerResponse.getString("cellPhone"));
+               currUser.setHomePhoneNumber(jsonServerResponse.getString("homePhone"));
+               currUser.setGrade(jsonServerResponse.getString("grade"));
+               currUser.setTeacherName(jsonServerResponse.getString("teacherName"));
+               currUser.setEmergencyContactInfoInstruction(jsonServerResponse.getString("emergencyContactInfo"));
+               currUser.setMonitoredByUsers(jsonServerResponse.getJSONArray("monitoredByUsers"));
+               currUser.setMonitorsOtherUsers(jsonServerResponse.getJSONArray("monitorsUsers"));
+               currUser.setMemberOfGroups(jsonServerResponse.getJSONArray("memberOfGroups"));
+               currUser.setLeaderOfGroups(jsonServerResponse.getJSONArray("leadsGroups"));
+                Log.d(TAG, "getDatabaseUserProfile: USER INFO RECIEVED " + currUser.getBirthyear());
+                currUser.setJsonObject(jsonServerResponse);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }*/
+        }
+    }
 
 
 
@@ -159,7 +228,6 @@ public class AccountApiInteractions {
     public int getUserID(){
         return userID;
     }
-
 
 
     /*  classes for group implementation:    */
@@ -427,5 +495,6 @@ public class AccountApiInteractions {
                     }
                 });
     }
+
 
 }
