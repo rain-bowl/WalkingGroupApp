@@ -117,9 +117,11 @@ public class ProgramSingletonController {
         return successFlag;
     }
     //Deletes a user from the list of monitored users
-    public void deleteMonitoredUsr(int monitorID, int dltdUser, String bearerToken, Context appContext){
+    public boolean deleteMonitoredUsr(String userToDelete, Context appContext){
         UserMonitor currInstance = new UserMonitor();
-        currInstance.stopMonitoringUser(monitorID, dltdUser, bearerToken, appContext);
+        AccountApiInteractions getId = new AccountApiInteractions();
+        //int stopMonitoringUser = getId.getDatabaseUserID(userToDelete, appContext, this.bearerToken);
+        return currInstance.stopMonitoringUser(this.userID, Integer.parseInt(userToDelete), this.bearerToken, appContext);
     }
 
 
@@ -137,7 +139,7 @@ public class ProgramSingletonController {
             e.printStackTrace();
         }
         if(tempArr != null) {
-            return createUserList(tempArr, appContext);
+            return createUserListID(tempArr, appContext);
         }
         else return null;
     }
@@ -172,6 +174,22 @@ public class ProgramSingletonController {
                e.printStackTrace();
            }
        }
+        return tempUserStorage;
+    }
+
+    private ArrayList<String> createUserListID(JSONArray jsonArr, Context appContext){
+        JSONObject tempJSONObject;
+        ArrayList<String> tempUserStorage = new ArrayList<>();
+        ArrayAdapter<String> tempArrAdapter;
+        for(int i = 0; i < jsonArr.length(); i++){
+            try {
+                tempJSONObject = jsonArr.getJSONObject(i);
+                tempUserStorage.add(tempJSONObject.getString("id"));
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         return tempUserStorage;
     }
 

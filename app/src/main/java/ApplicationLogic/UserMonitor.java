@@ -53,7 +53,7 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
                 return true;
             }
             else{
-                Log.d(TAG, "addMonitoredUser: Could not add user");
+                Log.d(TAG, "addMonitoredUser: Could not add user " + serverResponse.getError());
                 return false;
             }
         }
@@ -98,7 +98,7 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
     userID corresponds to the user which is monitoring somebody
     removedUserId corresponds to the user being monitored
      */
-    public void stopMonitoringUser(int userID, int removedUserId, String bearerKey, Context appContext){
+    public boolean stopMonitoringUser(int userID, int removedUserId, String bearerKey, Context appContext){
         String accessURL = String.format("/users/%d/monitorsUsers/%d", userID, removedUserId);
         AndroidNetworking.initialize(appContext);
         ANRequest stopMntrRequest = AndroidNetworking.delete(baseURL + accessURL)
@@ -111,12 +111,12 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
             if(serverResponse.getOkHttpResponse().code() == 204){
                 Log.d(TAG, "stopMonitoringUser: Successful removal");
             }
+            return true;
         }
         else {
-            Log.d(TAG, "stopMonitoringUser: Error with request");
+            Log.d(TAG, "stopMonitoringUser: Error with request " + serverResponse.getError());
+            return false;
         }
-
-
     }
 
 //Recovers users which are monitored by the current logged in user. Currently needs

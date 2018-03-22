@@ -144,7 +144,7 @@ public class AddUserDialog extends AppCompatDialogFragment{
         });
     }*/
     private class asyncReq extends AsyncTask<Void,Void,Void>{
-        ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstantce();
+        ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
         @Override
         protected Void doInBackground(Void... voids) {
             if(addUsrMonitor.isChecked() && addUsrMonitoree.isChecked()){

@@ -57,4 +57,5 @@
     <!-- User Monitor Activity -->
     <string name="delete">Delete</string>
     <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
 </resources>

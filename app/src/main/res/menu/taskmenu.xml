@@ -8,7 +8,7 @@
     </item>
     <item
         android:id="@+id/delete_monitor_user"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:title="@string/delete">
     </item>
 </menu>
