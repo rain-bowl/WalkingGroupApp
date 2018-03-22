@@ -112,13 +112,11 @@ public class UserMonitorDisplay extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            displayProgress.setVisibility(View.VISIBLE);
+            //displayProgress.setVisibility(View.VISIBLE);
             displayMntrdUser = (ListView) findViewById(R.id.usersMonitoredView);
             retrievedUsers = currInstanceSingleton.getUsersMonitored(getApplicationContext());
-
             return null;
         }
-
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.d("USERDISPLAY", "onPostExecute:Got here ");
@@ -131,7 +129,6 @@ public class UserMonitorDisplay extends AppCompatActivity {
                 displayMntrdUser.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
                 displayMntrdUser.setAdapter(listViewAdapter);
             }
-
         }
     }
 
@@ -172,8 +169,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(Void param) {
-            getMntrUsers getMonitorees = new getMntrUsers();
-            getMonitorees.execute();
+            new getMntrUsers().execute();
         }
 
     }

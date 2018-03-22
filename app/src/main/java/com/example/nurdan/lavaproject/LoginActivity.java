@@ -74,16 +74,18 @@ public class LoginActivity extends AppCompatActivity {
                 String pass = passText.getText().toString();
                 successFlag = localInstance.logIn(user,pass, getApplicationContext());
                 Log.d("AsyncLogIn", "doInBackground: SuccessFlag" + successFlag);
+                boolean isLoggedIn = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE)
+                        .getBoolean("isLoggedIn", false);
                 pass = "";
                 user = "";
-                if(successFlag){
+                if(successFlag || isLoggedIn){
                     SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
-                    prefs.edit().putBoolean("isLoggedIn", false).apply();
+                    prefs.edit().putBoolean("isLoggedIn", true).apply();
                     Log.d("AsyncLogin", "onPostExecute: I got here");
                     Intent intent = new Intent(LoginActivity.this, MainMenu.class);// New activity
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
-                    finish(); // Call once you redirect to another activity
+                    finish(); // Kill login activity once you redirect to another activity
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Could not log in!", Toast.LENGTH_LONG).show();
