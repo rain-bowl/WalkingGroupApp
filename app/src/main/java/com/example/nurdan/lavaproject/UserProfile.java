@@ -62,6 +62,8 @@ public class UserProfile extends AppCompatActivity {
                 startActivity(mainMenu);
                 break;
             case R.id.backItem:
+                backItem.setVisible(false);
+                editItem.setVisible(true);
                 loadFragment(new userProfileDisplayFragment());
         }
         return true;

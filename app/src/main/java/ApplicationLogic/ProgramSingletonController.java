@@ -127,7 +127,7 @@ public class ProgramSingletonController {
     //Networking method which sends a post request to server to edit user info.
     public Boolean editUserInformation(JSONObject newInformation, Context currContext){
         currInstance = new AccountApiInteractions();
-
+        Log.d(TAG, "editUserInformation: USER INFO JSON " + newInformation.toString());
        currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
         return null;
     }

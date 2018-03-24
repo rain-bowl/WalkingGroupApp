@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nurdan.lavaproject.R;
+import com.example.nurdan.lavaproject.UserProfile;
 
 import org.json.JSONObject;
 
@@ -48,8 +49,13 @@ public class userProfileEditInfoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         currInstance = ProgramSingletonController.getCurrInstance();
-        userInformation = currInstance.getUserInfo();
+        try {
+            userInformation = currInstance.getUserInfo();
+            Log.d(TAG, "onViewCreated: USER INFO RETRIEVEd " + userInformation);
+        }
+        catch (Exception e){
 
+        }
 
         //Local instances of inputs
         name = view.findViewById(R.id.nameInput);
@@ -275,12 +281,13 @@ public class userProfileEditInfoFragment extends Fragment {
                 createJsonBody("homePhone", tempHomePhone);
                 createJsonBody("grade", tempGrade);
                 createJsonBody("teacherName", tempTeacheName);
+                createJsonBody("emergencyContactInfo", tempEmergencyInfo);
                 userInformation.remove("lastGpsLocation");
                 Boolean returnStatus;
                sendNewData editInfoServercall = new sendNewData();
                editInfoServercall.execute();
 
-                   Toast.makeText(getContext(), "Success", Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -303,8 +310,8 @@ public class userProfileEditInfoFragment extends Fragment {
 
        private void createJsonBody(String key, int value) {
            try {
-               if (value != userInformation.getInt(key)) {
-                   userInformation.put(key, ""+value);
+               if (value != userInformation.getInt(key) || value != 0) {
+                   userInformation.put(key, value+"");
                }
            }
            catch (Exception e){
@@ -317,14 +324,15 @@ public class userProfileEditInfoFragment extends Fragment {
            @Override
            protected Boolean doInBackground(Void... voids) {
                Log.d(TAG, "doInBackground: Background runner for editing information has been reached");
-               Log.d(TAG, "doInBackground: Contents on edited info " + userInformation.toString());
+               Log.d(TAG, "doInBackground: Contents on edited info " + userInformation);
               currInstance.editUserInformation(userInformation, getContext());
-
               return null;
+           }
 
-
-
-
+           @Override
+           protected void onPostExecute(Boolean aBoolean) {
+                Toast.makeText(getContext(), "Success", Toast.LENGTH_LONG).show();
+               ((UserProfile)getActivity()).loadFragment(new userProfileDisplayFragment());
            }
        }
 

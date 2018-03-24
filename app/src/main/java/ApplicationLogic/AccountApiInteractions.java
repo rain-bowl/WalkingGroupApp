@@ -148,10 +148,12 @@ public class AccountApiInteractions {
     /*Sends of the provided JsonObject input to the server to edit the users information. CURRENTLY NOT WORKING PROPERLY!!!*/
     public Boolean editDatabaseUserProfile(JSONObject jsonBody, Context currContext, int userID, String currBearer){
         AndroidNetworking.initialize(currContext);
+        Log.d(TAG, "editDatabaseUserProfile: ID AND BEARER " + userID + "" + currBearer);
         ANRequest sendUserInfo = AndroidNetworking.post(baseURL + "/users/" + userID)
+                .setContentType("application/json")
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", currBearer)
-                .addApplicationJsonBody(jsonBody)
+                .addJSONObjectBody(jsonBody)
                 .build();
 
         ANResponse<JSONObject> serverResponse = sendUserInfo.executeForJSONObject();
