@@ -93,7 +93,7 @@ private class getMntrUsers extends AsyncTask<Void,Void,Void>{
     @Override
     protected void onPostExecute(Void aVoid) {
         Log.d("USERDISPLAY", "onPostExecute:Got here ");
-        if(retrievedUsers.isEmpty()){
+        if(retrievedUsers == null){
             retrievedUsers.add("There are no users currently monitored");
             ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
             displayMntrdUser.setAdapter(listViewAdapter);

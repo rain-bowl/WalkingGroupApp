@@ -29,6 +29,8 @@ public class ProgramSingletonController {
     Boolean logInStatus = false;
     private static ProgramSingletonController instance;
     private List<LatLng> listOfPoints = new ArrayList<>();
+    private User currLoggedInUser;
+
 
     private  ProgramSingletonController(){
         //Private constructor to prevent anybody instantiating the singleton class without using official method
@@ -45,6 +47,14 @@ public class ProgramSingletonController {
         }
     }
 
+    public void setUserID (int currUser) {
+        this.userID = currUser;
+    }
+
+    public void setBearerToken(String token) {
+        this.bearerToken = token;
+    }
+
     public int getUserID(){
         currInstance = new AccountApiInteractions();
         return currInstance.getUserID();
@@ -53,6 +63,9 @@ public class ProgramSingletonController {
     public String getBearerToken(){
         currInstance = new AccountApiInteractions();
         return currInstance.getBearerToken();
+    }
+    public User getCurrLoggedInUser(){
+        return this.currLoggedInUser;
     }
 
     //used for test, can delete
@@ -77,25 +90,56 @@ public class ProgramSingletonController {
 
     */
 
-    //Creates a new user
-    public void createNewUser(String name, String email, String password, Context appContext){
-        currInstance = new AccountApiInteractions();
-
-        currInstance.createNewUser(name, password, email, appContext);
+    public User getLoggedInUserProfile(){
+        return this.currLoggedInUser;
     }
 
-    //Logs user into their account
+    //Creates a new user
+    public Boolean createNewUser(JSONObject jsonBody, Context appContext){
+        currInstance = new AccountApiInteractions();
+        return currInstance.createNewUser(jsonBody, appContext);
+    }
+
+    //Logs user into their account and creates a new user instance to hold their details.
     public Boolean logIn(String email, String password, Context appContext){
        JSONArray tempArr;
+       this.currLoggedInUser = new User();
         currInstance = new AccountApiInteractions();
         logInStatus = currInstance.userLogIn(email, password, appContext);
         this.bearerToken = currInstance.getBearerToken();
-        Log.d(TAG, "logIn: Programsingletonberer " + this.bearerToken);
-        this.userID = currInstance.getDatabaseUserID(email, appContext);
+        Log.d(TAG, "logIn: Program singleton bearer token " + this.bearerToken);
+        currInstance.getDatabaseUserProfile(email, appContext);
+        this.userID = currLoggedInUser.getID();
         Log.d(TAG, "logIn: UserIDTEST " + this.userID   );
+        Log.d(TAG, "logIn: MONITORED BY TEST " +currLoggedInUser.getMonitorsOtherUsers());
         //saveEmail(email, this.bearerToken, appContext);
         return logInStatus;
     }
+
+     //Simple method which discards bearer token to log user out.
+    public void userLogout(){
+        bearerToken = null;
+    }
+
+    //Sets the fields of the user class according to the information provided by the JsonObject. Used on logging in.
+    public void setUserInfo(JSONObject newInformation){
+        currLoggedInUser.setJsonObject(newInformation);
+    }
+
+    //Provides access to the JsonObject which contains all of the data of the current logged in user. Used for displaying it
+    //and editing it.
+    public JSONObject getUserInfo(){
+        return currLoggedInUser.returnJsonUserInfo();
+    }
+
+    //Networking method which sends a post request to server to edit user info.
+    public Boolean editUserInformation(JSONObject newInformation, Context currContext){
+        currInstance = new AccountApiInteractions();
+
+       currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
+        return null;
+    }
+
     //Adds new user to be monitored by another
     public void addUsrMonitor(int monitorID, String userEmail, String bearerToken, Context appContext){
         AccountApiInteractions getId = new AccountApiInteractions();
@@ -104,7 +148,7 @@ public class ProgramSingletonController {
         currInstance.addMonitoredUser(monitorID, tempUsrID, bearerToken, appContext);
     }
     //Deletes a user from the list of monitored users
-    public void deleteMonitoredUsr(int monitorID, int dltdUser, String bearerToken, Context appContext){
+    public void deleteMonitoredUsr(int monitorID, int dltdUser, Context appContext){
         UserMonitor currInstance = new UserMonitor();
         currInstance.stopMonitoringUser(monitorID, dltdUser, bearerToken, appContext);
     }
@@ -145,7 +189,8 @@ public class ProgramSingletonController {
         else return null;
     }
 
-
+    //Creates a list of users from the provided jsonArray and then stores them in an array list for easy access
+    //Used when displaying people in the user monitors.
     private ArrayList<String> createUserList(JSONArray jsonArr, Context appContext){
         JSONObject tempJSONObject;
         ArrayList<String> tempUserStorage = new ArrayList<>();
@@ -179,10 +224,13 @@ public class ProgramSingletonController {
     }
 
         //create new group
-    public void createNewGroup(String bearerToken, String groupDescription, int leaderID, LatLng start, LatLng dest, Context appContext){
+    public void createNewGroup(String groupDescription, LatLng start, LatLng dest, Context appContext){
         currInstance = new AccountApiInteractions();
-        //bearerToken = currInstance.getBearerToken();
-        currInstance.createNewGroup(bearerToken, groupDescription, leaderID, start, dest, appContext);
+        Log.d(TAG, "createNewGroup: USERID: " + this.userID);
+        Log.d(TAG, "createNewGroup: TOKENBEARER: " + this.bearerToken);
+        String currToken = this.bearerToken;
+        int leaderID = this.userID;
+        currInstance.createNewGroup(currToken, groupDescription, leaderID, start, dest, appContext);
     }
 
     //get group info
@@ -233,4 +281,6 @@ public class ProgramSingletonController {
         currInstance.removeGroupMember(groupID, memberID, appContext);
         bearerToken = currInstance.getBearerToken();
     }
+
+
 }

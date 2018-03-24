@@ -246,6 +246,7 @@ public class MapActivity extends FragmentActivity implements
                                                 mDefaultLocation.longitude), DEFAULT_ZOOM));
                             }
                             else {
+                                //Todo: update lastknownlocation for User when method works @Rainbow
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mLastKnownLocation.getLatitude(),
                                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
