@@ -4,6 +4,8 @@
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
+    <string name="test_username">bob@lava.ca</string>
+    <string name="test_password">bobearth</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
@@ -26,7 +28,7 @@
     <string name="create_new_account">Create account</string>
     <string name="useremail_title">user_email</string>
     <string name="useremailname">Email:</string>
-    <string name="useremail_input_hint">Email...</string>
+    <string name="useremail_input_hint">Email…</string>
 
     <string name="NearBy">NearBy</string>
     <string name="Group">Groups</string>
@@ -47,7 +49,7 @@
     <string name="usrMonitors">User Monitor</string>
     <string name="usersWhoMonitorYou">Users who are monitoring you:</string>
     <string name="usersWhoYouMonitor">Users monitored:</string>
-    <string name="userHint">I would like to add...</string>
+    <string name="userHint">I would like to add…</string>
     <string name="monitorUsrCheckbox">another user to monitor</string>
     <string name="monitorMeUsrCheckbox">another user to monitor me</string>
     <string name="group_name">Group Name</string>
