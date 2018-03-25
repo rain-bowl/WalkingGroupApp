@@ -16,6 +16,8 @@ import android.widget.ToggleButton;
 
 import com.example.nurdan.lavaproject.R;
 
+import org.json.JSONObject;
+
 import ApplicationLogic.ProgramSingletonController;
 
 
@@ -26,6 +28,7 @@ public class UserInboxNewMessageFragment extends Fragment{
     String message;
     Boolean parentFlag, groupFlag;             //Flags which decide whether something is clicked on or not.
     ProgramSingletonController currSingletonInstance;
+    JSONObject userInfo;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,7 +38,7 @@ public class UserInboxNewMessageFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         currSingletonInstance = ProgramSingletonController.getCurrInstance();
-
+        userInfo = currSingletonInstance.getUserInfo();
         //Attach widgets
         final ToggleButton sendToParents = view.findViewById(R.id.sendToPrntsTgl);
         final ToggleButton sendToGroup = view.findViewById(R.id.sendToGrpTgl);
@@ -106,4 +109,6 @@ public class UserInboxNewMessageFragment extends Fragment{
 
 
     }
+
+
 }
