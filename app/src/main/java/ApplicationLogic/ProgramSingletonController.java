@@ -279,5 +279,14 @@ public class ProgramSingletonController {
         return currInstance.getMessagesForSingleUser(userID, bearerToken, currContext);
     }
 
+    public void sendMsgToGroup(String message, int groupID, Boolean emergencyStatus, Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        currInstance.newMessageToGroup(message, groupID, emergencyStatus, bearerToken, currContext);
+    }
+
+    public void sendMsgToParents(String message, int userID, Boolean emergencyStatus, Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        currInstance.newMessageToParents(message, userID, emergencyStatus, bearerToken, currContext);
+    }
 
 }

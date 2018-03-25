@@ -92,5 +92,7 @@
     <string name="groupSend">Send message to selected group</string>
     <string name="noTgl">No</string>
     <string name="yesTgl">Yes</string>
+    <string name="noSendDestinationWarning">Please select the users to whom you would like to send this message to!</string>
+    <string name="sendBtnText">Send Message</string>
 
 </resources>
