@@ -52,6 +52,7 @@ public class MapSecondActivity extends AppCompatActivity {
             JSONArray original = currInstance.getGroupList(getApplicationContext());
 
             if (original == null) {
+                Log.d("MapSecondActivity", "retrives null jsonarray");
                 original = new JSONArray();
             }
 

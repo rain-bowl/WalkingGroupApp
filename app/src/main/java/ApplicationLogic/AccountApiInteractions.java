@@ -240,19 +240,25 @@ public class AccountApiInteractions {
     // TODO: find out why it returns code 500
     public void createNewGroup(final String currToken, String groupDescription, final int leaderID, LatLng start, LatLng dest, Context appContext){
         final JSONObject jsonBody = new JSONObject();
+        bearerToken = currToken;
 
         try {
             JSONArray LatArray = new JSONArray();
             JSONArray LngArray = new JSONArray();
+            JSONObject leaderBody = new JSONObject();
 
             jsonBody.put("groupDescription", groupDescription);
+
             LatArray.put(start.latitude);
             LatArray.put(dest.latitude);
             jsonBody.put("routeLatArray", LatArray);
+
             LngArray.put(start.longitude);
             LngArray.put(dest.longitude);
             jsonBody.put("routeLngArray", LngArray);
-            jsonBody.put("leader", leaderID);
+
+            leaderBody.put("id", leaderID);
+            jsonBody.put("leader", leaderBody);
             jsonBody.put("memberUsers", new JSONArray());
         }
         catch (Exception e){
@@ -262,38 +268,6 @@ public class AccountApiInteractions {
 
         //Make POST call to server with attached json body
         AndroidNetworking.initialize(appContext);
-
-        // test code, will probably dleete
-        /*
-        ANRequest groupRequest = AndroidNetworking.post(baseURL + "/groups")
-                .addHeaders("apiKey", apiKey)
-                .addHeaders("Authorization", currToken)
-                .addJSONObjectBody(jsonBody)
-                .build();
-
-        ANResponse<JSONObject> serverResponse = groupRequest.executeForJSONObject();
-        if(serverResponse.isSuccess()) {
-            if (serverResponse.getOkHttpResponse().code() == 200) {
-                JSONObject jsonResponse = serverResponse.getResult();
-                Log.d(TAG, "createNewGroup: JSONRESP: " + jsonResponse);
-                try{
-                    groupID = jsonResponse.getInt("id");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.d(TAG, "createNewGroup: group ID ON SUCCESS IS" + groupID);
-            }
-        }
-        else {
-            Log.d(TAG, "createNewGroup: CODE: " + serverResponse.getError().getErrorCode());
-            Log.d(TAG, "createNewGroup: ERROR: " + serverResponse.getError().getErrorBody());
-            Log.d(TAG, "createNewGroup: ERRORDETAIL: " + serverResponse.getError().getErrorDetail());
-            Log.d(TAG, "createNewGroup: More Detail: " + serverResponse.getError().getResponse());
-        }
-        */
-
-
         AndroidNetworking.post(baseURL + "/groups")
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", currToken)
