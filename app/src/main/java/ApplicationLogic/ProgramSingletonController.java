@@ -272,4 +272,12 @@ public class ProgramSingletonController {
     }
 
 
+    /* These methods are related to messaging */
+    public JSONArray getMessagesForUser(Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        Log.d(TAG, "getMessagesForUser: Inputs " + userID + " " + bearerToken);
+        return currInstance.getMessagesForSingleUser(userID, bearerToken, currContext);
+    }
+
+
 }

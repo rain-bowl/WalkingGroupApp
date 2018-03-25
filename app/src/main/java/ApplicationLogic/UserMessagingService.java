@@ -1,12 +1,16 @@
 package ApplicationLogic;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import static com.google.android.gms.plus.PlusOneDummyView.TAG;
 
 /*This class will contain all network calls as well as data formatting needed to implement the messaging between users.
 
@@ -77,17 +81,18 @@ public class UserMessagingService {
     }
 
     //Gets all messages for a single user. These can be both emergency and non-emergency
-    public JSONObject getMessagesForSingleUser(int userID, String bearerToken, Context currContext){
+    public JSONArray getMessagesForSingleUser(int userID, String bearerToken, Context currContext){
         AndroidNetworking.initialize(currContext);
         ANRequest retrieveMessagesRequest = AndroidNetworking.get(baseURL + "/messages?foruser=" + userID)
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
                 .build();
 
-        ANResponse<JSONObject> serverResponse = retrieveMessagesRequest.executeForJSONObject();
+        ANResponse<JSONArray> serverResponse = retrieveMessagesRequest.executeForJSONArray();
 
         if(serverResponse.isSuccess()){
             if(serverResponse.getOkHttpResponse().code() == 200){
+                Log.d(TAG, "getMessagesForSingleUser: Server response " + serverResponse.getResult().toString());
                 return serverResponse.getResult();
             }
         }
@@ -95,14 +100,14 @@ public class UserMessagingService {
     }
 
      //Gets all read messages for a single user. These can be both emergency and non-emergency
-    public JSONObject getReadMessagesForSingleUser(int userID, String bearerToken, Context currContext){
+    public JSONArray getReadMessagesForSingleUser(int userID, String bearerToken, Context currContext){
         AndroidNetworking.initialize(currContext);
         ANRequest retrieveMessagesRequest = AndroidNetworking.get(baseURL + "/messages?foruser=" + userID + "&status=unread")
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
                 .build();
 
-        ANResponse<JSONObject> serverResponse = retrieveMessagesRequest.executeForJSONObject();
+        ANResponse<JSONArray> serverResponse = retrieveMessagesRequest.executeForJSONArray();
 
         if(serverResponse.isSuccess()){
             if(serverResponse.getOkHttpResponse().code() == 200){
@@ -114,14 +119,14 @@ public class UserMessagingService {
 
     //Gets all unread messages for a single user. These can be both emergency and non-emergency.
     //Returns a raw json object response which will need to be worked with.
-    public JSONObject getUnreadMessagesForSingleUser(int userID, String bearerToken, Context currContext){
+    public JSONArray getUnreadMessagesForSingleUser(int userID, String bearerToken, Context currContext){
         AndroidNetworking.initialize(currContext);
         ANRequest retrieveMessagesRequest = AndroidNetworking.get(baseURL + "/messages?foruser=" + userID + "&status=read")
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
                 .build();
 
-        ANResponse<JSONObject> serverResponse = retrieveMessagesRequest.executeForJSONObject();
+        ANResponse<JSONArray> serverResponse = retrieveMessagesRequest.executeForJSONArray();
 
         if(serverResponse.isSuccess()){
             if(serverResponse.getOkHttpResponse().code() == 200){
