@@ -26,7 +26,7 @@ import static android.content.ContentValues.TAG;
 
 import com.example.nurdan.lavaproject.R;
 
-public class AddUserDialog extends AppCompatDialogFragment{
+public class AddUserDialogFragment extends AppCompatDialogFragment{
     View currView;
     EditText usrInput;
     String emailInput = "";

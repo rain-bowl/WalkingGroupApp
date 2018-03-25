@@ -87,13 +87,12 @@ public class AccountApiInteractions {
     }
 
     //Handles the login of a user. Sets the bearer token on success.
-    public Boolean userLogIn(String email, String password, final Context appContext){
+    public Boolean userLogIn(String email, String password, final Context appContext) {
         final JSONObject jsonBody = new JSONObject();
-        try{
+        try {
             jsonBody.put("email", email);
             jsonBody.put("password", password);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -103,20 +102,20 @@ public class AccountApiInteractions {
                 .addJSONObjectBody(jsonBody)
                 .build();
 
-    ANResponse<OkHttpResponseListener> responseListenerANResponse = request.executeForOkHttpResponse();
-    if(responseListenerANResponse.isSuccess()) {
-        if (responseListenerANResponse.getOkHttpResponse().code() == 200){
-            Log.d(TAG, "userLogIn: Response Good " + responseListenerANResponse.getOkHttpResponse().code());
-            bearerToken = responseListenerANResponse.getOkHttpResponse().header("Authorization");
-            return true;
+        ANResponse<OkHttpResponseListener> responseListenerANResponse = request.executeForOkHttpResponse();
+        if (responseListenerANResponse.isSuccess()) {
+            if (responseListenerANResponse.getOkHttpResponse().code() == 200) {
+                Log.d(TAG, "userLogIn: Response Good " + responseListenerANResponse.getOkHttpResponse().code());
+                bearerToken = responseListenerANResponse.getOkHttpResponse().header("Authorization");
+                return true;
+            } else {
+                Log.d(TAG, "userLogIn: Response Not Good " + responseListenerANResponse.getOkHttpResponse().code());
+                return false;
+            }
         } else {
-            Log.d(TAG, "userLogIn: Response Not Good " + responseListenerANResponse.getOkHttpResponse().code());
+            Log.d(TAG, "userLogIn: Response Error" + responseListenerANResponse.getError());
             return false;
         }
-    }
-    else {
-        Log.d(TAG, "userLogIn: Response Error" + responseListenerANResponse.getError());
-        return false;
     }
 
 
