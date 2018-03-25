@@ -9,7 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import UIFragmentClasses.UserInboxDisplay;
+import UIFragmentClasses.UserInboxDisplayFragment;
+import UIFragmentClasses.UserInboxNewMessageFragment;
 
 public class MessageInbox extends AppCompatActivity {
 
@@ -18,7 +19,8 @@ public class MessageInbox extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_inbox);
         setUpToolbar();
-        setFragment(new UserInboxDisplay());
+
+        setFragment(new UserInboxDisplayFragment());
     }
 
     private void setUpToolbar(){
@@ -35,7 +37,15 @@ public class MessageInbox extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-
+            case R.id.newMessageItem:
+                setFragment(new UserInboxNewMessageFragment());
+                break;
+            case R.id.backInboxItem:
+                setFragment(new UserInboxDisplayFragment());
+                break;
+            case R.id.mainMenuInboxItem:
+                Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
+                startActivity(mainMenu);
         }
         return true;
     }

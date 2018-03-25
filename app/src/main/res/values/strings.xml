@@ -85,5 +85,12 @@
     <string name="create_group">Create Group</string>
     <string name="walking_group_project">Walking Group Project</string>
 
+    <!-- Strings related to the user's inbox -->
+    <string name="newMessage">New Message</string>
+    <string name="messageHint">Enter your message here...</string>
+    <string name="parentSend">Send message to parents of a selected user</string>
+    <string name="groupSend">Send message to selected group</string>
+    <string name="noTgl">No</string>
+    <string name="yesTgl">Yes</string>
 
 </resources>

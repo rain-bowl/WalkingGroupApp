@@ -27,7 +27,7 @@ import static com.google.android.gms.wearable.DataMap.TAG;
 /*This class will configure the fragment to display the inbox of the current logged in user
 
  */
-public class UserInboxDisplay extends Fragment {
+public class UserInboxDisplayFragment extends Fragment {
     ListView inbox;
     ProgramSingletonController currSingletonInstance;
     JSONArray rawMessages;
