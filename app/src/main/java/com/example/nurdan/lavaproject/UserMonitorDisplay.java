@@ -27,6 +27,7 @@ import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import ApplicationLogic.AccountApiInteractions;
@@ -38,7 +39,8 @@ public class UserMonitorDisplay extends AppCompatActivity {
     ProgramSingletonController currInstanceSingleton = ProgramSingletonController.getCurrInstance();
 
     // global variable in order to access IDs
-    ArrayList<Integer> retrievedIDs;
+    ArrayList<Integer> retrievedMonitoringIDs;
+    ArrayList<Integer> retrievedMonitoringMeIDs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,26 +67,16 @@ public class UserMonitorDisplay extends AppCompatActivity {
                 addUserFragment.show(getSupportFragmentManager(), "addUsr");
                 break;
             case R.id.delete_monitor_user:
-                ListView monitoredUsersList = findViewById(R.id.usersMonitoredView);
-                SparseBooleanArray checked = monitoredUsersList.getCheckedItemPositions();
-                // check if item is checked
-                if (checked == null) {
+                SparseBooleanArray monitoredList = ((ListView) findViewById(R.id.usersMonitoredView)).getCheckedItemPositions();
+                SparseBooleanArray monitoringMelist = ((ListView) findViewById(R.id.usersWhoMonitoreYouView)).getCheckedItemPositions();
+
+                if(monitoredList == null && monitoringMelist == null) {
                     Toast.makeText(this, "Select user to delete", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                ArrayList<Integer> checkedUsers = new ArrayList<>();
-                for (int i = 0, len = checked.size(); i < len; i++) {
-                    if (checked.valueAt(i)) {
-                        String s = ((TextView) monitoredUsersList.getChildAt(i)).getText().toString();
-                        int id = retrievedIDs.get(i);
-                        checkedUsers.add(id);
-                    }
-                }
-                deleteMonitoredUser deleteUser = new deleteMonitoredUser();
-                deleteUser.execute(checkedUsers);
 
-                String lenUsers = String.format(Locale.CANADA, "Stopped monitoring %d users %s", checkedUsers.size(), Arrays.toString(checkedUsers.toArray()));
-                Toast.makeText(this, lenUsers, Toast.LENGTH_SHORT).show();
+                if(monitoredList != null) deleteMonitoringUsers(retrievedMonitoringIDs, R.id.usersMonitoredView);
+                if(monitoringMelist != null) deleteUsersMonitoringMe(retrievedMonitoringMeIDs, R.id.usersWhoMonitoreYouView);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -92,6 +84,52 @@ public class UserMonitorDisplay extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void deleteMonitoringUsers(ArrayList<Integer> userIds, Integer listID) {
+        ListView displayList = (ListView) findViewById(listID);
+        SparseBooleanArray checked = displayList.getCheckedItemPositions();
+        // check if item is checked
+        if (checked == null) {
+            Toast.makeText(this, "Select user to delete", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ArrayList<Integer> checkedUsers = new ArrayList<>();
+        for (int i = 0, len = checked.size(); i < len; i++) {
+            if (checked.valueAt(i)) {
+                String s = ((TextView) displayList.getChildAt(i)).getText().toString();
+                int id = userIds.get(i);
+                checkedUsers.add(id);
+            }
+        }
+        AsyncDeleteMonitoredUser deleteUsers = new AsyncDeleteMonitoredUser();
+        deleteUsers.execute(checkedUsers);
+
+        String lenUsers = String.format(Locale.CANADA, "Stopped monitoring %d users %s", checkedUsers.size(), Arrays.toString(checkedUsers.toArray()));
+        Toast.makeText(this, lenUsers, Toast.LENGTH_SHORT).show();
+    }
+
+    private void deleteUsersMonitoringMe(ArrayList<Integer> userIds, Integer listID) {
+        ListView displayList = (ListView) findViewById(listID);
+        SparseBooleanArray checked = displayList.getCheckedItemPositions();
+        // check if item is checked
+        if (checked == null) {
+            Toast.makeText(this, "Select user to delete", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ArrayList<Integer> checkedUsers = new ArrayList<>();
+        for (int i = 0, len = checked.size(); i < len; i++) {
+            if (checked.valueAt(i)) {
+                String s = ((TextView) displayList.getChildAt(i)).getText().toString();
+                int id = userIds.get(i);
+                checkedUsers.add(id);
+            }
+        }
+        AsyncDeleteMonitoringMeUsers deleteUsers = new AsyncDeleteMonitoringMeUsers();
+        deleteUsers.execute(checkedUsers);
+
+        String lenUsers = String.format(Locale.CANADA, "Stopped monitoring %d users %s", checkedUsers.size(), Arrays.toString(checkedUsers.toArray()));
+        Toast.makeText(this, lenUsers, Toast.LENGTH_SHORT).show();
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.taskmenu, menu);
@@ -110,10 +148,10 @@ public class UserMonitorDisplay extends AppCompatActivity {
         getMonitors.execute();
     }
 
-    private void updateListView(ArrayList<String> retrievedUsers, ArrayList<Integer> retrievedIDs, int resourceID){
+    private void updateListView(ArrayList<String> retrievedUsers, ArrayList<Integer> retrievedUserIDs, int resourceID){
         ListView displayMntrdUser = (ListView) findViewById(resourceID);
         if (retrievedUsers.isEmpty()) {
-                retrievedIDs.clear();
+                retrievedUserIDs.clear();
                 retrievedUsers.add("There are no users currently monitored");
                 ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
                 displayMntrdUser.setAdapter(listViewAdapter);
@@ -127,55 +165,45 @@ public class UserMonitorDisplay extends AppCompatActivity {
     private class getMntrUsers extends AsyncTask<Void, Void, Void> {
         ListView displayMntrdUser;
         ArrayList<String> retrievedUsers;
-
         @Override
         protected Void doInBackground(Void... voids) {
-            //displayProgress.setVisibility(View.VISIBLE);
             displayMntrdUser = (ListView) findViewById(R.id.usersMonitoredView);
             retrievedUsers = currInstanceSingleton.getUsersMonitored(getApplicationContext());
-            retrievedIDs = currInstanceSingleton.getUsersMonitoredIDs(getApplicationContext());
+            retrievedMonitoringIDs = currInstanceSingleton.getUsersMonitoredIDs(getApplicationContext());
             return null;
         }
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.d("USERDISPLAY", "onPostExecute:Got here ");
             if(retrievedUsers == null) {
-                Toast.makeText(UserMonitorDisplay.this, "Could not retrieve monitored users", Toast.LENGTH_SHORT);
+                Toast.makeText(UserMonitorDisplay.this, "Could not retrieve monitored users", Toast.LENGTH_SHORT).show();
                 return;
             }
-            updateListView(retrievedUsers, retrievedIDs, R.id.usersMonitoredView);
-
+            updateListView(retrievedUsers, retrievedMonitoringIDs, R.id.usersMonitoredView);
         }
     }
 
     private class getUsrsMntrThis extends AsyncTask<Void, Void, Void> {
         ListView displayMonitors;
         ArrayList<String> retrievedUsers;
-
         @Override
         protected Void doInBackground(Void... voids) {
             displayMonitors = (ListView) findViewById(R.id.usersWhoMonitoreYouView);
             retrievedUsers = currInstanceSingleton.getUsersWhoMonitorThis(getApplicationContext());
+            retrievedMonitoringMeIDs = currInstanceSingleton.getIDsWhoMonitorThis(getApplicationContext());
             return null;
         }
-
         @Override
         protected void onPostExecute(Void aVoid) {
-            ArrayAdapter<String> listViewAdapter;
-            if(retrievedUsers == null) return;
-            if (retrievedUsers.isEmpty()) {
-                retrievedUsers.add("There are no users monitoring you");
-                listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
-                displayMonitors.setAdapter(listViewAdapter);
-            } else {
-                listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
-                displayMonitors.setAdapter(listViewAdapter);
+            if(retrievedUsers == null) {
+                Toast.makeText(UserMonitorDisplay.this, "Could not retrieve users monitoring you", Toast.LENGTH_SHORT).show();
+                return;
             }
-            displayProgress.setVisibility(View.GONE);
+            updateListView(retrievedUsers, retrievedMonitoringMeIDs, R.id.usersWhoMonitoreYouView);
         }
     }
 
-    private class deleteMonitoredUser extends AsyncTask<ArrayList<Integer>, Void, Void> {
+    private class AsyncDeleteMonitoredUser extends AsyncTask<ArrayList<Integer>, Void, Void> {
         @Override
         protected Void doInBackground(ArrayList<Integer>... arrayLists) {
             ArrayList<Integer> list = arrayLists[0];
@@ -190,6 +218,22 @@ public class UserMonitorDisplay extends AppCompatActivity {
         protected void onPostExecute(Void param) {
             new getMntrUsers().execute();
         }
+    }
 
+    private class AsyncDeleteMonitoringMeUsers extends AsyncTask<ArrayList<Integer>, Void, Void> {
+        @Override
+        protected Void doInBackground(ArrayList<Integer>...arrayLists) {
+            ArrayList<Integer> list = arrayLists[0];
+            for (int i = 0, len = list.size(); i < len; i++) {
+                int id = list.get(i);
+                currInstanceSingleton.deleteMonitoringMeUser(id, UserMonitorDisplay.this);
+                Log.d("DELETEDUSER", " with ID " + id);
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void param) {
+            new getUsrsMntrThis().execute();
+        }
     }
 }

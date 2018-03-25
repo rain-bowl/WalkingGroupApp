@@ -119,8 +119,10 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
         }
     }
 
-//Recovers users which are monitored by the current logged in user. Currently needs
-//some more work in particular, the case where it is not successful.
+    // Remove a user who is monitoring you
+
+    //Recovers users which are monitored by the current logged in user. Currently needs
+    //some more work in particular, the case where it is not successful.
     public JSONArray getMonitoredUsers(int userID, String bearerToken, Context appContext) throws JSONException{
         String URLPath = String.format("/users/%d/monitorsUsers", userID);
         Log.d(TAG, "getMonitoredUsers: Formatted URL" + URLPath);

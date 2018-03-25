@@ -133,10 +133,16 @@ public class ProgramSingletonController {
         successFlag = currMonitorInstance.addUsrToMonitorYou(userID, tempMonitorID, this.bearerToken, appContext);
         return successFlag;
     }
-    //Deletes a user from the list of monitored users
+    // Delete a user from the list of monitored users
     public boolean deleteMonitoredUsr(int userToDelete, Context appContext){
         UserMonitor currInstance = new UserMonitor();
         return currInstance.stopMonitoringUser(this.userID, userToDelete, this.bearerToken, appContext);
+    }
+
+    // Delete a user from the list who are monitoring you
+    public boolean deleteMonitoringMeUser(int userToDelete, Context appContext) {
+        UserMonitor currInstance = new UserMonitor();
+        return currInstance.stopMonitoringUser(userToDelete, this.userID, this.bearerToken, appContext);
     }
 
 
@@ -158,21 +164,6 @@ public class ProgramSingletonController {
         else return null;
     }
 
-    // Get ids of monitored users
-    public ArrayList<Integer> getUsersMonitoredIDs(Context appContext){
-        JSONArray tempArr = null;
-        UserMonitor currInstance = new UserMonitor();
-        try{
-            tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        if(tempArr != null) {
-            return createUserListID(tempArr, appContext);
-        }
-        else return null;
-    }
 
     public ArrayList<String> getUsersWhoMonitorThis(Context appContext){
         JSONArray tempArr = null;
@@ -189,6 +180,36 @@ public class ProgramSingletonController {
         else return null;
     }
 
+    public ArrayList<Integer> getIDsWhoMonitorThis(Context appContext){
+        JSONArray tempArr = null;
+        UserMonitor currInstance = new UserMonitor();
+        try{
+            tempArr = currInstance.getUsersWhoMonitor(userID, bearerToken, appContext);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        if (tempArr != null){
+            return createUserListID(tempArr, appContext);
+        }
+        else return null;
+    }
+
+    // Get ids of monitoring me
+    public ArrayList<Integer> getUsersMonitoredIDs(Context appContext){
+        JSONArray tempArr = null;
+        UserMonitor currInstance = new UserMonitor();
+        try{
+            tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        if(tempArr != null) {
+            return createUserListID(tempArr, appContext);
+        }
+        else return null;
+    }
 
     private ArrayList<String> createUserList(JSONArray jsonArr, Context appContext){
         JSONObject tempJSONObject;
