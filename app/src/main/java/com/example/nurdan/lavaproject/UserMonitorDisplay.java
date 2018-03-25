@@ -178,10 +178,11 @@ public class UserMonitorDisplay extends AppCompatActivity {
     private class deleteMonitoredUser extends AsyncTask<ArrayList<Integer>, Void, Void> {
         @Override
         protected Void doInBackground(ArrayList<Integer>... arrayLists) {
-            for (int i = 0, len = arrayLists.length; i < len; i++) {
-                ArrayList<Integer> checkedUsers = arrayLists[i];
-                currInstanceSingleton.deleteMonitoredUsr(checkedUsers.get(i), UserMonitorDisplay.this);
-                Log.d("DELETED USER", " with ID " + checkedUsers.get(i));
+            ArrayList<Integer> list = arrayLists[0];
+            for (int i = 0, len = list.size(); i < len; i++) {
+                int id = list.get(i);
+                currInstanceSingleton.deleteMonitoredUsr(id, UserMonitorDisplay.this);
+                Log.d("DELETEDUSER", " with ID " + id);
             }
             return null;
         }
