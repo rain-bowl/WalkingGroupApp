@@ -1,19 +1,24 @@
 package UIFragmentClasses;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.nurdan.lavaproject.R;
+import org.json.JSONArray;
 import org.json.JSONObject;
+import java.util.ArrayList;
 import ApplicationLogic.ProgramSingletonController;
 import ApplicationLogic.User;
 import static android.content.ContentValues.TAG;
@@ -23,7 +28,8 @@ import static android.content.ContentValues.TAG;
 It quite simply grabs the JSONObject through the singleton and sets all of the fields one by one.
  */
 public class userProfileDisplayFragment extends Fragment{
-
+    ArrayList<String> monitorees;
+    ProgramSingletonController currInstance;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,9 +38,12 @@ public class userProfileDisplayFragment extends Fragment{
     //Set up all listeners using the provided instance of User class stored in the singleton
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
-        JSONObject userInformation = currInstance.getUserInfo();
+       currInstance = ProgramSingletonController.getCurrInstance();
+       JSONObject userInformation = currInstance.getUserInfo();
+       monitorees = new ArrayList<>();
 
+
+        //Set up information display
         TextView name = view.findViewById(R.id.nameInput);
         TextView email = view.findViewById(R.id.emailInput);
         TextView birthYear = view.findViewById(R.id.birthYearInput);
@@ -58,26 +67,29 @@ public class userProfileDisplayFragment extends Fragment{
             grade.setText(userInformation.getString("grade"));
             teacher.setText(userInformation.getString("teacherName"));
             emergencyInfo.setText(userInformation.getString("emergencyContactInfo"));
+
         }
         catch (Exception e){
-
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+;
 
     }
+
+    private class getUserYouMonitor extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+           monitorees = currInstance.getUsersMonitored(getContext());
+           return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+        }
+    }
+
+
 }
+
+
+
