@@ -235,16 +235,18 @@ public class ProgramSingletonController {
 
     //get group info
     public void getGroupDetails(int groupID, Context appContext){
+        Log.d(TAG, "createNewGroup: USERID: " + this.userID);
+        Log.d(TAG, "createNewGroup: TOKENBEARER: " + this.bearerToken);
+        String currToken = this.bearerToken;
         currInstance = new AccountApiInteractions();
-        currInstance.getGroupDetails(groupID, appContext);
-        bearerToken = currInstance.getBearerToken();
+        currInstance.getGroupDetails(currToken, groupID, appContext);
     }
 
     //get list of all groups
     public JSONArray getGroupList(Context appContext){
         currInstance = new AccountApiInteractions();
-        bearerToken = currInstance.getBearerToken();
-        return currInstance.getGroupList(appContext);
+        String currToken = this.bearerToken;
+        return currInstance.getGroupList(currToken, appContext);
     }
 
     //update existing group info

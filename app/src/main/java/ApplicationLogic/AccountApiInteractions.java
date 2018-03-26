@@ -237,7 +237,6 @@ public class AccountApiInteractions {
 
 
     // create new group
-    // TODO: find out why it returns code 500
     public void createNewGroup(final String currToken, String groupDescription, final int leaderID, LatLng start, LatLng dest, Context appContext){
         final JSONObject jsonBody = new JSONObject();
         bearerToken = currToken;
@@ -298,11 +297,13 @@ public class AccountApiInteractions {
     }
 
     //gets list of all groups
-    public JSONArray getGroupList(Context currContext){
+    //todo implement properly :(
+    public JSONArray getGroupList(String currToken, Context currContext){
+        bearerToken = currToken;
         AndroidNetworking.initialize(currContext);
-        for (int currID = 0; currID < groupID; currID++){
-            AndroidNetworking.get(baseURL + "/groups/" + currID)
-                    .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
+       // for (int currID = 0; currID < 999; currID++){
+            AndroidNetworking.get(baseURL + "/groups")
+                    .addHeaders("apiKey", apiKey)
                     .addHeaders("Authorization", bearerToken)
                     .build()
                     .getAsJSONObject(new JSONObjectRequestListener() {
@@ -310,7 +311,7 @@ public class AccountApiInteractions {
                         public void onResponse(JSONObject response) {
                             try {
                                 groupList.put(response);
-                                Log.d(TAG, "onResponse: why"+ response.toString());
+                                Log.d(TAG, "onResponse: why "+ response.toString());
                             }
                             catch (Exception e){
                                 e.printStackTrace();
@@ -319,21 +320,21 @@ public class AccountApiInteractions {
                         }
                         @Override
                         public void onError(ANError anError) {
-                            Log.d(TAG, "onError: " + anError.getErrorBody());
-                            Log.d(TAG, "onError: " + anError.getErrorDetail());
+                            Log.d(TAG, "onError: errorbody: " + anError.getErrorBody());
+                            Log.d(TAG, "onError: detail: " + anError.getErrorDetail());
                         }
                     });
-        }
+    //    }
         return groupList;
     }
 
 
     //gets group's details through groupID
-    public void getGroupDetails(int groupID, Context currContext){
+    public void getGroupDetails(String currToken, int groupID, Context currContext){
         AndroidNetworking.initialize(currContext);
         AndroidNetworking.get(baseURL + "/groups/" + groupID)
-                .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
-                .addHeaders("Authorization", bearerToken)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currToken)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
@@ -348,8 +349,8 @@ public class AccountApiInteractions {
                     }
                     @Override
                     public void onError(ANError anError) {
-                        Log.d(TAG, "onError: " + anError.getErrorBody());
-                        Log.d(TAG, "onError: " + anError.getErrorDetail());
+                        Log.d(TAG, "onError body: " + anError.getErrorBody());
+                        Log.d(TAG, "onError detail: " + anError.getErrorDetail());
                     }
                 });
     }

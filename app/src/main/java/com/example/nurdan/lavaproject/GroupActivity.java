@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -17,20 +18,18 @@ import ApplicationLogic.ProgramSingletonController;
 public class GroupActivity extends AppCompatActivity {
     private ProgramSingletonController localInstance;
     private String groupName;
-    private int leaderID;
     private List<LatLng> startEnd;
     private LatLng start;
     private LatLng end;
-    private String bearerToken;
+    private String startLatLng;
+    private String endLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
-        localInstance = ProgramSingletonController.getCurrInstance();
-        leaderID = localInstance.getUserID(); //.getCurrUserID(getApplicationContext());
-        bearerToken = localInstance.getBearerToken(); //.getBearerToken(getApplicationContext());
 
+        localInstance = ProgramSingletonController.getCurrInstance();
         startEnd = localInstance.returnLatLng(getApplicationContext());
         if (startEnd == null) {
             start = new LatLng(0, 0);
@@ -39,14 +38,23 @@ public class GroupActivity extends AppCompatActivity {
         start = startEnd.get(0);
         end = startEnd.get(1);
 
-        String startLatLng = start.toString();
-        Toast.makeText(this, "start:" + startLatLng, Toast.LENGTH_LONG).show();
+        startLatLng = start.toString();
+       // Toast.makeText(this, "start:" + startLatLng, Toast.LENGTH_LONG).show();
 
-        String endLatLng = end.toString();
-        Toast.makeText(this, "end:" + endLatLng, Toast.LENGTH_LONG).show();
+        endLatLng = end.toString();
+      //  Toast.makeText(this, "end:" + endLatLng, Toast.LENGTH_LONG).show();
 
         createBtn();
         setupBackbtn();
+        setUpCoord();
+    }
+
+    private void setUpCoord(){
+        final TextView start = findViewById(R.id.startCoord);
+        final TextView end = findViewById(R.id.endCoord);
+
+        start.setText(startLatLng);
+        end.setText(endLatLng);
     }
 
     public void createBtn(){
