@@ -7,6 +7,9 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.graphics.Point;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.example.nurdan.lavaproject.R;
@@ -141,11 +144,16 @@ public class ProgramSingletonController {
         return currLoggedInUser.returnJsonUserInfo();
     }
 
+    public void getUserInfoByID(Integer id, Context appContext) {
+        AccountApiInteractions currInstance = new AccountApiInteractions();
+        currInstance.getUserInfoByID(id, this.bearerToken, appContext);
+    }
+
     //Networking method which sends a post request to server to edit user info.
     public Boolean editUserInformation(JSONObject newInformation, Context currContext){
         currInstance = new AccountApiInteractions();
         Log.d(TAG, "editUserInformation: USER INFO JSON " + newInformation.toString());
-       currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
+        currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
         return null;
     }
 

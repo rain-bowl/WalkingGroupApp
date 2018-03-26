@@ -11,4 +11,8 @@
         app:showAsAction="ifRoom"
         android:title="@string/delete">
     </item>
+    <item
+        android:id="@+id/info_monitor_user"
+        app:showAsAction="ifRoom"
+        android:title="@string/info" />
 </menu>
