@@ -69,6 +69,7 @@ public class GroupActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), groupName, Toast.LENGTH_LONG).show();
                 localInstance.createNewGroup(groupName, start, end, getApplicationContext());
                 startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
+
             }
         });
     }
