@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.nurdan.lavaproject.R;
@@ -30,6 +32,8 @@ It quite simply grabs the JSONObject through the singleton and sets all of the f
 public class userProfileDisplayFragment extends Fragment{
     ArrayList<String> monitorees;
     ProgramSingletonController currInstance;
+    ListView dispalyMonitorees;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +58,9 @@ public class userProfileDisplayFragment extends Fragment{
         TextView grade = view.findViewById(R.id.userGradeInput);
         TextView teacher = view.findViewById(R.id.userTeacherInput);
         TextView emergencyInfo = view.findViewById(R.id.userEmergencyInput);
+        dispalyMonitorees = view.findViewById(R.id.displayMonitoreesList);
+        getUserYouMonitor getMonitorees = new getUserYouMonitor();
+        getMonitorees.execute();
 
         try {
             Log.d(TAG, "onViewCreated: test" + userInformation.getString("emergencyContactInfo"));
@@ -71,6 +78,13 @@ public class userProfileDisplayFragment extends Fragment{
         }
         catch (Exception e){
         }
+
+        dispalyMonitorees.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
 ;
 
     }
@@ -84,7 +98,8 @@ public class userProfileDisplayFragment extends Fragment{
 
         @Override
         protected void onPostExecute(Void aVoid) {
-
+            ArrayAdapter monitoreesAdapter = new ArrayAdapter(getContext(), R.layout.user_listview_display_layout, monitorees);
+            dispalyMonitorees.setAdapter(monitoreesAdapter);
         }
     }
 

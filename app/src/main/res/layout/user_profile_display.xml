@@ -316,7 +316,7 @@
 
                     <TextView
                         android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="TextView" />
                 </TableRow>
@@ -325,6 +325,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <ListView
+                        android:id="@+id/displayMonitoreesList"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:isScrollContainer="false"
+                        android:scrollbars="vertical" />
                 </TableRow>
 
             </TableLayout>
