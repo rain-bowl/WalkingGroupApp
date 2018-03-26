@@ -31,7 +31,7 @@ private final String baseURL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443";
 private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 /*This method adds a user to be monitored by another user.
  */
-    public void addMonitoredUser(int userID, int monitoredUserID, String bearerKey, Context appContext){
+    public Boolean addMonitoredUser(int userID, int monitoredUserID, String bearerKey, Context appContext){
 
         JSONObject jsonBody = new JSONObject();
         try {
@@ -50,16 +50,47 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
         if (serverResponse.isSuccess()){
             if(serverResponse.getOkHttpResponse().code() == 201){
                 Log.d(TAG, "addMonitoredUser: Success in adding user");
+                return true;
             }
             else{
-                Log.d(TAG, "addMonitoredUser: Could not add user");
+                Log.d(TAG, "addMonitoredUser: Could not add user " + serverResponse.getError());
+                return false;
             }
         }
         else {
             Log.d(TAG, "addMonitoredUser: Request Error" + serverResponse.getError());
+            return false;
         }
 
 
+
+    }
+    public Boolean addUsrToMonitorYou(int userId, int monitorID, String bearer, Context appContext){
+        Boolean successFlag;
+        AndroidNetworking.initialize(appContext);
+        JSONObject jsonBody = new JSONObject();
+        try{
+            jsonBody.put("id", monitorID);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        ANRequest addMonitorRequest = AndroidNetworking.post(baseURL + "/users/" + userId + "/monitoredByUsers")
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearer)
+                .addJSONObjectBody(jsonBody)
+                .build();
+
+        ANResponse<OkHttpResponseListener> serverResponse = addMonitorRequest.executeForOkHttpResponse();
+        if(serverResponse.isSuccess()){
+            if(serverResponse.getOkHttpResponse().code() == 201){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        return null;
 
     }
 
@@ -67,7 +98,7 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
     userID corresponds to the user which is monitoring somebody
     removedUserId corresponds to the user being monitored
      */
-    public void stopMonitoringUser(int userID, int removedUserId, String bearerKey, Context appContext){
+    public boolean stopMonitoringUser(int userID, int removedUserId, String bearerKey, Context appContext){
         String accessURL = String.format("/users/%d/monitorsUsers/%d", userID, removedUserId);
         AndroidNetworking.initialize(appContext);
         ANRequest stopMntrRequest = AndroidNetworking.delete(baseURL + accessURL)
@@ -80,16 +111,18 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
             if(serverResponse.getOkHttpResponse().code() == 204){
                 Log.d(TAG, "stopMonitoringUser: Successful removal");
             }
+            return true;
         }
         else {
-            Log.d(TAG, "stopMonitoringUser: Error with request");
+            Log.d(TAG, "stopMonitoringUser: Error with request " + serverResponse.getError());
+            return false;
         }
-
-
     }
 
-//Recovers users which are monitored by the current logged in user. Currently needs
-//some more work in particular, the case where it is not successful.
+    // Remove a user who is monitoring you
+
+    //Recovers users which are monitored by the current logged in user. Currently needs
+    //some more work in particular, the case where it is not successful.
     public JSONArray getMonitoredUsers(int userID, String bearerToken, Context appContext) throws JSONException{
         String URLPath = String.format("/users/%d/monitorsUsers", userID);
         Log.d(TAG, "getMonitoredUsers: Formatted URL" + URLPath);
@@ -115,6 +148,7 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 
     }
 
+    //Synchronous method to retrieve users who are monitoring the logged in user.
     public JSONArray getUsersWhoMonitor(int userID, String bearerToken, Context appContext){
         String URLPath = String.format("/users/%d/monitoredByUsers", userID);
         JSONArray users = null;

@@ -2,6 +2,7 @@ package ApplicationLogic;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -50,6 +51,8 @@ public class AccountApiInteractions {
     private JSONArray groupList;
 
 
+
+
         //Creates a single user using the inputs
     public Boolean createNewUser(JSONObject jsonBody, Context appContext){
       Boolean successFlag;
@@ -86,13 +89,12 @@ public class AccountApiInteractions {
     }
 
     //Handles the login of a user. Sets the bearer token on success.
-    public Boolean userLogIn(String email, String password, final Context appContext){
+    public Boolean userLogIn(String email, String password, final Context appContext) {
         final JSONObject jsonBody = new JSONObject();
-        try{
+        try {
             jsonBody.put("email", email);
             jsonBody.put("password", password);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -103,34 +105,31 @@ public class AccountApiInteractions {
                 .build();
 
         ANResponse<OkHttpResponseListener> responseListenerANResponse = request.executeForOkHttpResponse();
-        if(responseListenerANResponse.isSuccess()) {
-            if (responseListenerANResponse.getOkHttpResponse().code() == 200){
+        if (responseListenerANResponse.isSuccess()) {
+            if (responseListenerANResponse.getOkHttpResponse().code() == 200) {
                 Log.d(TAG, "userLogIn: Response Good " + responseListenerANResponse.getOkHttpResponse().code());
-                ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
                 bearerToken = responseListenerANResponse.getOkHttpResponse().header("Authorization");
-                currInstance.setBearerToken(bearerToken);
                 return true;
-            }
-            else{
+            } else {
+                Log.d(TAG, "userLogIn: Response Not Good " + responseListenerANResponse.getOkHttpResponse().code());
                 return false;
             }
-        }
-        else {
+        } else {
             Log.d(TAG, "userLogIn: Response Error" + responseListenerANResponse.getError());
-            return null;
+            return false;
         }
     }
 
 
     //Class which recovers a users ID number from the database. This is needed to implement the user monitoring.
-    public int getDatabaseUserID(String email, Context currContext) {
-        Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
+    public int getDatabaseUserID(String email, Context currContext, String bearer) {
+        Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearer);
         AndroidNetworking.initialize(currContext);
         String formattedEmail = email.replace("@", "%40");
         Log.d(TAG, "getDatabaseUserID: Formatted email" + formattedEmail);
         ANRequest getUserIDRequest = AndroidNetworking.get(baseURL + "/users/byEmail?email=" + formattedEmail)
                 .addHeaders("apiKey", apiKey)
-                .addHeaders("Authorization", bearerToken)
+                .addHeaders("Authorization", bearer)
                 .build();
 
 
