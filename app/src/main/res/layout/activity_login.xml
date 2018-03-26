@@ -66,7 +66,7 @@
 
             <EditText
                 android:id="@+id/usernameText"
-                android:text="123@gmail.com"
+                android:text="@string/test_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/username_input_hint"
@@ -95,7 +95,7 @@
                 android:id="@+id/passText"
                 android:layout_width="238dp"
                 android:layout_height="wrap_content"
-                android:text="123"
+                android:text="@string/test_password"
                 android:hint="@string/password_input_hint"
                 android:inputType="textPassword" />
         </TableRow>

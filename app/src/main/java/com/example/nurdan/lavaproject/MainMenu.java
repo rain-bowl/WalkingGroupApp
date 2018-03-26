@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import ApplicationLogic.ProgramSingletonController;
+// Class simply creates and contains listeners to help user navigate the application.
 public class MainMenu extends AppCompatActivity {
 
     @Override
@@ -21,6 +23,7 @@ public class MainMenu extends AppCompatActivity {
         Button mngGroups = findViewById(R.id.mngGroups);
         Button usrMonitor = findViewById(R.id.usrMonitor);
         Button usrLogout = findViewById(R.id.usrLogout);
+        Button usrProfile = findViewById(R.id.profileBtn);
 
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,10 +47,22 @@ public class MainMenu extends AppCompatActivity {
 
             }
         });
+        usrProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent userProfile = UserProfile.userProfileIntent(getApplicationContext());
+                startActivity(userProfile);
+            }
+        });
 
+        //Logs out user by discarding currently saved bearer token and returns them to the log in menu
         usrLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ProgramSingletonController currInstence = ProgramSingletonController.getCurrInstance();
+                currInstence.userLogout();
+                Intent logoutIntent = LoginActivity.loginActIntent(getApplicationContext());
+                startActivity(logoutIntent);
 
             }
         });
