@@ -48,7 +48,7 @@ public class AccountApiInteractions {
     private JSONObject groupDetails;
     private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
     private int userID = -1;
-    private JSONArray groupList;
+    private JSONArray groupList = new JSONArray();
 
 
 
@@ -296,34 +296,31 @@ public class AccountApiInteractions {
     }
 
     //gets list of all groups
-    //todo implement properly :(
     public JSONArray getGroupList(String currToken, Context currContext){
         bearerToken = currToken;
         AndroidNetworking.initialize(currContext);
-       // for (int currID = 0; currID < 999; currID++){
             AndroidNetworking.get(baseURL + "/groups")
                     .addHeaders("apiKey", apiKey)
                     .addHeaders("Authorization", bearerToken)
                     .build()
-                    .getAsJSONObject(new JSONObjectRequestListener() {
+                    .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
-                        public void onResponse(JSONObject response) {
+                        public void onResponse(JSONArray response) {
                             try {
-                                groupList.put(response);
-                                Log.d(TAG, "onResponse: why "+ response.toString());
-                            }
-                            catch (Exception e){
+                                groupList = response;
+                                Log.d(TAG, "onResponse: why " + response.toString());
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             Log.d(TAG, "onResponse: JsonBody " + response.toString());
                         }
+
                         @Override
                         public void onError(ANError anError) {
                             Log.d(TAG, "onError: errorbody: " + anError.getErrorBody());
                             Log.d(TAG, "onError: detail: " + anError.getErrorDetail());
                         }
                     });
-    //    }
         return groupList;
     }
 

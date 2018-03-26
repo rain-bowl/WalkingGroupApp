@@ -318,7 +318,9 @@ public class ProgramSingletonController {
     public JSONArray getGroupList(Context appContext){
         currInstance = new AccountApiInteractions();
         String currToken = this.bearerToken;
-        return currInstance.getGroupList(currToken, appContext);
+        JSONArray list = currInstance.getGroupList(currToken, appContext);
+        Log.d(TAG, "getGroupList: " + list);
+        return list;
     }
 
     //update existing group info

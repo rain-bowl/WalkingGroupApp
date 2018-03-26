@@ -26,7 +26,7 @@ import ApplicationLogic.ProgramSingletonController;
 
 public class MapSecondActivity extends AppCompatActivity {
     private ListView groupList;
-    private ProgramSingletonController currInstance;
+    private ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
     private List<String> nameList = new ArrayList<>();
 
     @Override
@@ -44,17 +44,13 @@ public class MapSecondActivity extends AppCompatActivity {
 
     //may need the data from the server to inside list to view how many groups in there
     //may change to radiogroup for easier access to join / delete
+    //todo: implement async properly
     private class setupListView extends AsyncTask<Void,Void,Void>{
+        JSONArray original;
         @Override
         protected Void doInBackground(Void... voids) {
-
-            currInstance = ProgramSingletonController.getCurrInstance();
-            JSONArray original = currInstance.getGroupList(getApplicationContext());
-
-            if (original == null) {
-                Log.d("MapSecondActivity", "retrives null jsonarray");
-                original = new JSONArray();
-            }
+            original = currInstance.getGroupList(getApplicationContext());
+            Log.d("testing getgrouplist: ", original.toString());
 
             for (int i = 0; i < original.length(); i++) {
                 JSONObject childJSONObject = null;
@@ -64,18 +60,19 @@ public class MapSecondActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 try {
-                    nameList.add(childJSONObject.getString("groupDescription"));
+                    if (childJSONObject != null) {
+                        nameList.add(childJSONObject.getString("groupDescription"));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, nameList);
-            groupList.setAdapter(adapter);
             return null;
-        }
+       }
         @Override
         protected void onPostExecute(Void aVoid) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, nameList);
+            groupList.setAdapter(adapter);
         }
     }
 
