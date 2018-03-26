@@ -87,8 +87,6 @@
     <string name="emptyInputWarning">Please enter a valid email.</string>
 
 
-    <string name="group_name">Group Name</string>
-    <string name="create_group">Create Group</string>
     <string name="walking_group_project">Walking Group Project</string>
 
     <!-- User Monitor Activity -->
