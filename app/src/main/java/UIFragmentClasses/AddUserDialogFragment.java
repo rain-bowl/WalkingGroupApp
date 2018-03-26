@@ -48,6 +48,7 @@ public class AddUserDialogFragment extends AppCompatDialogFragment{
         addUsrMonitoree = view.findViewById(R.id.addUsrMonitorThis);
         cancelBtn = view.findViewById(R.id.backBtn);
         addUsrBtn = view.findViewById(R.id.addUsrBtn);
+        usrWarning.setVisibility(View.INVISIBLE);
 
         usrInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -72,9 +73,10 @@ public class AddUserDialogFragment extends AppCompatDialogFragment{
                 if(emailInput.length() != 0){
                     asyncReq instance = new asyncReq();
                     instance.execute();
+                    dismiss();
                 }
                 else {
-                    usrWarning.setText("Please enter a valid email address!");
+                    usrWarning.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -88,59 +90,7 @@ public class AddUserDialogFragment extends AppCompatDialogFragment{
 
     }
 
-    /*@Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity())
-                .setTitle("Add a user to monitor");
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        currView = inflater.inflate(R.layout.add_user_dialog_layout, null);
-        dialogBuilder.setView(currView);
-        createUsrInput();
-        dialogBuilder.setPositiveButton("Add user", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
 
-                    if(emailInput.length() != 0){
-                        Log.d(TAG, "onClick: I get here!k");
-                    usrWarning.setText(emailInput);
-                    }
-                    else {
-                        usrWarning.setText("Please enter a valid email into the input!");
-
-                    }
-                    }
-                })
-                .setNegativeButton("Back", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-        return dialogBuilder.create();
-    }
-    //This method simply initiates all of the inputs.
-    private void createUsrInput(){
-        usrInput =  currView.findViewById(R.id.emailInput);
-        usrWarning = (TextView) currView.findViewById(R.id.emptyInptWrn);
-        addUsrMonitor = (CheckBox) currView.findViewById(R.id.addUsrMonitor);
-        addUsrMonitoree = (CheckBox) currView.findViewById(R.id.addUsrMonitorThis);
-        usrInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            emailInput= usrInput.getText().toString();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            emailInput = usrInput.getText().toString();
-            }
-        });
-    }*/
     private class asyncReq extends AsyncTask<Void,Void,Void>{
         ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
         @Override

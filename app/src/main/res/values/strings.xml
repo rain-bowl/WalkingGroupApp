@@ -80,6 +80,7 @@
     <string name="userHint">I would like to add…</string>
     <string name="monitorUsrCheckbox">another user to monitor</string>
     <string name="monitorMeUsrCheckbox">another user to monitor me</string>
+    <string name="emptyInputWarning">Please enter a valid email.</string>
 
 
     <string name="group_name">Group Name</string>
