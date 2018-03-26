@@ -181,6 +181,21 @@ public class ProgramSingletonController {
         else return null;
     }
 
+      public ArrayList<String> getUsersWhoMonitorThisID(Context appContext){
+        JSONArray tempArr = null;
+        UserMonitor currInstance = new UserMonitor();
+        try{
+            tempArr = currInstance.getUsersWhoMonitor(userID, bearerToken, appContext);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        if (tempArr != null){
+            return createUserList(tempArr, appContext);
+        }
+        else return null;
+    }
+
     //Creates a list of users from the provided jsonArray and then stores them in an array list for easy access
     //Used when displaying people in the user monitors.
     private ArrayList<String> createUserList(JSONArray jsonArr, Context appContext){
@@ -198,6 +213,8 @@ public class ProgramSingletonController {
        }
         return tempUserStorage;
     }
+
+
 
     /* group functions */
     /* need to implement/test */

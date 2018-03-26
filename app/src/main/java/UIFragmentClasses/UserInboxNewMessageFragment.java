@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -51,6 +52,9 @@ public class UserInboxNewMessageFragment extends Fragment{
             public void onClick(View v) {
                 if(sendToParents.isChecked()){
                     parentFlag = true;
+                    FragmentManager fm = getFragmentManager();
+                    newMessageTargetsDialogFragment frag = new newMessageTargetsDialogFragment();
+                    frag.show(fm, "tag");
                 }
                 else{
                     parentFlag = false;
