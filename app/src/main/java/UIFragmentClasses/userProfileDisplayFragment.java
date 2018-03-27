@@ -21,6 +21,8 @@ import com.example.nurdan.lavaproject.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
+
+import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
 import ApplicationLogic.User;
 import static android.content.ContentValues.TAG;

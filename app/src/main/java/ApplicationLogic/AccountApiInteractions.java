@@ -238,7 +238,6 @@ public class AccountApiInteractions {
 
 
 
-
     //Recover bearer token on login
     public String getBearerToken(){
         return bearerToken;
