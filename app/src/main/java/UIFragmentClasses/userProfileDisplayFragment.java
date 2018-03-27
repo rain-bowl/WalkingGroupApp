@@ -35,6 +35,8 @@ public class userProfileDisplayFragment extends Fragment{
     ArrayList<String> monitorees;
     ProgramSingletonController currInstance;
     ListView dispalyMonitorees;
+    JSONObject userInformation = null;
+    int theUserId = -1;
 
     @Nullable
     @Override
@@ -44,10 +46,24 @@ public class userProfileDisplayFragment extends Fragment{
     //Set up all listeners using the provided instance of User class stored in the singleton
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-       currInstance = ProgramSingletonController.getCurrInstance();
-       JSONObject userInformation = currInstance.getUserInfo();
-       monitorees = new ArrayList<>();
+        // get user ID if -1 then display the logged in user's info
+        theUserId = this.getArguments().getInt("theUserID", -1);
 
+        currInstance = ProgramSingletonController.getCurrInstance();
+        if(theUserId == -1) {
+            userInformation = currInstance.getUserInfo();
+            populateUserInfo(view, userInformation);
+        } else {
+            asyncGetUserInfo getinfo = new asyncGetUserInfo();
+            getinfo.execute(view);
+        }
+        monitorees = new ArrayList<>();
+
+
+
+    }
+
+    private void populateUserInfo(View view, JSONObject userInformation) {
 
         //Set up information display
         TextView name = view.findViewById(R.id.nameInput);
@@ -77,13 +93,21 @@ public class userProfileDisplayFragment extends Fragment{
         }
         catch (Exception e){
         }
-
-
-
     }
 
-    
-
+    private class asyncGetUserInfo extends AsyncTask<View, Void, Void> {
+        View v;
+        @Override
+        protected Void doInBackground(View... views) {
+            v = views[0];
+            userInformation = currInstance.getUserInfoByID(theUserId, getContext());
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            populateUserInfo(v, userInformation);
+        }
+    }
 }
 
 

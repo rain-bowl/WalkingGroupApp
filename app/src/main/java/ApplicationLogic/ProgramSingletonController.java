@@ -144,9 +144,9 @@ public class ProgramSingletonController {
         return currLoggedInUser.returnJsonUserInfo();
     }
 
-    public void getUserInfoByID(Integer id, Context appContext) {
+    public JSONObject getUserInfoByID(Integer id, Context appContext) {
         AccountApiInteractions currInstance = new AccountApiInteractions();
-        currInstance.getUserInfoByID(id, this.bearerToken, appContext);
+        return currInstance.getUserInfoByID(id, this.bearerToken, appContext);
     }
 
     //Networking method which sends a post request to server to edit user info.

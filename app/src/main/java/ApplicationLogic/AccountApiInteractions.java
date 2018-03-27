@@ -172,7 +172,7 @@ public class AccountApiInteractions {
         return false;
     }
 
-    public void getUserInfoByID(int id, String bearerKey, Context currContext){
+    public JSONObject getUserInfoByID(int id, String bearerKey, Context currContext){
         AndroidNetworking.initialize(currContext);
 
         ANRequest getUserProfile = AndroidNetworking.get(baseURL + "/users/" + id)
@@ -184,9 +184,11 @@ public class AccountApiInteractions {
         if(serverResponse.isSuccess()){
             JSONObject response = serverResponse.getResult();
             Log.d(TAG, "getUserProfileByID: SUCCESS " + response.toString());
+            return response;
         }
         else{
             Log.d(TAG, "getUserProfileByID: FAILURE " + serverResponse.getError().getErrorBody());
+            return null;
         }
     }
 

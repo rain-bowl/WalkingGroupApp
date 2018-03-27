@@ -29,21 +29,19 @@ public class UserProfile extends AppCompatActivity {
     public void loadFragment(Fragment fragmentClass){
         FragmentTransaction fTInstance = getSupportFragmentManager().beginTransaction();
         fTInstance.replace(R.id.userProfileFragmentContainer, fragmentClass);
+        // don't need to pass Bundle with userID when displaying logged in user's info
         fTInstance.commit();
-
     }
 
     private void setUpToolbar(){
         Toolbar profileToolbar = (Toolbar) findViewById(R.id.profileDisplayToolbar);
         setSupportActionBar(profileToolbar);
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_display_menu, menu);
-         editItem = menu.findItem(R.id.editItem);
+        editItem = menu.findItem(R.id.editItem);
         backItem = menu.findItem(R.id.backItem);
         mainMenuItem = menu.findItem(R.id.mainMenuItem);
         return true;
