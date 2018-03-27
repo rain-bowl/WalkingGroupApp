@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void startNextActivity() {
         Intent intent = new Intent(LoginActivity.this, MainMenu.class);// New activity
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish(); // Kill login activity once you redirect to another activity
     }
