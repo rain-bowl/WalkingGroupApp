@@ -60,7 +60,6 @@ public class userProfileDisplayFragment extends Fragment{
         TextView grade = view.findViewById(R.id.userGradeInput);
         TextView teacher = view.findViewById(R.id.userTeacherInput);
         TextView emergencyInfo = view.findViewById(R.id.userEmergencyInput);
-        dispalyMonitorees = view.findViewById(R.id.displayMonitoreesList);
         getUserYouMonitor getMonitorees = new getUserYouMonitor();
         getMonitorees.execute();
 
