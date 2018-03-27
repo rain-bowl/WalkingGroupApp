@@ -294,25 +294,23 @@ public class AccountApiInteractions {
                     }
                 });
     }
-
+/*
     //gets list of all groups
     public JSONArray getGroupList(String currToken, Context currContext){
-        bearerToken = currToken;
         AndroidNetworking.initialize(currContext);
             AndroidNetworking.get(baseURL + "/groups")
                     .addHeaders("apiKey", apiKey)
-                    .addHeaders("Authorization", bearerToken)
+                    .addHeaders("Authorization", currToken)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
                             try {
                                 groupList = response;
-                                Log.d(TAG, "onResponse: why " + response.toString());
+                                Log.d(TAG, "onResponse: JSONArray " + groupList.toString());
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            Log.d(TAG, "onResponse: JsonBody " + response.toString());
                         }
 
                         @Override
@@ -321,9 +319,28 @@ public class AccountApiInteractions {
                             Log.d(TAG, "onError: detail: " + anError.getErrorDetail());
                         }
                     });
+        Log.d(TAG, "onResponse: JSONArray b/f return: " + groupList.toString());
         return groupList;
-    }
+    }*/
 
+    public JSONArray getGroupList(String currToken, Context appContext){
+        String URLPath = baseURL + "/groups";
+        JSONArray list = null;
+        AndroidNetworking.initialize(appContext);
+        ANRequest groupListReq = AndroidNetworking.get(URLPath)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currToken)
+                .build();
+        ANResponse<JSONArray> serverResponse = groupListReq.executeForJSONArray();
+        if (serverResponse.isSuccess()){
+            list = serverResponse.getResult();
+        }
+        else {
+            Log.d(TAG, "getGroupList: Error from server" + serverResponse.getError());
+        }
+        Log.d(TAG, "onResponse: JSONArray b/f return: " + list.toString());
+        return list;
+    }
 
     //gets group's details through groupID
     public void getGroupDetails(String currToken, int groupID, Context currContext){

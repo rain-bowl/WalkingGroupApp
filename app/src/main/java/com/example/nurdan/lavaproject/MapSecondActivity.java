@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,7 +28,7 @@ import ApplicationLogic.ProgramSingletonController;
 public class MapSecondActivity extends AppCompatActivity {
     private ListView groupList;
     private ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
-    private List<String> nameList = new ArrayList<>();
+    private ArrayList<String> nameList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +40,8 @@ public class MapSecondActivity extends AppCompatActivity {
 
         setupListView Test = new setupListView();
         Test.execute();
-        setPickGroup();
     }
+
 
     //may need the data from the server to inside list to view how many groups in there
     //may change to radiogroup for easier access to join / delete
@@ -51,7 +52,6 @@ public class MapSecondActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             original = currInstance.getGroupList(getApplicationContext());
             Log.d("testing getgrouplist: ", original.toString());
-
             for (int i = 0; i < original.length(); i++) {
                 JSONObject childJSONObject = null;
                 try {
@@ -67,25 +67,24 @@ public class MapSecondActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+            Log.d("onpost: test list: ", nameList.toString());
             return null;
-       }
+        }
+
+
         @Override
         protected void onPostExecute(Void aVoid) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, nameList);
-            groupList.setAdapter(adapter);
+            super.onPostExecute(aVoid);
+
+            setPickGroup();
         }
     }
 
     private void setPickGroup() {
-        groupList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int arg2, long arg3) {
-                Toast.makeText(getApplicationContext(), "delete item in position : " + arg2, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_multiple_choice, nameList);
+        groupList.setAdapter(adapter);
+        groupList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        groupList.setAdapter(adapter);
     }
 
     private void setupBackbtn() {
@@ -97,9 +96,4 @@ public class MapSecondActivity extends AppCompatActivity {
             }
         });
     }
-
-    public static Intent makeIntent(Context context) {
-        return new Intent(context,MapSecondActivity.class);
-    }
-
 }

@@ -190,6 +190,7 @@ public class ProgramSingletonController {
         UserMonitor currInstance = new UserMonitor();
         try{
            tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
+           Log.d(TAG, "getUsersMonitored temparr: " + tempArr);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -318,9 +319,21 @@ public class ProgramSingletonController {
     public JSONArray getGroupList(Context appContext){
         currInstance = new AccountApiInteractions();
         String currToken = this.bearerToken;
-        JSONArray list = currInstance.getGroupList(currToken, appContext);
-        Log.d(TAG, "getGroupList: " + list);
-        return list;
+        JSONArray list = null;
+        try{
+            list = currInstance.getGroupList(currToken, appContext);
+            Log.d(TAG, "getGroupList: " + list);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(list != null){
+            return list;
+        }
+        else {
+            return null;
+        }
     }
 
     //update existing group info
