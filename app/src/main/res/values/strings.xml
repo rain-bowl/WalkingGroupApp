@@ -72,6 +72,7 @@
     <string name="usrMonitors">User Monitor</string>
     <string name="profileBtnTitle">Profile</string>
     <string name="messageInboxBtn">Message Inbox</string>
+    <string name="panicBtn">PANIC</string>
 
     <!-- Strings related to monitoring/being monitored -->
     <string name="usersWhoMonitorYou">Users who are monitoring you:</string>
@@ -98,5 +99,13 @@
     <string name="errorMessageSend">There was an error when sending your message. Please check your internet connection and resend your message.</string>
     <string name="emptyMessageWarning">Please enter a message.</string>
     <string name="noMessageTargetsSelectedWarning">Please select the people to whom you would like to send your message to.</string>
+
+    <!-- Panic message strings -->
+    <string name="panicMsgTitle">PANIC MESSAGE</string>
+    <string name="panicMsgInstructions">This emergency message will be sent to all of the people who monitor you as
+    well as all leaders of the groups that you are in!</string>
+    <string name="msgSend">SEND</string>
+    <string name="panicCancel">Go Back</string>
+
 
 </resources>

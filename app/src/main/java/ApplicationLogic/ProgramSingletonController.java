@@ -301,7 +301,7 @@ public class ProgramSingletonController {
         currInstance.newMessageToGroup(message, groupID, emergencyStatus, bearerToken, currContext);
     }
 
-    public void sendMsgToParents(String message, int userID, Boolean emergencyStatus, Context currContext){
+    public void sendMsgToParents(String message, Boolean emergencyStatus, Context currContext){
         UserMessagingService currInstance = new UserMessagingService();
         currInstance.newMessageToParents(message, userID, emergencyStatus, bearerToken, currContext);
     }

@@ -82,6 +82,7 @@ public class UserMessagingService {
                     }
                 });
     }
+
     //Retrieves a single message by its message id. If it is sucessful in doing so then it will return the server
     //response as a JSON object. Note, the JSONObject returned is "untouched" so all values will have to be retrieved
     //from it as they are needed which means that it cannot be iterated through.

@@ -2,12 +2,15 @@ package com.example.nurdan.lavaproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import ApplicationLogic.ProgramSingletonController;
+import UIFragmentClasses.PanicMessageFragment;
+
 // Class simply creates and contains listeners to help user navigate the application.
 public class MainMenu extends AppCompatActivity {
 
@@ -25,6 +28,7 @@ public class MainMenu extends AppCompatActivity {
         Button usrLogout = findViewById(R.id.usrLogout);
         Button usrProfile = findViewById(R.id.profileBtn);
         Button messageInbox = findViewById(R.id.inboxAccessBtn);
+        Button panicBtn = findViewById(R.id.panicBtn);
 
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +79,18 @@ public class MainMenu extends AppCompatActivity {
                 startActivity(inboxIntent);
             }
         });
+
+        panicBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                PanicMessageFragment panicFrag = new PanicMessageFragment();
+                panicFrag.show(fm, "Show panic message fragment");
+            }
+        });
     }
+
+
     public static Intent mainMenuIntent(Context currActivityContext){
         return new Intent(currActivityContext, MainMenu.class);
     }

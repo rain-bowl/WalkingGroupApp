@@ -36,7 +36,7 @@ public class UserInboxNewMessageFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.user_inbox_new_message_layout, null);
+        return inflater.inflate(R.layout.user_inbox_new_message_layout, container);
     }
 
     @Override
@@ -95,10 +95,10 @@ public class UserInboxNewMessageFragment extends Fragment{
             public void onClick(View v) {
                 if(parentFlag && groupFlag){
                     currSingletonInstance.sendMsgToGroup(message, userID, false, getContext());
-                    currSingletonInstance.sendMsgToParents(message, userID, false, getContext());
+                    currSingletonInstance.sendMsgToParents(message, false, getContext());
                 }
                 else if(parentFlag){
-                    currSingletonInstance.sendMsgToParents(message, userID, false, getContext());
+                    currSingletonInstance.sendMsgToParents(message, false, getContext());
                 }
                 else if(groupFlag){
                     currSingletonInstance.sendMsgToGroup(message, userID, false, getContext());

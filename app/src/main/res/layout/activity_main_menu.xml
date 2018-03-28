@@ -30,18 +30,18 @@
         android:id="@+id/usrLogout"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="116dp"
+        android:layout_marginEnd="117dp"
         android:layout_marginTop="16dp"
         android:text="@string/logout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/panicBtn" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="80dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="24dp"
         android:text="@string/walking_group_project"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +67,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mngGroups"
         app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <Button
+        android:id="@+id/panicBtn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="117dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/panicBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileBtn" />
 
     <Button
         android:id="@+id/inboxAccessBtn"
