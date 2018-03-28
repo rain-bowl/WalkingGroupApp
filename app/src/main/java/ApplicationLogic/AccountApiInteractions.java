@@ -233,8 +233,6 @@ public class AccountApiInteractions {
 
     /*  classes for group implementation:    */
 
-
-
     // create new group
     public void createNewGroup(final String currToken, String groupDescription, final int leaderID, LatLng start, LatLng dest, Context appContext){
         final JSONObject jsonBody = new JSONObject();
@@ -294,34 +292,6 @@ public class AccountApiInteractions {
                     }
                 });
     }
-/*
-    //gets list of all groups
-    public JSONArray getGroupList(String currToken, Context currContext){
-        AndroidNetworking.initialize(currContext);
-            AndroidNetworking.get(baseURL + "/groups")
-                    .addHeaders("apiKey", apiKey)
-                    .addHeaders("Authorization", currToken)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                groupList = response;
-                                Log.d(TAG, "onResponse: JSONArray " + groupList.toString());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onError(ANError anError) {
-                            Log.d(TAG, "onError: errorbody: " + anError.getErrorBody());
-                            Log.d(TAG, "onError: detail: " + anError.getErrorDetail());
-                        }
-                    });
-        Log.d(TAG, "onResponse: JSONArray b/f return: " + groupList.toString());
-        return groupList;
-    }*/
 
     public JSONArray getGroupList(String currToken, Context appContext){
         String URLPath = baseURL + "/groups";
@@ -338,11 +308,12 @@ public class AccountApiInteractions {
         else {
             Log.d(TAG, "getGroupList: Error from server" + serverResponse.getError());
         }
-        Log.d(TAG, "onResponse: JSONArray b/f return: " + list.toString());
+        if (list != null) {
+            Log.d(TAG, "onResponse: JSONArray b/f return: " + list.toString());
+        }
         return list;
     }
-
-    //gets group's details through groupID
+/*
     public void getGroupDetails(String currToken, int groupID, Context currContext){
         AndroidNetworking.initialize(currContext);
         AndroidNetworking.get(baseURL + "/groups/" + groupID)
@@ -367,9 +338,62 @@ public class AccountApiInteractions {
                     }
                 });
     }
-
+    */
+    //gets group's details through groupID
+    public JSONObject getGroupDetails(String currToken, int groupID, Context currContext){
+        String URLPath = baseURL + "/groups/" + groupID;
+        JSONObject details = null;
+        AndroidNetworking.initialize(currContext);
+        ANRequest groupDetailsReq = AndroidNetworking.get(URLPath)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currToken)
+                .build();
+        ANResponse<JSONObject> serverResponse = groupDetailsReq.executeForJSONObject();
+        if (serverResponse.isSuccess()){
+            details = serverResponse.getResult();
+        }
+        else {
+            Log.d(TAG, "getGroupDetails: Error from server" + serverResponse.getError());
+        }
+        if (details != null) {
+            Log.d(TAG, "onResponse: JSONArray b/f return: " + details.toString());
+        }
+        return details;
+    }
 
     // update group
+    public void updateGroup(String currToken, int groupID, int leaderID, final String newDescription, final double latitude, final double longitude, Context currContext){
+        JSONObject jsonBody = new JSONObject();
+        try{
+            jsonBody.put("groupDescription", newDescription);
+            JSONObject lead = new JSONObject();
+            lead.put("id", leaderID);
+            jsonBody.put("leader", lead);
+            jsonBody.put("routeLatArray", latitude);
+            jsonBody.put("routeLngArray", longitude);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        String URLPath = baseURL + "/groups/" + groupID;
+        AndroidNetworking.initialize(currContext);
+        ANRequest groupEditReq = AndroidNetworking.post(URLPath)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currToken)
+                .addApplicationJsonBody(jsonBody)
+                .build();
+        ANResponse<JSONObject> serverResponse = groupEditReq.executeForJSONObject();
+        Log.d(TAG, "updateGroup: JSON BODY INPUT BEFORE SEND "+ jsonBody.toString());
+        if(serverResponse.isSuccess()){
+            Log.d(TAG, "updateGroup: Success in sending edited information!!");
+        }
+        else {
+            Log.d(TAG, "updateGroup: Server error when modding info " + serverResponse.getError().getErrorBody());
+            Log.d(TAG, "updateGroup: More error info " + serverResponse.getError().getResponse().toString());
+        }
+    }
+    /*
     public void updateGroup(int groupID, final String newDescription, final double latitude, final double longitude, Context appContext){
         //Initialize androidNetworking library with current activity context
         AndroidNetworking.initialize(appContext);
@@ -397,14 +421,31 @@ public class AccountApiInteractions {
                     }
                 });
     }
-
+*/
     // delete group
-    public void deleteGroup(int groupID, Context appContext){
-        //Initialize androidNetworking library with current activity context
+    public void deleteGroup(String currToken, int groupID, Context appContext) {
+        String URLPath = baseURL + "/groups/" + groupID;
+        AndroidNetworking.initialize(appContext);
+        ANRequest deleteGroupReq = AndroidNetworking.delete(URLPath)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currToken)
+                .build();
+
+        ANResponse<OkHttpResponseListener> serverResponse = deleteGroupReq.executeForOkHttpResponse();
+        if (serverResponse.isSuccess()) {
+            if (serverResponse.getOkHttpResponse().code() == 204) {
+                Log.d(TAG, "deleteGroup: Successful removal");
+            }
+        } else {
+            Log.d(TAG, "stopMonitoringUser: Error with request " + serverResponse.getError());
+        }
+    }
+/*
+    public void deleteGroup(String currToken, int groupID, Context appContext){
         AndroidNetworking.initialize(appContext);
         AndroidNetworking.delete(baseURL + "/groups/" + groupID)
-                .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
-                .addHeaders("Authorization", bearerToken)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currToken)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
             @Override
@@ -425,13 +466,13 @@ public class AccountApiInteractions {
             }
         });
     }
-
+*/
     // get group members
     public void getGroupMembers(int groupID, Context appContext){
         //Initialize androidNetworking library with current activity context
         AndroidNetworking.initialize(appContext);
         AndroidNetworking.get(baseURL + "/groups/" + groupID + "/memberUsers")
-                .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
+                .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -458,7 +499,7 @@ public class AccountApiInteractions {
         //Initialize androidNetworking library with current activity context
         AndroidNetworking.initialize(appContext);
         AndroidNetworking.post(baseURL + "/groups/" + groupID + "/memberUsers")
-                .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
+                .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -496,7 +537,7 @@ public class AccountApiInteractions {
         //Initialize androidNetworking library with current activity context
         AndroidNetworking.initialize(appContext);
         AndroidNetworking.delete(baseURL + "/groups/" + groupID + "/memberUsers/" + memberID)
-                .addHeaders("apiKey", "F369E8E6-244B-4672-B8A8-1E44A32CA496")
+                .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {

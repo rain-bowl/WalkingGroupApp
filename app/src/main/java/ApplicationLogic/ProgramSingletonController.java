@@ -69,28 +69,6 @@ public class ProgramSingletonController {
         return this.currLoggedInUser;
     }
 
-    //used for test, can delete
-    /*
-    //saves curr email, bearer toekn
-    private void saveEmail(String email, String token, Context context){
-        userEmail = email;
-        bearerToken = token;
-    }
-
-    private String getEmail(Context context){
-        return userEmail;
-    }
-
-
-    public int getCurrUserID(Context appContext){
-        currInstance = new AccountApiInteractions();
-        userEmail = getEmail(appContext);
-        int tempUserID = currInstance.getDatabaseUserID(userEmail, appContext);
-        return tempUserID;
-    }
-
-    */
-
     public User getLoggedInUserProfile(){
         return this.currLoggedInUser;
     }
@@ -308,8 +286,6 @@ public class ProgramSingletonController {
 
     //get group info
     public void getGroupDetails(int groupID, Context appContext){
-        Log.d(TAG, "createNewGroup: USERID: " + this.userID);
-        Log.d(TAG, "createNewGroup: TOKENBEARER: " + this.bearerToken);
         String currToken = this.bearerToken;
         currInstance = new AccountApiInteractions();
         currInstance.getGroupDetails(currToken, groupID, appContext);
@@ -339,15 +315,13 @@ public class ProgramSingletonController {
     //update existing group info
     public void updateGroup(int groupID, final String newDescription, final double latitude, final double longitude, Context appContext){
         currInstance = new AccountApiInteractions();
-        currInstance.updateGroup(groupID, newDescription, latitude, longitude, appContext);
-        bearerToken = currInstance.getBearerToken();
+        currInstance.updateGroup(this.bearerToken, groupID, this.userID, newDescription, latitude, longitude, appContext);
     }
 
     // delete group
     public void deleteGroup(int groupID, Context appContext) {
         currInstance = new AccountApiInteractions();
-        currInstance.deleteGroup(groupID, appContext);
-        bearerToken = currInstance.getBearerToken();
+        currInstance.deleteGroup(this.bearerToken, groupID, appContext);
     }
 
     // get group members
