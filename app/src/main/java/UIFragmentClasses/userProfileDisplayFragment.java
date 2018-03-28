@@ -32,7 +32,6 @@ import static android.content.ContentValues.TAG;
 It quite simply grabs the JSONObject through the singleton and sets all of the fields one by one.
  */
 public class userProfileDisplayFragment extends Fragment{
-    ArrayList<String> monitorees;
     ProgramSingletonController currInstance;
     ListView dispalyMonitorees;
     JSONObject userInformation = null;
@@ -47,7 +46,8 @@ public class userProfileDisplayFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // get user ID if -1 then display the logged in user's info
-        theUserId = this.getArguments().getInt("theUserID", -1);
+        if(this.getArguments() != null)
+            theUserId = this.getArguments().getInt("theUserID", -1);
 
         currInstance = ProgramSingletonController.getCurrInstance();
         if(theUserId == -1) {
@@ -57,8 +57,6 @@ public class userProfileDisplayFragment extends Fragment{
             asyncGetUserInfo getinfo = new asyncGetUserInfo();
             getinfo.execute(view);
         }
-        monitorees = new ArrayList<>();
-
 
 
     }

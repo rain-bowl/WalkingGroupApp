@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         loginProgress = findViewById(R.id.loginProgressBar);
         loginProgress.setVisibility(GONE);
 
-       // checkIfLoggedIn();
+        checkIfLoggedIn();
 
         createLogInBtns();
     }

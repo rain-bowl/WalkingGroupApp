@@ -78,17 +78,25 @@ public class UserMonitorDisplay extends AppCompatActivity {
 
             case R.id.info_monitor_user:
                 Intent otherUsers = new Intent(UserMonitorDisplay.this, display_other_user_info.class);
-                Integer checked = - 1;
-
-                if(checkedMonitorThem != -1) checked = retrievedMonitoringIDs.get(checkedMonitorThem);
-                else if(checkedMonitorMe != -1) checked = retrievedMonitoringMeIDs.get(checkedMonitorMe);
+                Integer checked = -1;
+                Boolean isMonitored;
+                if(checkedMonitorThem != -1) {
+                    checked = retrievedMonitoringIDs.get(checkedMonitorThem);
+                    isMonitored = true;
+                }
+                else if(checkedMonitorMe != -1) {
+                    checked = retrievedMonitoringMeIDs.get(checkedMonitorMe);
+                    isMonitored = false;
+                }
                 else {
                     Toast.makeText(UserMonitorDisplay.this, "Must select user", Toast.LENGTH_SHORT).show();
                     break;
                 }
 
                 otherUsers.putExtra("otherUserID", checked);
+                otherUsers.putExtra("isMonitored", isMonitored);
                 startActivity(otherUsers);
+                finish(); // in case information is modified
                 break;
 
             default:

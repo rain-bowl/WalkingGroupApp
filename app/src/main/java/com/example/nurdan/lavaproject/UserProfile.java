@@ -58,6 +58,7 @@ public class UserProfile extends AppCompatActivity {
             case R.id.mainMenuItem:
                 Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
                 startActivity(mainMenu);
+                finish(); // to remove activity from stack
                 break;
             case R.id.backItem:
                 backItem.setVisible(false);

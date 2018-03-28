@@ -153,8 +153,14 @@ public class ProgramSingletonController {
     public Boolean editUserInformation(JSONObject newInformation, Context currContext){
         currInstance = new AccountApiInteractions();
         Log.d(TAG, "editUserInformation: USER INFO JSON " + newInformation.toString());
-        currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
-        return null;
+        return currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
+    }
+
+    // Edit monitoring users
+    public Boolean editUserInformationById(JSONObject newInfo, Integer userMonitorID, Context currContext) {
+        currInstance = new AccountApiInteractions();
+        Log.d("EDITMONITOR", "" + userMonitorID + " JSON: " + newInfo.toString());
+        return currInstance.editDatabaseUserProfile(newInfo, currContext, userMonitorID, this.bearerToken);
     }
 
     //Adds new user to be monitored by another
