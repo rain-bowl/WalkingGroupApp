@@ -51,7 +51,9 @@
         <activity android:name=".MainMenu" />
         <activity android:name=".UserMonitorDisplay" />
         <activity android:name=".EditUserInformation" />
-        <activity android:name=".UserProfile"></activity>
+        <activity android:name=".UserProfile" />
+        <activity android:name=".EditGroupActivity" />
+        <activity android:name=".GroupMemberInfoActivity"></activity>
     </application>
 
 </manifest>

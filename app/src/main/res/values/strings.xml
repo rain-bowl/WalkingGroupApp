@@ -91,4 +91,8 @@
     <string name="all_groups">All groups:</string>
     <string name="leader_of">Leader of:</string>
     <string name="member_of">Member of:</string>
+    <string name="edit">Edit/Details</string>
+    <string name="submit">Submit</string>
+    <string name="change_group_name">Change Group Name?</string>
+    <string name="editing_group">Editing Group</string>
 </resources>

@@ -203,13 +203,15 @@ public class MapActivity extends FragmentActivity implements
     }
 
     private void createGroupMarkers(){
-        for (int i = 0; i < nameList.size(); i++){
+        for (int i = 0; i < nameList.size()-1; i++){
             try {
                 groupPoints.add(new LatLng(latArray.get(i), lngArray.get(i)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            makeMarker(groupPoints.get(i), nameList.get(i));
+            if (nameList.get(i) != null && groupPoints.get(i) != null) {
+                makeMarker(groupPoints.get(i), nameList.get(i));
+            }
         }
     }
 
@@ -297,7 +299,7 @@ public class MapActivity extends FragmentActivity implements
                                                 mDefaultLocation.longitude), DEFAULT_ZOOM));
                             }
                             else {
-                                //Todo: update lastknownlocation for User when method works @Rainbow
+                                localInstance.setLastGpsLocation(mLastKnownLocation, getApplicationContext());
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mLastKnownLocation.getLatitude(),
                                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));

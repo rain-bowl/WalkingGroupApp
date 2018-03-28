@@ -1,23 +1,16 @@
 package com.example.nurdan.lavaproject;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -26,49 +19,69 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 import ApplicationLogic.ProgramSingletonController;
-import UIFragmentClasses.AddUserDialogFragment;
 
 public class MapSecondActivity extends AppCompatActivity{
-    private ListView groupList;
+    private ListView allGroupsList;
     private ListView leaderOfList;
+    private ListView memberOfList;
     private ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
-    private ArrayList<String> nameList = new ArrayList<>();
-    private ArrayList<String> leaderList = new ArrayList<>();
-    private ArrayList<Integer> groupIDList = new ArrayList<>();
-    private ArrayList<Integer> groupLeaderIDList = new ArrayList<>();
+    private ArrayList<String> allGroupNameList = new ArrayList<>();
+    private ArrayList<String> leaderOfNameList = new ArrayList<>();
+    private ArrayList<String> memberOfNameList = new ArrayList<>();
+    private ArrayList<Integer> allGroupIDList = new ArrayList<>();
+    private ArrayList<Integer> leaderOfIDList = new ArrayList<>();
+    private ArrayList<Integer> memberOfIDList = new ArrayList<>();
     setupListView test = new setupListView();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
                setContentView(R.layout.activity_map_second);
-        groupList = findViewById(R.id.groupListView);
+        allGroupsList = findViewById(R.id.groupListView);
         leaderOfList = findViewById(R.id.leaderGroups);
+        memberOfList = findViewById(R.id.memberGroups);
 
         setupBackbtn();
         makeJoinBtn();
         makeRemoveBtn ();
+        makeEditBtn();
         test.execute();
     }
 
-    private void makeRemoveBtn () {
-        Button removeBtn = findViewById(R.id.SecRemoveBtn);
-        removeBtn.setOnClickListener(new View.OnClickListener() {
+    private void makeEditBtn() {
+        Button editBtn = findViewById(R.id.editBtn);
+        editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Remove clicked", Toast.LENGTH_SHORT).show();
-                Log.d("clicked remove: ", "remove clicked");
+                Toast.makeText(getApplicationContext(), "Edit clicked", Toast.LENGTH_SHORT).show();
+                Log.d("Edit clicked: ", "Edit clicked ");
 
-                if(leaderList == null){
-                    Toast.makeText(getApplicationContext(), "Select group to remove", Toast.LENGTH_SHORT).show();
+                if(leaderOfNameList == null){
+                    Toast.makeText(getApplicationContext(), "Select group to Edit", Toast.LENGTH_SHORT).show();
                 }
 
-                if(leaderList != null) {
-                    deleteCheckedGroup(groupLeaderIDList, R.id.leaderGroups);
+                if(leaderOfNameList != null) {
+                    SparseBooleanArray checked = leaderOfList.getCheckedItemPositions();
+                    Log.d("boolarr: ", "array: " + checked);
+                    if (checked == null) {
+                        Toast.makeText(getApplicationContext(), "Select group to edit", Toast.LENGTH_SHORT).show();
+                    }
+                    if (checked.size() != 1) {
+                        Toast.makeText(getApplicationContext(), "Please select only one group", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        for (int i = 0; i < leaderOfIDList.size(); i++) {
+                            if (checked.get(i)) {
+                                int id = leaderOfIDList.get(i);
+                                Log.d("editing:", "editing curr id: " + id);
+                                currInstance.setCurrGroupID(id);
+                                startActivity(new Intent(getApplicationContext(), EditGroupActivity.class));
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -82,16 +95,37 @@ public class MapSecondActivity extends AppCompatActivity{
                 Toast.makeText(getApplicationContext(), "Join clicked", Toast.LENGTH_SHORT).show();
                 Log.d("Join clicked: ", "Join clicked ");
 
-                if(nameList == null){
+                if(allGroupNameList == null){
                     Toast.makeText(getApplicationContext(), "Select group to join", Toast.LENGTH_SHORT).show();
                 }
 
-                if(nameList != null) {
-                    joinCheckedGroup(groupIDList, R.id.groupListView);
+                if(allGroupNameList != null) {
+                    joinCheckedGroup(allGroupIDList, R.id.groupListView);
                 }
             }
         });
     }
+
+    private void makeRemoveBtn () {
+        Button removeBtn = findViewById(R.id.SecRemoveBtn);
+        removeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Remove clicked", Toast.LENGTH_SHORT).show();
+                Log.d("clicked remove: ", "remove clicked");
+
+                if(leaderOfNameList == null){
+                    Toast.makeText(getApplicationContext(), "Select group to remove", Toast.LENGTH_SHORT).show();
+                }
+
+                if(leaderOfNameList != null) {
+                    deleteCheckedGroup(leaderOfIDList, R.id.leaderGroups);
+                }
+            }
+        });
+    }
+
+
 
 
     private class setupListView extends AsyncTask<Void,Void,Void>{
@@ -109,22 +143,29 @@ public class MapSecondActivity extends AppCompatActivity{
                 }
                 try {
                     if (childJSONObject != null) {
-                        nameList.add(childJSONObject.getString("groupDescription"));
-                        groupIDList.add(childJSONObject.getInt("id"));
+                        allGroupNameList.add(childJSONObject.getString("groupDescription"));
+                        allGroupIDList.add(childJSONObject.getInt("id"));
+
                         if (childJSONObject.getJSONObject("leader").getInt("id") == currInstance.getUserID()){
-                            leaderList.add(childJSONObject.getString("groupDescription"));
-                            groupLeaderIDList.add(childJSONObject.getInt("id"));
+                            leaderOfNameList.add(childJSONObject.getString("groupDescription"));
+                            leaderOfIDList.add(childJSONObject.getInt("id"));
                         }
-                        // todo: get memberUsers
+
+/*                        if (childJSONObject.getJSONArray("memberUsers").getJSONObject(currInstance.getUserID()).getInt("id") == currInstance.getUserID()){
+                            memberOfNameList.add(childJSONObject.getString("groupDescription"));
+                            memberOfIDList.add(childJSONObject.getInt("id"));
+                        }*/
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            Log.d("onpost: all list: ", nameList.toString());
-            Log.d("onpost: allID list: ", groupIDList.toString());
-            Log.d("onpost: leader list: ", leaderList.toString());
-            Log.d("onpost: LeaderID list: ", groupLeaderIDList.toString());
+            Log.d("onpost: all list: ", allGroupNameList.toString());
+            Log.d("onpost: allID list: ", allGroupIDList.toString());
+            Log.d("onpost: leader list: ", leaderOfNameList.toString());
+            Log.d("onpost: LeaderID list: ", leaderOfIDList.toString());
+/*            Log.d("onpost: member list: ", memberOfNameList.toString());
+            Log.d("onpost: memberID list: ", memberOfIDList.toString());*/
             return null;
         }
 
@@ -133,8 +174,9 @@ public class MapSecondActivity extends AppCompatActivity{
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            setPickGroup(groupList, nameList);
-            setPickGroup(leaderOfList, leaderList);
+            setPickGroup(allGroupsList, allGroupNameList);
+            setPickGroup(leaderOfList, leaderOfNameList);
+            setPickGroup(memberOfList, memberOfNameList);
         }
     }
 

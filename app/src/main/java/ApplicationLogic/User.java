@@ -199,19 +199,8 @@ public class User {
         return lastGpsLocation;
     }
 
-    public void setLastGpsLocation(Location lastKnownLocation) {
-         JSONObject gpsInfo = new JSONObject();
-
-        try {
-            gpsInfo.put("lat", lastKnownLocation.getLatitude());
-            gpsInfo.put("lng", lastKnownLocation.getLongitude());
-            Instant currentTime = Instant.now();
-            gpsInfo.put("timestamp", currentTime);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        this.lastGpsLocation = gpsInfo;
+    public void setLastGpsLocation(JSONObject lastKnownLocation) {
+        this.lastGpsLocation = lastKnownLocation;
     }
 
     public String getUserHref() {

@@ -3,6 +3,7 @@ package ApplicationLogic;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -31,8 +32,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -354,7 +360,7 @@ public class AccountApiInteractions {
     }
 
     // update group
-    public void updateGroup(String currToken, int groupID, int leaderID, final String newDescription, final double latitude, final double longitude, Context currContext) {
+    public void updateGroup(String currToken, int groupID, int leaderID, String newDescription, JSONArray latitude, JSONArray longitude, Context currContext) {
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("groupDescription", newDescription);
@@ -372,7 +378,7 @@ public class AccountApiInteractions {
         ANRequest groupEditReq = AndroidNetworking.post(URLPath)
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", currToken)
-                .addApplicationJsonBody(jsonBody)
+                .addJSONObjectBody(jsonBody)
                 .build();
         ANResponse<JSONObject> serverResponse = groupEditReq.executeForJSONObject();
         Log.d(TAG, "updateGroup: JSON BODY INPUT BEFORE SEND " + jsonBody.toString());
@@ -380,7 +386,7 @@ public class AccountApiInteractions {
             Log.d(TAG, "updateGroup: Success in sending edited information!!");
         } else {
             Log.d(TAG, "updateGroup: Server error when modding info " + serverResponse.getError().getErrorBody());
-            Log.d(TAG, "updateGroup: More error info " + serverResponse.getError().getResponse().toString());
+            Log.d(TAG, "updateGroup: More error info " + serverResponse.getError().getResponse());
         }
     }
 
@@ -433,30 +439,24 @@ public class AccountApiInteractions {
     }
 
     // get group members
-    public void getGroupMembers(int groupID, Context appContext) {
-        //Initialize androidNetworking library with current activity context
+    public JSONArray getGroupMembers(String currToken, int groupID, Context appContext) {
+        String URLPath = baseURL + "/groups/" + groupID + "/memberUsers";
+        JSONArray list = null;
         AndroidNetworking.initialize(appContext);
-        AndroidNetworking.get(baseURL + "/groups/" + groupID + "/memberUsers")
+        ANRequest groupMemReq = AndroidNetworking.get(URLPath)
                 .addHeaders("apiKey", apiKey)
-                .addHeaders("Authorization", bearerToken)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            Log.d(TAG, "onResponse: JsonBody " + response.toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        Log.d(TAG, "onResponse: JsonBody " + response.toString());
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.d(TAG, "onError: " + anError.getErrorBody());
-                        Log.d(TAG, "onError: " + anError.getErrorDetail());
-                    }
-                });
+                .addHeaders("Authorization", currToken)
+                .build();
+        ANResponse<JSONArray> serverResponse = groupMemReq.executeForJSONArray();
+        if (serverResponse.isSuccess()) {
+            list = serverResponse.getResult();
+        } else {
+            Log.d(TAG, "getGroupMembers: Error from server" + serverResponse.getError());
+        }
+        if (list != null) {
+            Log.d(TAG, "onResponse: JSONArray b/f return: " + list.toString());
+        }
+        return list;
     }
 
     // add group member
@@ -502,6 +502,38 @@ public class AccountApiInteractions {
             }
         } else {
             Log.d(TAG, "removeGroupMember: Error with request " + serverResponse.getError());
+        }
+    }
+
+    public void setLastGpsLocation(String currToken, int userID, Location lastKnownLocation, Context currContext) {
+        JSONObject gpsInfo = new JSONObject();
+        try {
+            gpsInfo.put("lat", lastKnownLocation.getLatitude());
+            gpsInfo.put("lng", lastKnownLocation.getLongitude());
+            //TODO: fix error, currently has 'null' server error when sent
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.CANADA);
+            String currentTime = df.format(new Date());
+            gpsInfo.put("timestamp", currentTime);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String URLPath = baseURL + "/users/" + userID + "/lastGpsLocation";
+        AndroidNetworking.initialize(currContext);
+        ANRequest setGPSReq = AndroidNetworking.post(URLPath)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currToken)
+                .addJSONObjectBody(gpsInfo)
+                .build();
+        ANResponse<JSONObject> serverResponse = setGPSReq.executeForJSONObject();
+        Log.d(TAG, "setLastGpsLocation: JSON BODY INPUT BEFORE SEND " + gpsInfo.toString());
+        if (serverResponse.isSuccess()) {
+            Log.d(TAG, "setLastGpsLocation: Success?");
+        } else {
+            Log.d(TAG, "setLastGpsLocation: Server error when adding: " + serverResponse.getError().getErrorBody());
+            Log.d(TAG, "setLastGpsLocation: Server error code: "  + serverResponse);
+            Log.d(TAG, "setLastGpsLocation: More error info: " + serverResponse.getError().getResponse());
         }
     }
 }
