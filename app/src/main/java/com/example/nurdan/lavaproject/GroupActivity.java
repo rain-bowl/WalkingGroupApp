@@ -31,18 +31,20 @@ public class GroupActivity extends AppCompatActivity {
 
         localInstance = ProgramSingletonController.getCurrInstance();
         startEnd = localInstance.returnLatLng(getApplicationContext());
-        if (startEnd == null) {
-            start = new LatLng(0, 0);
-            end = new LatLng(0, 0);
+        if (startEnd.size() != 2) {
+            Toast.makeText(this, "Please reselect coordinates.", Toast.LENGTH_LONG).show();
+            startEnd.clear();
+            finish();
         }
-        start = startEnd.get(0);
-        end = startEnd.get(1);
+        else{
+            start = startEnd.get(0);
+            end = startEnd.get(1);
+        }
 
-        startLatLng = start.toString();
-       // Toast.makeText(this, "start:" + startLatLng, Toast.LENGTH_LONG).show();
-
-        endLatLng = end.toString();
-      //  Toast.makeText(this, "end:" + endLatLng, Toast.LENGTH_LONG).show();
+        if (start != null && end != null){
+            startLatLng = start.toString();
+            endLatLng = end.toString();
+        }
 
         createBtn();
         setupBackbtn();
@@ -50,11 +52,12 @@ public class GroupActivity extends AppCompatActivity {
     }
 
     private void setUpCoord(){
-        final TextView start = findViewById(R.id.startCoord);
-        final TextView end = findViewById(R.id.endCoord);
+        final TextView startpt = findViewById(R.id.startCoord);
+        final TextView endpt = findViewById(R.id.endCoord);
 
-        start.setText(startLatLng);
-        end.setText(endLatLng);
+
+        startpt.setText(startLatLng);
+        endpt.setText(endLatLng);
     }
 
     public void createBtn(){

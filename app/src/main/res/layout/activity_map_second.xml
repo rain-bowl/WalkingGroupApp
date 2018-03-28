@@ -18,24 +18,24 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/SecMapActRemoveGroupbtn" />
+        app:layout_constraintStart_toEndOf="@+id/SecRemoveBtn" />
 
     <Button
-        android:id="@+id/SecActMapJoinGroupsbtn"
+        android:id="@+id/SecJoinBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
-        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:text="@string/Join"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/SecMapActRemoveGroupbtn"
+        app:layout_constraintEnd_toStartOf="@+id/SecRemoveBtn"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/SecMapActRemoveGroupbtn"
+        android:id="@+id/SecRemoveBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
@@ -45,13 +45,88 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/MapSecondBackbtn"
-        app:layout_constraintStart_toEndOf="@+id/SecActMapJoinGroupsbtn" />
+        app:layout_constraintStart_toEndOf="@+id/SecJoinBtn" />
+
+    <TextView
+        android:id="@+id/LeaderOf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/leader_of"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="52dp" />
+
+    <ListView
+        android:id="@+id/leaderGroups"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/allGroups"
+        app:layout_constraintRight_toLeftOf="@+id/memberGroups"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/LeaderOf" />
+
+    <TextView
+        android:id="@+id/MemberOf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:layout_marginRight="64dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/member_of"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/memberGroups"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/allGroups"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/leaderGroups"
+        app:layout_constraintTop_toBottomOf="@+id/MemberOf" />
+
+    <TextView
+        android:id="@+id/allGroups"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="155dp"
+        android:layout_marginLeft="163dp"
+        android:layout_marginRight="155dp"
+        android:layout_marginStart="163dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/all_groups"
+        app:layout_constraintBottom_toTopOf="@+id/groupListView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/memberGroups" />
 
     <ListView
         android:id="@+id/groupListView"
-        android:layout_width="368dp"
-        android:layout_height="497dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/SecJoinBtn"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/allGroups" />
 
 </android.support.constraint.ConstraintLayout>

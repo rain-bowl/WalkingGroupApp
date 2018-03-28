@@ -127,6 +127,7 @@ public class MapActivity extends FragmentActivity implements
         if (MarkerPoints.size() > 2) {
             MarkerPoints.clear();
             mMap.clear();
+            createGroupMarkers();
         }
 
         MarkerPoints.add(point);
@@ -156,7 +157,7 @@ public class MapActivity extends FragmentActivity implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-//        startActivity(new Intent(this, GroupActivity.class));
+        Toast.makeText(this, "To join, click 'View Groups'.", Toast.LENGTH_LONG).show();
     }
 
     private class getGroupList extends AsyncTask<Void,Void,Void> {
@@ -195,7 +196,9 @@ public class MapActivity extends FragmentActivity implements
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            createGroupMarkers();
+            if (mLocationPermissionGranted) {
+                createGroupMarkers();
+            }
         }
     }
 
@@ -213,8 +216,9 @@ public class MapActivity extends FragmentActivity implements
     private void makeMarker(LatLng point, String markerName){
         MarkerOptions option = new MarkerOptions();
         option.position(point);
-        option.title(markerName);
+        option.title("Group: " + markerName);
         option.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+        option.alpha(0.7f);
         mMap.addMarker(option);
     }
 

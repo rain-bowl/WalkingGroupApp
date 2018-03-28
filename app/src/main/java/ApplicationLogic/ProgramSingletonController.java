@@ -58,7 +58,7 @@ public class ProgramSingletonController {
 
     public int getUserID(){
         currInstance = new AccountApiInteractions();
-        return currInstance.getUserID();
+        return this.userID;
     }
 
     public String getBearerToken(){
@@ -332,18 +332,17 @@ public class ProgramSingletonController {
     }
 
     // add group member
-    public void addGroupMember(int groupID, final int memberID, Context appContext) {
+    public void addGroupMember(int groupID, Context appContext) {
         currInstance = new AccountApiInteractions();
-        currInstance.addGroupMember(groupID, memberID, appContext);
-        bearerToken = currInstance.getBearerToken();
+        currInstance.addGroupMember(this.bearerToken, groupID, this.userID, appContext);
     }
 
     // remove group member
-    public void removeGroupMember(int groupID, final int memberID, Context appContext) {
+    public void removeGroupMember(int groupID, int memberID, Context appContext) {
         currInstance = new AccountApiInteractions();
-        currInstance.removeGroupMember(groupID, memberID, appContext);
-        bearerToken = currInstance.getBearerToken();
+        if (memberID == -1) {
+            memberID = this.userID;
+        }
+        currInstance.removeGroupMember(this.bearerToken, groupID, memberID, appContext);
     }
-
-
 }

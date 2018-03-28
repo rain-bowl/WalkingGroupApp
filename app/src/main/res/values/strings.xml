@@ -88,4 +88,7 @@
     <string name="delete">Delete</string>
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
+    <string name="all_groups">All groups:</string>
+    <string name="leader_of">Leader of:</string>
+    <string name="member_of">Member of:</string>
 </resources>
