@@ -94,5 +94,9 @@
     <string name="yesTgl">Yes</string>
     <string name="noSendDestinationWarning">Please select the users to whom you would like to send this message to!</string>
     <string name="sendBtnText">Send Message</string>
+    <string name="successfulMessageSend">Your message was successfully sent!</string>
+    <string name="errorMessageSend">There was an error when sending your message. Please check your internet connection and resend your message.</string>
+    <string name="emptyMessageWarning">Please enter a message.</string>
+    <string name="noMessageTargetsSelectedWarning">Please select the people to whom you would like to send your message to.</string>
 
 </resources>

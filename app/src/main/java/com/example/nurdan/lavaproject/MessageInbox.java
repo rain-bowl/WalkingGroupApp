@@ -36,10 +36,8 @@ public class MessageInbox extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        MenuItem newMsg = findViewById(R.id.newMessageItem);
         switch (item.getItemId()){
             case R.id.newMessageItem:
-                newMsg.setVisible(false);
                 setFragment(new UserInboxNewMessageFragment());
                 break;
             case R.id.backInboxItem:

@@ -1,5 +1,6 @@
 package UIFragmentClasses;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,9 +28,11 @@ whatever group/user is necessary.
  */
 public class UserInboxNewMessageFragment extends Fragment{
     String message;
-    Boolean parentFlag, groupFlag;             //Flags which decide whether something is clicked on or not.
+    Boolean parentFlag = false;
+    Boolean groupFlag = false;             //Flags which decide whether something is clicked on or not.
     ProgramSingletonController currSingletonInstance;
     JSONObject userInfo;
+    int userID;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,23 +43,31 @@ public class UserInboxNewMessageFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         currSingletonInstance = ProgramSingletonController.getCurrInstance();
         userInfo = currSingletonInstance.getUserInfo();
+        //Load up the user id
+        try{
+            userID = userInfo.getInt("id");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         //Attach widgets
         final ToggleButton sendToParents = view.findViewById(R.id.sendToPrntsTgl);
         final ToggleButton sendToGroup = view.findViewById(R.id.sendToGrpTgl);
         Button sendMessage = view.findViewById(R.id.sendBtn);
         EditText messageBody = view.findViewById(R.id.messageInput);
+        sendToGroup.setBackgroundColor(Color.RED);
+        sendToParents.setBackgroundColor(Color.RED);
 
         //Attach listeners
         sendToParents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(sendToParents.isChecked()){
+                    sendToParents.setBackgroundColor(Color.GREEN);
                     parentFlag = true;
-                    FragmentManager fm = getFragmentManager();
-                    newMessageTargetsDialogFragment frag = new newMessageTargetsDialogFragment();
-                    frag.show(fm, "tag");
                 }
                 else{
+                    sendToParents.setBackgroundColor(Color.RED);
                     parentFlag = false;
                 }
             }
@@ -66,9 +77,14 @@ public class UserInboxNewMessageFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 if(sendToGroup.isChecked()){
+                    sendToGroup.setBackgroundColor(Color.GREEN);
                     groupFlag = true;
+                    FragmentManager fm = getFragmentManager();
+                    newMessageTargetsDialogFragment frag = new newMessageTargetsDialogFragment();
+                    frag.show(fm, "Selecting a group");
                 }
                 else{
+                    sendToGroup.setBackgroundColor(Color.RED);
                     groupFlag = false;
                 }
             }
@@ -78,14 +94,17 @@ public class UserInboxNewMessageFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 if(parentFlag && groupFlag){
-                    currSingletonInstance.sendMsgToGroup(message, 31, false, getContext());
-                    currSingletonInstance.sendMsgToParents(message, 31, false, getContext());
+                    currSingletonInstance.sendMsgToGroup(message, userID, false, getContext());
+                    currSingletonInstance.sendMsgToParents(message, userID, false, getContext());
                 }
                 else if(parentFlag){
-                    currSingletonInstance.sendMsgToParents(message, 31, false, getContext());
+                    currSingletonInstance.sendMsgToParents(message, userID, false, getContext());
                 }
                 else if(groupFlag){
-                    currSingletonInstance.sendMsgToGroup(message, 31, false, getContext());
+                    currSingletonInstance.sendMsgToGroup(message, userID, false, getContext());
+                }
+                else if(message.length() == 0){
+                    Toast.makeText(getContext(), R.string.emptyMessageWarning, Toast.LENGTH_LONG).show();
                 }
                 else{
                     Toast.makeText(getContext(),R.string.noSendDestinationWarning,Toast.LENGTH_LONG).show();

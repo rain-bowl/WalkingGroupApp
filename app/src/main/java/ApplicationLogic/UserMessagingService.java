@@ -2,13 +2,19 @@ package ApplicationLogic;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.OkHttpResponseListener;
+import com.example.nurdan.lavaproject.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import okhttp3.Response;
 
 import static com.google.android.gms.plus.PlusOneDummyView.TAG;
 
@@ -43,8 +49,8 @@ public class UserMessagingService {
 
     /*Sends a message to the parents of a user
      */
-    public void newMessageToParents(String message, int userID, Boolean emergencyStatus, String bearerToken, Context currContext){
-        JSONObject requestBody = new JSONObject();
+    public void newMessageToParents(String message, int userID, Boolean emergencyStatus, String bearerToken, final Context currContext){
+        final JSONObject requestBody = new JSONObject();
         try{
             requestBody.put("text", message);
             requestBody.put("emergency", emergencyStatus);
@@ -54,11 +60,27 @@ public class UserMessagingService {
         }
 
         AndroidNetworking.initialize(currContext);
-        AndroidNetworking.post(baseURL + "/messages/toparents/" + userID )
+        AndroidNetworking.post(baseURL + "/messages/toparentsof/" + userID )
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
                 .addJSONObjectBody(requestBody)
-                .build();
+                .build()
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        if(response.code() == 201){
+                            Toast.makeText(currContext, R.string.successfulMessageSend, Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "onResponse: Success when sending message to parents " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Toast.makeText(currContext, R.string.errorMessageSend, Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "onError: Error when sending message to parents!" + anError.getErrorDetail());
+
+                    }
+                });
     }
     //Retrieves a single message by its message id. If it is sucessful in doing so then it will return the server
     //response as a JSON object. Note, the JSONObject returned is "untouched" so all values will have to be retrieved
