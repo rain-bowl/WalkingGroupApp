@@ -412,5 +412,13 @@ public class ProgramSingletonController {
         UserMessagingService currInstance = new UserMessagingService();
         currInstance.newMessageToParents(message, userID, emergencyStatus, bearerToken, currContext);
     }
+    public void setLastGpsLocation(Location lastKnown, Context appContext){
+        currInstance = new AccountApiInteractions();
+        currInstance.setLastGpsLocation(this.bearerToken, this.userID, lastKnown, appContext);
+    }
 
+    public JSONObject getLastGpsLocation(int UserID, Context appContext) {
+        currInstance = new AccountApiInteractions();
+        return currInstance.getLastGpsLocation(this.bearerToken, UserID, appContext);
+    }
 }
