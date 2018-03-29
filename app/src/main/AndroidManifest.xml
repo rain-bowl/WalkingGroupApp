@@ -52,6 +52,7 @@
         <activity android:name=".UserMonitorDisplay" />
         <activity android:name=".EditUserInformation" />
         <activity android:name=".UserProfile" />
+        <activity android:name=".MessageInbox"></activity>
         <activity android:name=".EditGroupActivity" />
         <activity android:name=".GroupMemberInfoActivity" />
         <activity android:name=".ViewMembersActivity"></activity>

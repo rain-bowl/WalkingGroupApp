@@ -395,11 +395,22 @@ public class ProgramSingletonController {
         currInstance.removeGroupMember(this.bearerToken, groupID, this.userID, appContext);
     }
 
-    //doesn't work properly, ignore
-/*
-    public void setLastGpsLocation(Location lastKnown, Context appContext){
-        currInstance = new AccountApiInteractions();
-        currInstance.setLastGpsLocation(this.bearerToken, this.userID, lastKnown, appContext);
-    }*/
+
+    /* These methods are related to messaging */
+    public JSONArray getMessagesForUser(Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        Log.d(TAG, "getMessagesForUser: Inputs " + userID + " " + bearerToken);
+        return currInstance.getMessagesForSingleUser(userID, bearerToken, currContext);
+    }
+
+    public void sendMsgToGroup(String message, int groupID, Boolean emergencyStatus, Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        currInstance.newMessageToGroup(message, groupID, emergencyStatus, bearerToken, currContext);
+    }
+
+    public void sendMsgToParents(String message, Boolean emergencyStatus, Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        currInstance.newMessageToParents(message, userID, emergencyStatus, bearerToken, currContext);
+    }
 
 }
