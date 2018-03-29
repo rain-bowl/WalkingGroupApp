@@ -123,6 +123,25 @@ public class AccountApiInteractions {
         }
     }
 
+    public JSONObject getUserByID (String currToken, int ID, Context currContext){
+        String URLPath = baseURL + "/users/" + ID;
+        JSONObject list = null;
+        AndroidNetworking.initialize(currContext);
+        ANRequest groupListReq = AndroidNetworking.get(URLPath)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currToken)
+                .build();
+        ANResponse<JSONObject> serverResponse = groupListReq.executeForJSONObject();
+        if (serverResponse.isSuccess()) {
+            list = serverResponse.getResult();
+        } else {
+            Log.d(TAG, "getUserByID: Error from server" + serverResponse.getError());
+        }
+        if (list != null) {
+            Log.d(TAG, "onResponse: JSONObject b/f return: " + list.toString());
+        }
+        return list;
+    }
 
     //Class which recovers a users ID number from the database. This is needed to implement the user monitoring.
     public int getDatabaseUserID(String email, Context currContext, String bearer) {

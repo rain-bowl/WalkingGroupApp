@@ -285,6 +285,13 @@ public class ProgramSingletonController {
         return tempUserStorage;
     }
 
+    public JSONObject getUserByID(int ID, Context context){
+        currInstance = new AccountApiInteractions();
+        JSONObject currUserInfo = currInstance.getUserByID(this.bearerToken, ID, context);
+        Log.d(TAG, "getUserByID: currUserInfo: " + currUserInfo);
+        return currUserInfo;
+    }
+
     /* group functions */
     /* need to implement/test */
 
