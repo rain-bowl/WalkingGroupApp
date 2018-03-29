@@ -54,7 +54,6 @@ public class UserMonitorDisplay extends AppCompatActivity {
     private void setUpToolBar() {
         Toolbar toolbar = findViewById(R.id.monitorToolBar);
         setSupportActionBar(toolbar);
-
     }
 
     @Override
