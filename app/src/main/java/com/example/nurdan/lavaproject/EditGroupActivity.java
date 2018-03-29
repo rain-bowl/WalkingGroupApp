@@ -57,9 +57,6 @@ public class EditGroupActivity extends AppCompatActivity {
         test2.execute();
 
         ListClick(currMembers);
-
-  /*      submitEdit test2 = new submitEdit();
-        test2.execute();*/
     }
 
     private class editGroup extends AsyncTask<Void, Void, Void> {
@@ -141,17 +138,16 @@ public class EditGroupActivity extends AppCompatActivity {
 
 
     //used previously, probably gonna delete
-/*    private class submitEdit extends AsyncTask<Void, Void, Void> {
+    private class submitEdit extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void ... voids) {
-            currInstance.updateGroup(currGroupId, currGroupName, latArr, lngArr, getApplicationContext());
+            currInstance.updateGroup(currGroupId, newGroupName, latArr, lngArr, getApplicationContext());
             return null;
         }
         @Override
         protected void onPostExecute(Void param) {
-            createSubmitBtn();
         }
-    }*/
+    }
 
 //todo: fix updategroup, returns error rn
     public void createSubmitBtn(){
@@ -166,7 +162,8 @@ public class EditGroupActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
                 }
                 Toast.makeText(getApplicationContext(), "newGroupName: " + newGroupName, Toast.LENGTH_LONG).show();
-                currInstance.updateGroup(currGroupId, newGroupName, latArr, lngArr, getApplicationContext());
+                submitEdit test3 = new submitEdit();
+                test3.execute();
                 startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
             }
         });

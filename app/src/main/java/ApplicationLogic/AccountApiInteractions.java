@@ -387,6 +387,7 @@ public class AccountApiInteractions {
         if (serverResponse.isSuccess()) {
             Log.d(TAG, "updateGroup: Success in sending edited information!!");
         } else {
+            Log.d(TAG, "updateGroup: Server error when modding info detail: " + serverResponse.getError().getErrorDetail());
             Log.d(TAG, "updateGroup: Server error when modding info " + serverResponse.getError().getErrorBody());
             Log.d(TAG, "updateGroup: More error info " + serverResponse.getError().getResponse());
         }
@@ -508,6 +509,7 @@ public class AccountApiInteractions {
         }
     }
 
+    //set gpslocation of curr user
     public void setLastGpsLocation(String currToken, int currUserID, Location lastKnownLocation, Context currContext) {
         JSONObject gpsInfo = new JSONObject();
         try {
@@ -543,6 +545,7 @@ public class AccountApiInteractions {
         }
     }
 
+    // get gps location of specified user
     public JSONObject getLastGpsLocation(String currToken, int UserID, Context currContext) {
         JSONObject gpsInfo = new JSONObject();
 

@@ -59,6 +59,8 @@ public class MapActivity extends FragmentActivity implements
     ArrayList<Double> latArray = new ArrayList<>();
     ArrayList<Double> lngArray = new ArrayList<>();
     private ProgramSingletonController localInstance = ProgramSingletonController.getCurrInstance();
+    private boolean arrivalFlag = false;
+    JSONObject currGPS = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +78,9 @@ public class MapActivity extends FragmentActivity implements
         getGroupList test = new getGroupList();
         test.execute();
 
-        handleGPS();
-        /*setGPS test2 = new setGPS();
-        test2.execute();*/
+        if (!arrivalFlag){
+            handleGPS();
+        }
     }
 
     private void handleGPS() {
@@ -89,6 +91,7 @@ public class MapActivity extends FragmentActivity implements
                 setGPS test2 = new setGPS();
                 test2.execute();
                 Log.d("Handlers", "Called on main thread");
+                //todo: implement arrival check
             }
         };
         handler.postDelayed(runnableCode, 30000);
@@ -197,7 +200,7 @@ public class MapActivity extends FragmentActivity implements
                 Log.d("test setLastGpsLocation", mLastKnownLocation.toString());
                 localInstance.setLastGpsLocation(mLastKnownLocation, getApplicationContext());
 
-                JSONObject currGPS = localInstance.getLastGpsLocation(localInstance.getUserID(), getApplicationContext());
+                currGPS = localInstance.getLastGpsLocation(localInstance.getUserID(), getApplicationContext());
                 Log.d("test getLastGpsLocation", "curr gps of " + localInstance.getUserID() + ": " + currGPS.toString());
             }
             if(mLastKnownLocation == null)

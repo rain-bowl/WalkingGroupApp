@@ -145,6 +145,7 @@ public class ProgramSingletonController {
         return currLoggedInUser.returnJsonUserInfo();
     }
 
+
     //Networking method which sends a post request to server to edit user info.
     public Boolean editUserInformation(JSONObject newInformation, Context currContext){
         currInstance = new AccountApiInteractions();

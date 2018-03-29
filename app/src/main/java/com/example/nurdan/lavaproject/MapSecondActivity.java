@@ -113,61 +113,6 @@ public class MapSecondActivity extends AppCompatActivity{
         });
     }
 
-/*    private void makeEditBtn() {
-        Button editBtn = findViewById(R.id.editBtn);
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Edit clicked", Toast.LENGTH_SHORT).show();
-                Log.d("Edit clicked: ", "Edit clicked ");
-
-                leaderChecked = leaderOfList.getCheckedItemPositions();
-                memberChecked = memberOfList.getCheckedItemPositions();
-
-                if (leaderChecked == null && memberChecked == null) {
-                    Toast.makeText(getApplicationContext(), "Select group to edit", Toast.LENGTH_SHORT).show();
-                }
-
-                if (leaderChecked != null && memberChecked == null) {
-                    Log.d("boolarr: ", "leader array: " + leaderChecked);
-
-                    if (leaderChecked.size() != 1 || memberChecked != null) {
-                        Toast.makeText(getApplicationContext(), "Please select only one group", Toast.LENGTH_SHORT).show();
-                    }
-                    // implement support for tapping and untapping (ex changing mind)
-                    else {
-                        for (int i = 0; i < leaderOfIDList.size(); i++) {
-                            if (leaderChecked.get(i)) {
-                                int id = leaderOfIDList.get(i);
-                                Log.d("editing:", "editing curr id: " + id);
-                                currInstance.setCurrGroupID(id);
-                                startActivity(new Intent(getApplicationContext(), EditGroupActivity.class));
-                            }
-                        }
-                    }
-                }
-
-                else if (memberChecked != null && leaderChecked == null) {
-                    Log.d("boolarr: ", "member array: " + memberChecked);
-
-                    if (memberChecked.size() != 1 || leaderChecked != null) {
-                        Toast.makeText(getApplicationContext(), "Please select only one group from either the 'Member of' list or 'Leader of' list", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        for (int i = 0; i < memberOfIDList.size(); i++) {
-                            if (memberChecked.get(i)) {
-                                int id = memberOfIDList.get(i);
-                                Log.d("editing:", "editing curr id: " + id);
-                                currInstance.setCurrGroupID(id);
-                                startActivity(new Intent(getApplicationContext(), EditGroupActivity.class));
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }*/
-
     private void makeJoinBtn () {
         Button removeBtn = findViewById(R.id.SecJoinBtn);
         removeBtn.setOnClickListener(new View.OnClickListener() {
@@ -209,9 +154,6 @@ public class MapSecondActivity extends AppCompatActivity{
             }
         });
     }
-
-
-
 
     private class setupListView extends AsyncTask<Void,Void,Void>{
         JSONArray original;
@@ -261,7 +203,6 @@ public class MapSecondActivity extends AppCompatActivity{
             Log.d("onpost: memberID list: ", memberOfIDList.toString());
             return null;
         }
-
 
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -321,7 +262,7 @@ public class MapSecondActivity extends AppCompatActivity{
         joinGroup joinChecked = new joinGroup();
         joinChecked.execute(checkedGroups);
 
-        String joinedGorups = String.format(Locale.CANADA, "Joined %d groups, %s\nPlease return to main menu to update lists", checkedGroups.size(), Arrays.toString(checkedGroups.toArray()));
+        String joinedGorups = String.format(Locale.CANADA, "Attempted to join %d groups, %s\nPlease return to main menu to update lists", checkedGroups.size(), Arrays.toString(checkedGroups.toArray()));
         Toast.makeText(this, joinedGorups, Toast.LENGTH_SHORT).show();
     }
 
@@ -376,7 +317,7 @@ public class MapSecondActivity extends AppCompatActivity{
             leaveGroup leaveChecked = new leaveGroup();
             leaveChecked.execute(checkedGroups);
 
-            String leftGroups = String.format(Locale.CANADA, "Left %d groups, %s\nPlease return to main menu to update lists", checkedGroups.size(), Arrays.toString(checkedGroups.toArray()));
+            String leftGroups = String.format(Locale.CANADA, "Attempted to leave %d groups, %s\nPlease return to main menu to update lists", checkedGroups.size(), Arrays.toString(checkedGroups.toArray()));
             Toast.makeText(this, leftGroups, Toast.LENGTH_SHORT).show();
         }
     }
@@ -400,7 +341,7 @@ public class MapSecondActivity extends AppCompatActivity{
             deleteGroup deleteChecked = new deleteGroup();
             deleteChecked.execute(checkedGroups);
 
-            String goneGroups = String.format(Locale.CANADA, "Deleted %d groups, %s\n Please refresh page to update lists", checkedGroups.size(), Arrays.toString(checkedGroups.toArray()));
+            String goneGroups = String.format(Locale.CANADA, "Attempted to delete %d groups, %s\n Please refresh page to update lists", checkedGroups.size(), Arrays.toString(checkedGroups.toArray()));
             Toast.makeText(this, goneGroups, Toast.LENGTH_SHORT).show();
         }
     }
