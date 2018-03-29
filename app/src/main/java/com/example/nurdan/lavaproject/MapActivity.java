@@ -70,6 +70,7 @@ public class MapActivity extends FragmentActivity implements
         initializeMapFrag();
         makeListBtn();
         makeCreateBtn();
+        setupBackBtn();
         getGroupList test = new getGroupList();
         test.execute();
 
@@ -97,6 +98,16 @@ public class MapActivity extends FragmentActivity implements
                 else {
                     Toast.makeText(getApplicationContext(), "Please select start and destination", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+    }
+
+    private void setupBackBtn() {
+        Button btn = findViewById(R.id.mapBackBtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), MainMenu.class));
             }
         });
     }
@@ -176,9 +187,11 @@ public class MapActivity extends FragmentActivity implements
                 }
                 try {
                     if (childJSONObject != null) {
-                        nameList.add(childJSONObject.getString("groupDescription"));
-                        latArray.add(childJSONObject.getJSONArray("routeLatArray").getDouble(0));
-                        lngArray.add(childJSONObject.getJSONArray("routeLngArray").getDouble(0));
+                        if (!childJSONObject.getString("groupDescription").equals("null")){
+                            nameList.add(childJSONObject.getString("groupDescription"));
+                            latArray.add(childJSONObject.getJSONArray("routeLatArray").getDouble(0));
+                            lngArray.add(childJSONObject.getJSONArray("routeLngArray").getDouble(0));
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -203,15 +216,13 @@ public class MapActivity extends FragmentActivity implements
     }
 
     private void createGroupMarkers(){
-        for (int i = 0; i < nameList.size()-1; i++){
+        for (int i = 0; i < nameList.size(); i++){
             try {
                 groupPoints.add(new LatLng(latArray.get(i), lngArray.get(i)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (nameList.get(i) != null && groupPoints.get(i) != null) {
-                makeMarker(groupPoints.get(i), nameList.get(i));
-            }
+            makeMarker(groupPoints.get(i), nameList.get(i));
         }
     }
 

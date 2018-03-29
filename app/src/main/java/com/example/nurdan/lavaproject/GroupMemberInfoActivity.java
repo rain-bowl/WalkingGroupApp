@@ -17,6 +17,6 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
         currMemberID = currInstance.getCurrMemberID();
         Log.d("GroupMemberInfoActivity", "currMemberID: " + currMemberID);
 
-        //TODO: set information display for current member
+        //TODO: set information display for current member, who they're monitored by + their info
     }
 }

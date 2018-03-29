@@ -30,7 +30,7 @@
     <string name="create_new_account">Create account</string>
     <string name="useremail_title">user_email</string>
     <string name="useremailname">Email:</string>
-    <string name="useremail_input_hint">Email...</string>
+    <string name="useremail_input_hint">Email…</string>
     <string name="register">Register new account</string>
     <string name="birthYear">Birth Year</string>
     <string name="birthMonth">Birth Month</string>
@@ -61,7 +61,7 @@
     <string name="viewGroups">View Groups</string>
     <string name="JoinTitle">Join</string>
     <string name="BACK">BACK</string>
-    <string name="removeGroups">Remove</string>
+    <string name="removeGroups">Remove/Leave</string>
     <string name="group_name">Group Name</string>
     <string name="create_group">Create Group</string>
     <string name="Start">Start: </string>
@@ -95,4 +95,6 @@
     <string name="submit">Submit</string>
     <string name="change_group_name">Change Group Name?</string>
     <string name="editing_group">Editing Group</string>
+    <string name="current_members_in_group">Current Members in Group:</string>
+    <string name="tap_on_member_to_view_information">Tap on member to view information</string>
 </resources>

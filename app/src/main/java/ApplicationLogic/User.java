@@ -51,7 +51,7 @@ public class User {
             homePhoneNumber = retrievedInfo.getString("homePhone");
             grade = retrievedInfo.getString("grade");
             teacherName = retrievedInfo.getString("teacherName");
-            emergencyContactInfoInstruction = retrievedInfo.getString("emercencyContactInfo");
+            emergencyContactInfoInstruction = retrievedInfo.getString("emergencyContactInfo");
             monitoredByUsers = retrievedInfo.getJSONArray("monitoredByUsers");
             monitorsOtherUsers = retrievedInfo.getJSONArray("monitorsUsers");
             memberOfGroups = retrievedInfo.getJSONArray("memberOfGroups");

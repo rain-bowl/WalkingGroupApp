@@ -364,12 +364,10 @@ public class ProgramSingletonController {
     }
 
     // remove group member
-    public void removeGroupMember(int groupID, int memberID, Context appContext) {
+    // todo: implement support for removing monitored users
+    public void removeGroupMember(int groupID, Context appContext) {
         currInstance = new AccountApiInteractions();
-        if (memberID == -1) {
-            memberID = this.userID;
-        }
-        currInstance.removeGroupMember(this.bearerToken, groupID, memberID, appContext);
+        currInstance.removeGroupMember(this.bearerToken, groupID, this.userID, appContext);
     }
 
     public void setLastGpsLocation(Location lastKnown, Context appContext){

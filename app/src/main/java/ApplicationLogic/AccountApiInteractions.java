@@ -505,7 +505,7 @@ public class AccountApiInteractions {
         }
     }
 
-    public void setLastGpsLocation(String currToken, int userID, Location lastKnownLocation, Context currContext) {
+    public void setLastGpsLocation(String currToken, int currUserID, Location lastKnownLocation, Context currContext) {
         JSONObject gpsInfo = new JSONObject();
         try {
             gpsInfo.put("lat", lastKnownLocation.getLatitude());
@@ -519,7 +519,7 @@ public class AccountApiInteractions {
             e.printStackTrace();
         }
 
-        String URLPath = baseURL + "/users/" + userID + "/lastGpsLocation";
+        String URLPath = baseURL + "/users/" + currUserID + "/lastGpsLocation";
         AndroidNetworking.initialize(currContext);
         ANRequest setGPSReq = AndroidNetworking.post(URLPath)
                 .addHeaders("apiKey", apiKey)
@@ -532,7 +532,7 @@ public class AccountApiInteractions {
             Log.d(TAG, "setLastGpsLocation: Success?");
         } else {
             Log.d(TAG, "setLastGpsLocation: Server error when adding: " + serverResponse.getError().getErrorBody());
-            Log.d(TAG, "setLastGpsLocation: Server error code: "  + serverResponse);
+            Log.d(TAG, "setLastGpsLocation: Server error code: "  + serverResponse.getError().getErrorCode());
             Log.d(TAG, "setLastGpsLocation: More error info: " + serverResponse.getError().getResponse());
         }
     }
