@@ -508,17 +508,19 @@ public class AccountApiInteractions {
         }
     }
 
- /*   public void setLastGpsLocation(String currToken, int currUserID, Location lastKnownLocation, Context currContext) {
+    public void setLastGpsLocation(String currToken, int currUserID, Location lastKnownLocation, Context currContext) {
         JSONObject gpsInfo = new JSONObject();
         try {
             gpsInfo.put("lat", lastKnownLocation.getLatitude());
+            Log.d(TAG, "lat: " + lastKnownLocation.getLatitude());
             gpsInfo.put("lng", lastKnownLocation.getLongitude());
-            //TODO: fix error, currently has 'null' server error when sent
+            Log.d(TAG, "lng: " + lastKnownLocation.getLongitude());
+
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.CANADA);
             String currentTime = df.format(new Date());
             gpsInfo.put("timestamp", currentTime);
-        }
-        catch (JSONException e) {
+            Log.d(TAG, "timestamp: " + currentTime);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -534,9 +536,33 @@ public class AccountApiInteractions {
         if (serverResponse.isSuccess()) {
             Log.d(TAG, "setLastGpsLocation: Success?");
         } else {
+            Log.d(TAG, "setLastGpsLocation: Server error when adding: " + serverResponse.getError().getErrorDetail());
             Log.d(TAG, "setLastGpsLocation: Server error when adding: " + serverResponse.getError().getErrorBody());
-            Log.d(TAG, "setLastGpsLocation: Server error code: "  + serverResponse.getError().getErrorCode());
+            Log.d(TAG, "setLastGpsLocation: Server error code: " + serverResponse.getError().getErrorCode());
             Log.d(TAG, "setLastGpsLocation: More error info: " + serverResponse.getError().getResponse());
         }
-    }*/
+    }
+
+    public JSONObject getLastGpsLocation(String currToken, int UserID, Context currContext) {
+        JSONObject gpsInfo = new JSONObject();
+
+        String URLPath = baseURL + "/users/" + UserID + "/lastGpsLocation";
+        AndroidNetworking.initialize(currContext);
+        ANRequest getGPSReq = AndroidNetworking.get(URLPath)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currToken)
+                .build();
+        ANResponse<JSONObject> serverResponse = getGPSReq.executeForJSONObject();
+        if (serverResponse.isSuccess()) {
+            Log.d(TAG, "getLastGpsLocation: Success?");
+            gpsInfo = serverResponse.getResult();
+            Log.d(TAG, "getLastGpsLocation: response: " + gpsInfo);
+        } else {
+            Log.d(TAG, "getLastGpsLocation: Server error when getting: detail: " + serverResponse.getError().getErrorDetail());
+            Log.d(TAG, "getLastGpsLocation: Server error when getting: " + serverResponse.getError().getErrorBody());
+            Log.d(TAG, "getLastGpsLocation: Server error code: " + serverResponse.getError().getErrorCode());
+            Log.d(TAG, "getLastGpsLocation: More error info: " + serverResponse.getError().getResponse());
+        }
+        return gpsInfo;
+    }
 }

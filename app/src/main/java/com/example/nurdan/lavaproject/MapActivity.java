@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -33,7 +34,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
 
 public class MapActivity extends FragmentActivity implements
@@ -65,16 +65,34 @@ public class MapActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         MarkerPoints = new ArrayList<>();
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         getLocationPermission();
         initializeMapFrag();
         makeListBtn();
         makeCreateBtn();
         setupBackBtn();
+
         getGroupList test = new getGroupList();
         test.execute();
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        handleGPS();
+        /*setGPS test2 = new setGPS();
+        test2.execute();*/
+    }
+
+    private void handleGPS() {
+        Handler handler = new Handler();
+        Runnable runnableCode = new Runnable() {
+            @Override
+            public void run() {
+                setGPS test2 = new setGPS();
+                test2.execute();
+                Log.d("Handlers", "Called on main thread");
+            }
+        };
+        handler.postDelayed(runnableCode, 30000);
+        handler.post(runnableCode);
     }
 
     private void makeListBtn () {
@@ -169,6 +187,25 @@ public class MapActivity extends FragmentActivity implements
     @Override
     public void onInfoWindowClick(Marker marker) {
         Toast.makeText(this, "To join, click 'View Groups'.", Toast.LENGTH_LONG).show();
+    }
+
+    private class setGPS extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            getDeviceLocation();
+            if (mLastKnownLocation != null) {
+                Log.d("test setLastGpsLocation", mLastKnownLocation.toString());
+                localInstance.setLastGpsLocation(mLastKnownLocation, getApplicationContext());
+
+                JSONObject currGPS = localInstance.getLastGpsLocation(localInstance.getUserID(), getApplicationContext());
+                Log.d("test getLastGpsLocation", "curr gps of " + localInstance.getUserID() + ": " + currGPS.toString());
+            }
+            if(mLastKnownLocation == null)
+            {
+                Log.d("setLastGpsLocation", "mLastKnownLocation is null");
+            }
+            return null;
+        }
     }
 
     private class getGroupList extends AsyncTask<Void,Void,Void> {
@@ -268,7 +305,6 @@ public class MapActivity extends FragmentActivity implements
                 updateLocationUI();
             }
         }
-
     }
 
     private void updateLocationUI() {
@@ -304,13 +340,13 @@ public class MapActivity extends FragmentActivity implements
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = (Location) task.getResult();
+                            Log.d(TAG, "mLastKnownLocation: " + mLastKnownLocation);
                             if (mLastKnownLocation == null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mDefaultLocation.latitude,
                                                 mDefaultLocation.longitude), DEFAULT_ZOOM));
                             }
                             else {
-                                localInstance.setLastGpsLocation(mLastKnownLocation, getApplicationContext());
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mLastKnownLocation.getLatitude(),
                                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));

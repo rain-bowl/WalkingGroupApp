@@ -378,11 +378,13 @@ public class ProgramSingletonController {
         currInstance.removeGroupMember(this.bearerToken, groupID, this.userID, appContext);
     }
 
-    //doesn't work properly, ignore
-/*
     public void setLastGpsLocation(Location lastKnown, Context appContext){
         currInstance = new AccountApiInteractions();
         currInstance.setLastGpsLocation(this.bearerToken, this.userID, lastKnown, appContext);
-    }*/
+    }
 
+    public JSONObject getLastGpsLocation(int UserID, Context appContext) {
+        currInstance = new AccountApiInteractions();
+        return currInstance.getLastGpsLocation(this.bearerToken, UserID, appContext);
+    }
 }
