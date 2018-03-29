@@ -58,6 +58,66 @@ public class MapSecondActivity extends AppCompatActivity{
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Edit/Details clicked", Toast.LENGTH_SHORT).show();
+                Log.d("Edit/Details clicked: ", "Edit/Details clicked ");
+
+                leaderChecked = leaderOfList.getCheckedItemPositions();
+                memberChecked = memberOfList.getCheckedItemPositions();
+
+                Log.d("boolarr: ", "leader array: " + leaderChecked);
+                Log.d("boolarr: ", "member array: " + memberChecked);
+
+                ArrayList<Integer> checkedLeaderGroups = new ArrayList<>();
+                ArrayList<String> checkedLeaderNameGroups = new ArrayList<>();
+                for (int i = 0; i < leaderOfIDList.size(); i++) {
+                    if (leaderChecked.get(i)) {
+                        int id = leaderOfIDList.get(i);
+                        Log.d("leaveCheckedGroup:", "curr id: " + id);
+                        checkedLeaderGroups.add(id);
+                        checkedLeaderNameGroups.add(leaderOfNameList.get(i));
+                    }
+                }
+
+                ArrayList<Integer> checkedMemberGroups = new ArrayList<>();
+                ArrayList<String> checkedMemberNameGroups = new ArrayList<>();
+                for (int i = 0; i < memberOfIDList.size(); i++) {
+                    if (memberChecked.get(i)) {
+                        int id = memberOfIDList.get(i);
+                        Log.d("leaveCheckedGroup:", "curr id: " + id);
+                        checkedMemberGroups.add(id);
+                        checkedMemberNameGroups.add(memberOfNameList.get(i));
+                    }
+                }
+
+                if (checkedLeaderGroups.size() == 1 && checkedMemberGroups.size() == 0) {
+                    int id = checkedLeaderGroups.get(0);
+                    currInstance.setCurrGroupID(id);
+                    currInstance.setCurrGroupName(checkedLeaderNameGroups.get(0));
+                    startActivity(new Intent(getApplicationContext(), EditGroupActivity.class));
+                }
+                else if (checkedLeaderGroups.size() == 0 && checkedMemberGroups.size() == 1) {
+                    int id = checkedMemberGroups.get(0);
+                    currInstance.setCurrGroupID(id);
+                    currInstance.setCurrGroupName(checkedMemberNameGroups.get(0));
+                    startActivity(new Intent(getApplicationContext(), ViewMembersActivity.class));
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Please select only one group", Toast.LENGTH_SHORT).show();
+                    Log.d("Edit/Details clicked: ", "more than one group selected");
+                    leaderChecked.clear();
+                    memberChecked.clear();
+                    checkedLeaderNameGroups.clear();
+                    checkedMemberNameGroups.clear();
+                }
+            }
+        });
+    }
+
+/*    private void makeEditBtn() {
+        Button editBtn = findViewById(R.id.editBtn);
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Edit clicked", Toast.LENGTH_SHORT).show();
                 Log.d("Edit clicked: ", "Edit clicked ");
 
@@ -68,7 +128,7 @@ public class MapSecondActivity extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(), "Select group to edit", Toast.LENGTH_SHORT).show();
                 }
 
-                if (leaderChecked != null && leaderOfNameList != null) {
+                if (leaderChecked != null && memberChecked == null) {
                     Log.d("boolarr: ", "leader array: " + leaderChecked);
 
                     if (leaderChecked.size() != 1 || memberChecked != null) {
@@ -87,7 +147,7 @@ public class MapSecondActivity extends AppCompatActivity{
                     }
                 }
 
-                if (memberChecked != null && memberOfNameList != null) {
+                else if (memberChecked != null && leaderChecked == null) {
                     Log.d("boolarr: ", "member array: " + memberChecked);
 
                     if (memberChecked.size() != 1 || leaderChecked != null) {
@@ -106,7 +166,7 @@ public class MapSecondActivity extends AppCompatActivity{
                 }
             }
         });
-    }
+    }*/
 
     private void makeJoinBtn () {
         Button removeBtn = findViewById(R.id.SecJoinBtn);
@@ -343,7 +403,6 @@ public class MapSecondActivity extends AppCompatActivity{
             String goneGroups = String.format(Locale.CANADA, "Deleted %d groups, %s\n Please refresh page to update lists", checkedGroups.size(), Arrays.toString(checkedGroups.toArray()));
             Toast.makeText(this, goneGroups, Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void setupBackbtn() {

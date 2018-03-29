@@ -53,7 +53,8 @@
         <activity android:name=".EditUserInformation" />
         <activity android:name=".UserProfile" />
         <activity android:name=".EditGroupActivity" />
-        <activity android:name=".GroupMemberInfoActivity"></activity>
+        <activity android:name=".GroupMemberInfoActivity" />
+        <activity android:name=".ViewMembersActivity"></activity>
     </application>
 
 </manifest>

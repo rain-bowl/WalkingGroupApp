@@ -126,6 +126,7 @@ public class EditGroupActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
         list.setAdapter(adapter);
     }
+
     private void ListClick (final ListView list) {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
@@ -161,6 +162,9 @@ public class EditGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 newGroupName = newName.getText().toString();
+                if (newGroupName == currGroupName) {
+                    startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
+                }
                 Toast.makeText(getApplicationContext(), "newGroupName: " + newGroupName, Toast.LENGTH_LONG).show();
                 currInstance.updateGroup(currGroupId, newGroupName, latArr, lngArr, getApplicationContext());
                 startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));

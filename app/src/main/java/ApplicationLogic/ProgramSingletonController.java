@@ -28,6 +28,7 @@ public class ProgramSingletonController {
     private String bearerToken;
     private int userID;
     private int currGroupID;
+    private String currGroupName;
     private AccountApiInteractions currInstance;
     Boolean logInStatus = false;
     private static ProgramSingletonController instance;
@@ -71,6 +72,13 @@ public class ProgramSingletonController {
         return this.currGroupID;
     }
 
+    public String getCurrGroupName() {
+        return this.currGroupName;
+    }
+
+    public void setCurrGroupName(String currGroupName) {
+        this.currGroupName = currGroupName;
+    }
 
     public void setBearerToken(String token) {
         this.bearerToken = token;
@@ -374,4 +382,5 @@ public class ProgramSingletonController {
         currInstance = new AccountApiInteractions();
         currInstance.setLastGpsLocation(this.bearerToken, this.userID, lastKnown, appContext);
     }
+
 }
