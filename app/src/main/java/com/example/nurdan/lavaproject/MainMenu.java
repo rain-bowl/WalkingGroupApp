@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import ApplicationLogic.ProgramSingletonController;
 
+import ApplicationLogic.ProgramSingletonController;
 // Class simply creates and contains listeners to help user navigate the application.
 public class MainMenu extends AppCompatActivity {
     private ProgramSingletonController localInstance;

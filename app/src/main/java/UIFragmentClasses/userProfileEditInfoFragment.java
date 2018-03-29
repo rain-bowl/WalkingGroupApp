@@ -17,8 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nurdan.lavaproject.R;
+import com.example.nurdan.lavaproject.UserProfile;
+import com.example.nurdan.lavaproject.display_other_user_info;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import ApplicationLogic.ProgramSingletonController;
 import ApplicationLogic.User;
@@ -39,6 +43,7 @@ public class userProfileEditInfoFragment extends Fragment {
     Button submitChanges;
     JSONObject userInformation;
     ProgramSingletonController currInstance;
+    int userMonitorID = -1;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,8 +53,26 @@ public class userProfileEditInfoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         currInstance = ProgramSingletonController.getCurrInstance();
-        userInformation = currInstance.getUserInfo();
+        // get user ID if -1 then display the logged in user's info
+        if(this.getArguments() != null)
+            userMonitorID = this.getArguments().getInt("theUserID", -1);
 
+        currInstance = ProgramSingletonController.getCurrInstance();
+        if(userMonitorID == -1) {
+            try {
+                userInformation = currInstance.getUserInfo();
+                Log.d(TAG, "onViewCreated: USER INFO RETRIEVEd " + userInformation);
+            }
+            catch (Exception e){}
+            populateEditInfo(view);
+        } else {
+            asyncGetUserInfo getInfo = new asyncGetUserInfo();
+            getInfo.execute(view);
+        }
+
+    }
+
+    private void populateEditInfo(View view) {
 
         //Local instances of inputs
         name = view.findViewById(R.id.nameInput);
@@ -96,7 +119,7 @@ public class userProfileEditInfoFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-            tempName = s.toString();
+                tempName = s.toString();
             }
         });
 
@@ -275,16 +298,19 @@ public class userProfileEditInfoFragment extends Fragment {
                 createJsonBody("homePhone", tempHomePhone);
                 createJsonBody("grade", tempGrade);
                 createJsonBody("teacherName", tempTeacheName);
+                createJsonBody("emergencyContactInfo", tempEmergencyInfo);
                 userInformation.remove("lastGpsLocation");
                 Boolean returnStatus;
-               sendNewData editInfoServercall = new sendNewData();
-               editInfoServercall.execute();
+                sendNewData editInfoServercall = new sendNewData();
+                // true for logged in user
+                if(userMonitorID == -1)
+                    editInfoServercall.execute(true);
+                else
+                    editInfoServercall.execute(false);
 
-                   Toast.makeText(getContext(), "Success", Toast.LENGTH_LONG).show();
+
             }
         });
-
-
     }
 
 //The following two overriden methods will take in an input, compare it to what we have and if it has changed then the
@@ -303,8 +329,8 @@ public class userProfileEditInfoFragment extends Fragment {
 
        private void createJsonBody(String key, int value) {
            try {
-               if (value != userInformation.getInt(key)) {
-                   userInformation.put(key, ""+value);
+               if (value != userInformation.getInt(key) || value != 0) {
+                   userInformation.put(key, value+"");
                }
            }
            catch (Exception e){
@@ -313,19 +339,42 @@ public class userProfileEditInfoFragment extends Fragment {
        }
 
 
-       private class sendNewData extends AsyncTask<Void,Void, Boolean>{
+       private class sendNewData extends AsyncTask<Boolean,Void, Boolean>{
+           Boolean isOwner;
            @Override
-           protected Boolean doInBackground(Void... voids) {
-               Log.d(TAG, "doInBackground: Background runner for editing information has been reached");
-               Log.d(TAG, "doInBackground: Contents on edited info " + userInformation.toString());
-              currInstance.editUserInformation(userInformation, getContext());
+           protected Boolean doInBackground(Boolean... bools) {
+                Log.d(TAG, "doInBackground: Background runner for editing information has been reached");
+                Log.d(TAG, "doInBackground: Contents on edited info " + userInformation);
+                isOwner = bools[0];
+                if(isOwner)
+                    currInstance.editUserInformation(userInformation, getContext());
+                else
+                    currInstance.editUserInformationById(userInformation, userMonitorID, getContext());
+                return null;
+           }
 
-              return null;
-
-
-
-
+           @Override
+           protected void onPostExecute(Boolean aBoolean) {
+                Toast.makeText(getContext(), "Success", Toast.LENGTH_LONG).show();
+                if(isOwner)
+                    ((UserProfile)getActivity()).loadFragment(new userProfileDisplayFragment());
+                else
+                    ((display_other_user_info)getActivity()).loadFragment(new userProfileDisplayFragment());
            }
        }
+
+    private class asyncGetUserInfo extends AsyncTask<View, Void, Void> {
+        View v;
+        @Override
+        protected Void doInBackground(View... views) {
+            v = views[0];
+            userInformation = currInstance.getUserInfoByID(userMonitorID, getContext());
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            populateEditInfo(v);
+        }
+    }
 
 }

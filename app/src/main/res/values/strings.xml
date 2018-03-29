@@ -87,6 +87,7 @@
     <!-- User Monitor Activity -->
     <string name="delete">Delete</string>
     <string name="add">Add</string>
+    <string name="info">Info</string>
     <string name="cancel">Cancel</string>
     <string name="all_groups">All groups:</string>
     <string name="leader_of">Leader of:</string>
