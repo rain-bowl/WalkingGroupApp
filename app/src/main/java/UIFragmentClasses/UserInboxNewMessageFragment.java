@@ -42,14 +42,6 @@ public class UserInboxNewMessageFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         currSingletonInstance = ProgramSingletonController.getCurrInstance();
-        userInfo = currSingletonInstance.getUserInfo();
-        //Load up the user id
-        try{
-            userID = userInfo.getInt("id");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
         //Attach widgets
         final ToggleButton sendToParents = view.findViewById(R.id.sendToPrntsTgl);
         final ToggleButton sendToGroup = view.findViewById(R.id.sendToGrpTgl);
@@ -57,7 +49,6 @@ public class UserInboxNewMessageFragment extends Fragment{
         EditText messageBody = view.findViewById(R.id.messageInput);
         sendToGroup.setBackgroundColor(Color.RED);
         sendToParents.setBackgroundColor(Color.RED);
-
         //Attach listeners
         sendToParents.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +80,8 @@ public class UserInboxNewMessageFragment extends Fragment{
                 }
             }
         });
-
+        //Listener for the button responsible for sending a message. Handles all of the different possible combinations
+        //of users to which the person would like to send a message to.
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

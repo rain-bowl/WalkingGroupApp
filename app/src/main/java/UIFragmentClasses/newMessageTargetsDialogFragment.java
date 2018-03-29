@@ -41,16 +41,13 @@ public class newMessageTargetsDialogFragment extends DialogFragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         targetDisplay = view.findViewById(R.id.messageTargetsListview);
-       currInsance = ProgramSingletonController.getCurrInstance();
-       getUserNames getNames = new getUserNames();
-       getNames.execute();
+        currInsance = ProgramSingletonController.getCurrInstance();
 
     }
 
-    private class getUserNames extends AsyncTask<Void, Void, Void>{
+   /* private class getUserNames extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... voids) {
-            targetList = currInsance.getUsersWhoMonitorThis(getContext());
             return null;
         }
 
@@ -69,5 +66,5 @@ public class newMessageTargetsDialogFragment extends DialogFragment{
                 }
             });
         }
-    }
+    }*/
 }
