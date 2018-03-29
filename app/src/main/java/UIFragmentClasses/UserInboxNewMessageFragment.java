@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import org.json.JSONObject;
 
 import ApplicationLogic.ProgramSingletonController;
 
+import static com.google.android.gms.wearable.DataMap.TAG;
+
 
 /* This fragment class will handle all of the logic needed for controlling the sending of a new message to
 whatever group/user is necessary.
@@ -33,10 +36,11 @@ public class UserInboxNewMessageFragment extends Fragment{
     ProgramSingletonController currSingletonInstance;
     JSONObject userInfo;
     int userID;
+    int groupID;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.user_inbox_new_message_layout, container);
+        return inflater.inflate(R.layout.user_inbox_new_message_layout, container, false);
     }
 
     @Override
@@ -85,15 +89,16 @@ public class UserInboxNewMessageFragment extends Fragment{
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: Group Id Check " + groupID);
                 if(parentFlag && groupFlag){
-                    currSingletonInstance.sendMsgToGroup(message, userID, false, getContext());
+                    currSingletonInstance.sendMsgToGroup(message, groupID, false, getContext());
                     currSingletonInstance.sendMsgToParents(message, false, getContext());
                 }
                 else if(parentFlag){
                     currSingletonInstance.sendMsgToParents(message, false, getContext());
                 }
                 else if(groupFlag){
-                    currSingletonInstance.sendMsgToGroup(message, userID, false, getContext());
+                    currSingletonInstance.sendMsgToGroup(message, groupID, false, getContext());
                 }
                 else if(message.length() == 0){
                     Toast.makeText(getContext(), R.string.emptyMessageWarning, Toast.LENGTH_LONG).show();
@@ -125,5 +130,8 @@ public class UserInboxNewMessageFragment extends Fragment{
 
     }
 
+    public void  setGroupID(int ID){
+        groupID = ID;
+    }
 
 }
