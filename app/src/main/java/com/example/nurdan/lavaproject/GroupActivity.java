@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -17,36 +18,46 @@ import ApplicationLogic.ProgramSingletonController;
 public class GroupActivity extends AppCompatActivity {
     private ProgramSingletonController localInstance;
     private String groupName;
-    private int leaderID;
     private List<LatLng> startEnd;
     private LatLng start;
     private LatLng end;
-    private String bearerToken;
+    private String startLatLng;
+    private String endLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
+
         localInstance = ProgramSingletonController.getCurrInstance();
-        leaderID = localInstance.getUserID(); //.getCurrUserID(getApplicationContext());
-        bearerToken = localInstance.getBearerToken(); //.getBearerToken(getApplicationContext());
-
         startEnd = localInstance.returnLatLng(getApplicationContext());
-        if (startEnd == null) {
-            start = new LatLng(0, 0);
-            end = new LatLng(0, 0);
+        if (startEnd.size() != 2) {
+            Toast.makeText(this, "Please reselect coordinates.", Toast.LENGTH_LONG).show();
+            startEnd.clear();
+            finish();
         }
-        start = startEnd.get(0);
-        end = startEnd.get(1);
+        else{
+            start = startEnd.get(0);
+            end = startEnd.get(1);
+        }
 
-        String startLatLng = start.toString();
-        Toast.makeText(this, "start:" + startLatLng, Toast.LENGTH_LONG).show();
-
-        String endLatLng = end.toString();
-        Toast.makeText(this, "end:" + endLatLng, Toast.LENGTH_LONG).show();
+        if (start != null && end != null){
+            startLatLng = start.toString();
+            endLatLng = end.toString();
+        }
 
         createBtn();
         setupBackbtn();
+        setUpCoord();
+    }
+
+    private void setUpCoord(){
+        final TextView startpt = findViewById(R.id.startCoord);
+        final TextView endpt = findViewById(R.id.endCoord);
+
+
+        startpt.setText(startLatLng);
+        endpt.setText(endLatLng);
     }
 
     public void createBtn(){
@@ -59,8 +70,9 @@ public class GroupActivity extends AppCompatActivity {
                 localInstance = ProgramSingletonController.getCurrInstance();
                 groupName = group.getText().toString();
                 Toast.makeText(getApplicationContext(), groupName, Toast.LENGTH_LONG).show();
-                localInstance.createNewGroup(groupName, leaderID, start, end, getApplicationContext());
+                localInstance.createNewGroup(groupName, start, end, getApplicationContext());
                 startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
+
             }
         });
     }

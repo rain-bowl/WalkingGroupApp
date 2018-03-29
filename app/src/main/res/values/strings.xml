@@ -28,7 +28,7 @@
     <string name="create_new_account">Create account</string>
     <string name="useremail_title">user_email</string>
     <string name="useremailname">Email:</string>
-    <string name="useremail_input_hint">Email...</string>
+    <string name="useremail_input_hint">Email…</string>
     <string name="register">Register new account</string>
     <string name="birthYear">Birth Year</string>
     <string name="birthMonth">Birth Month</string>
@@ -63,8 +63,11 @@
     <string name="JoinTitle">Join</string>
     <string name="FindTitle">Finding</string>
     <string name="BACK">BACK</string>
-    <string name="Joiningroup">Join</string>
-    <string name="removeGroups">Remove</string>
+    <string name="removeGroups">Remove/Leave</string>
+    <string name="group_name">Group Name</string>
+    <string name="create_group">Create Group</string>
+    <string name="Start">Start: </string>
+    <string name="End">End: </string>
 
     <!-- Strings related to main menu -->
     <string name="logout">Logout</string>
@@ -80,10 +83,9 @@
     <string name="userHint">I would like to add...</string>
     <string name="monitorUsrCheckbox">another user to monitor</string>
     <string name="monitorMeUsrCheckbox">another user to monitor me</string>
+    <string name="emptyInputWarning">Please enter a valid email.</string>
 
 
-    <string name="group_name">Group Name</string>
-    <string name="create_group">Create Group</string>
     <string name="walking_group_project">Walking Group Project</string>
 
     <!-- Strings related to the user's inbox -->
@@ -108,4 +110,19 @@
     <string name="panicCancel">Go Back</string>
 
 
+    <!-- User Monitor Activity -->
+    <string name="delete">Delete</string>
+    <string name="add">Add</string>
+    <string name="info">Info</string>
+    <string name="cancel">Cancel</string>
+    <string name="all_groups">All groups:</string>
+    <string name="leader_of">Leader of:</string>
+    <string name="member_of">Member of:</string>
+    <string name="edit">Edit/Details</string>
+    <string name="submit">Submit</string>
+    <string name="change_group_name">Change Group Name?</string>
+    <string name="editing_group">Editing Group</string>
+    <string name="current_members_in_group">Current Members in Group:</string>
+    <string name="tap_on_member_to_view_information">Tap on member to view information</string>
+    <string name="viewing_current_group_members_of">Viewing Current Group Members of:</string>
 </resources>

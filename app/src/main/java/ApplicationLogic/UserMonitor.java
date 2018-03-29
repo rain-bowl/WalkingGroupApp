@@ -165,7 +165,6 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
             Log.d(TAG, "getUsersWhoMonitor: Error from server" + serverResponse.getError());
         }
         return users;
-
     }
 
 

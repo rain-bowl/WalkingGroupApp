@@ -3,17 +3,21 @@ package com.example.nurdan.lavaproject;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import ApplicationLogic.ProgramSingletonController;
 
 import ApplicationLogic.ProgramSingletonController;
 import UIFragmentClasses.PanicMessageFragment;
 
 // Class simply creates and contains listeners to help user navigate the application.
 public class MainMenu extends AppCompatActivity {
-
+    private ProgramSingletonController localInstance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +70,17 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View v) {
                 ProgramSingletonController currInstence = ProgramSingletonController.getCurrInstance();
                 currInstence.userLogout();
-                Intent logoutIntent = LoginActivity.loginActIntent(getApplicationContext());
-                startActivity(logoutIntent);
 
+                // reset login credentials
+                SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+                prefs.edit()
+                        .putString("bearerToken", "")
+                        .putInt("userID", -1)
+                        .apply();
+
+                Intent intent = new Intent(MainMenu.this, LoginActivity.class);// New activity
+                startActivity(intent);
+                finish();
             }
         });
 

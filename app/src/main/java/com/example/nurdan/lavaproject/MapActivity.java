@@ -1,21 +1,18 @@
 package com.example.nurdan.lavaproject;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -31,10 +28,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.security.acl.Group;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
 
 public class MapActivity extends FragmentActivity implements
@@ -55,22 +54,48 @@ public class MapActivity extends FragmentActivity implements
     private Location mLastKnownLocation;
     ArrayList<LatLng> MarkerPoints;
 
+    ArrayList<String> nameList = new ArrayList<>();
+    ArrayList<LatLng> groupPoints = new ArrayList<>();
+    ArrayList<Double> latArray = new ArrayList<>();
+    ArrayList<Double> lngArray = new ArrayList<>();
     private ProgramSingletonController localInstance = ProgramSingletonController.getCurrInstance();
-
-
+    private boolean arrivalFlag = false;
+    JSONObject currGPS = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         MarkerPoints = new ArrayList<>();
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         getLocationPermission();
         initializeMapFrag();
         makeListBtn();
         makeCreateBtn();
+        setupBackBtn();
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        getGroupList test = new getGroupList();
+        test.execute();
+
+        if (!arrivalFlag){
+            handleGPS();
+        }
+    }
+
+    private void handleGPS() {
+        Handler handler = new Handler();
+        Runnable runnableCode = new Runnable() {
+            @Override
+            public void run() {
+                setGPS test2 = new setGPS();
+                test2.execute();
+                Log.d("Handlers", "Called on main thread");
+                //todo: implement arrival check
+            }
+        };
+        handler.postDelayed(runnableCode, 30000);
+        handler.post(runnableCode);
     }
 
     private void makeListBtn () {
@@ -94,6 +119,16 @@ public class MapActivity extends FragmentActivity implements
                 else {
                     Toast.makeText(getApplicationContext(), "Please select start and destination", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+    }
+
+    private void setupBackBtn() {
+        Button btn = findViewById(R.id.mapBackBtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), MainMenu.class));
             }
         });
     }
@@ -124,6 +159,7 @@ public class MapActivity extends FragmentActivity implements
         if (MarkerPoints.size() > 2) {
             MarkerPoints.clear();
             mMap.clear();
+            createGroupMarkers();
         }
 
         MarkerPoints.add(point);
@@ -153,18 +189,90 @@ public class MapActivity extends FragmentActivity implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-//        startActivity(new Intent(this, GroupActivity.class));
+        Toast.makeText(this, "To join, click 'View Groups'.", Toast.LENGTH_LONG).show();
+    }
+
+    private class setGPS extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            getDeviceLocation();
+            if (mLastKnownLocation != null) {
+                Log.d("test setLastGpsLocation", mLastKnownLocation.toString());
+                localInstance.setLastGpsLocation(mLastKnownLocation, getApplicationContext());
+
+                currGPS = localInstance.getLastGpsLocation(localInstance.getUserID(), getApplicationContext());
+                Log.d("test getLastGpsLocation", "curr gps of " + localInstance.getUserID() + ": " + currGPS.toString());
+            }
+            if(mLastKnownLocation == null)
+            {
+                Log.d("setLastGpsLocation", "mLastKnownLocation is null");
+            }
+            return null;
+        }
+    }
+
+    private class getGroupList extends AsyncTask<Void,Void,Void> {
+        JSONArray original;
+        ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
+        @Override
+        protected Void doInBackground(Void... voids) {
+            original = currInstance.getGroupList(getApplicationContext());
+            Log.d("testing getgrouplist: ", original.toString());
+            for (int i = 0; i < original.length(); i++) {
+                JSONObject childJSONObject = null;
+                try {
+                    childJSONObject = original.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (childJSONObject != null) {
+                        if (!childJSONObject.getString("groupDescription").equals("null")){
+                            nameList.add(childJSONObject.getString("groupDescription"));
+                            latArray.add(childJSONObject.getJSONArray("routeLatArray").getDouble(0));
+                            lngArray.add(childJSONObject.getJSONArray("routeLngArray").getDouble(0));
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            Log.d("onpost: test name: ", nameList.toString());
+            Log.d("onpost: lat points: ", latArray.toString());
+            Log.d("onpost: lng points: ", lngArray.toString());
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if (mLocationPermissionGranted) {
+                createGroupMarkers();
+            }
+        }
     }
 
     private void createGroupMarkers(){
-        localInstance.getGroupList(getApplicationContext());
-        //todo: use cluster markers (googel it)
+        for (int i = 0; i < nameList.size(); i++){
+            try {
+                groupPoints.add(new LatLng(latArray.get(i), lngArray.get(i)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            makeMarker(groupPoints.get(i), nameList.get(i));
+        }
     }
 
-    private void createMarker(LatLng point, String markerName){
-        mMap.addMarker(new MarkerOptions()
-                .position(point)
-                .title(markerName));
+    private void makeMarker(LatLng point, String markerName){
+        MarkerOptions option = new MarkerOptions();
+        option.position(point);
+        option.title("Group: " + markerName);
+        option.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+        option.alpha(0.7f);
+        mMap.addMarker(option);
     }
 
     private void getLocationPermission() {
@@ -200,7 +308,6 @@ public class MapActivity extends FragmentActivity implements
                 updateLocationUI();
             }
         }
-
     }
 
     private void updateLocationUI() {
@@ -222,10 +329,6 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 
-    public static Intent makeIntent(Context context) {
-        return new Intent(context,MapActivity.class);
-    }
-
     private void getDeviceLocation() {
     /*
      * Get the best and most recent location of the device, which may be null in rare
@@ -240,6 +343,7 @@ public class MapActivity extends FragmentActivity implements
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = (Location) task.getResult();
+                            Log.d(TAG, "mLastKnownLocation: " + mLastKnownLocation);
                             if (mLastKnownLocation == null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mDefaultLocation.latitude,

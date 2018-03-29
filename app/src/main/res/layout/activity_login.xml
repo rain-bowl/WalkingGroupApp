@@ -66,7 +66,6 @@
 
             <EditText
                 android:id="@+id/usernameText"
-                android:text="@string/test_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/username_input_hint"
@@ -95,7 +94,6 @@
                 android:id="@+id/passText"
                 android:layout_width="238dp"
                 android:layout_height="wrap_content"
-                android:text="@string/test_password"
                 android:hint="@string/password_input_hint"
                 android:inputType="textPassword" />
         </TableRow>
@@ -107,11 +105,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="168dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="268dp"
+        android:indeterminate="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:indeterminate="true"/>
-
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
