@@ -1,7 +1,6 @@
 package ApplicationLogic;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.Layout;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -61,14 +60,6 @@ public class ProgramSingletonController {
         return this.currLoggedInUser;
     }
 
-    public void setBearerToken(String t){
-        this.bearerToken = t;
-    }
-
-    public void setUserID(Integer id){
-        this.userID = id;
-    }
-
     //used for test, can delete
     /*
     //saves curr email, bearer toekn
@@ -114,14 +105,6 @@ public class ProgramSingletonController {
         Log.d(TAG, "logIn: UserIDTEST " + this.userID   );
         Log.d(TAG, "logIn: MONITORED BY TEST " +currLoggedInUser.getMonitorsOtherUsers());
         //saveEmail(email, this.bearerToken, appContext);
-
-        //save token in shared preferences
-        SharedPreferences prefs = appContext.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
-        prefs.edit()
-                .putString("bearerToken", bearerToken)
-                .putInt("userID", userID)
-                .apply();
-
         return logInStatus;
     }
 
@@ -150,35 +133,16 @@ public class ProgramSingletonController {
     }
 
     //Adds new user to be monitored by another
-    public Boolean addUsrMonitor(String userEmail,Context appContext){
-        Log.d(TAG, "addUsrMonitor: Beaerer Token " + this.bearerToken );
-        Boolean successFlag;
+    public void addUsrMonitor(int monitorID, String userEmail, String bearerToken, Context appContext){
         AccountApiInteractions getId = new AccountApiInteractions();
         UserMonitor currInstance = new UserMonitor();
-        int tempUsrID = getId.getDatabaseUserID(userEmail, appContext, this.bearerToken);
-        successFlag = currInstance.addMonitoredUser(userID, tempUsrID, this.bearerToken, appContext);
-        return successFlag;
+        int tempUsrID = getId.getDatabaseUserID(userEmail, appContext);
+        currInstance.addMonitoredUser(monitorID, tempUsrID, bearerToken, appContext);
     }
-
-    public Boolean addUsrMonitorYou(String userEmail, Context appContext){
-        Log.d(TAG, "addUsrMonitorYou: Bearer Token " + this.bearerToken);
-        Boolean successFlag;
-        AccountApiInteractions getMonitorID = new AccountApiInteractions();
-        UserMonitor currMonitorInstance = new UserMonitor();
-        int tempMonitorID = getMonitorID.getDatabaseUserID(userEmail, appContext, this.bearerToken);
-        successFlag = currMonitorInstance.addUsrToMonitorYou(userID, tempMonitorID, this.bearerToken, appContext);
-        return successFlag;
-    }
-    // Delete a user from the list of monitored users
-    public boolean deleteMonitoredUsr(int userToDelete, Context appContext){
+    //Deletes a user from the list of monitored users
+    public void deleteMonitoredUsr(int monitorID, int dltdUser, Context appContext){
         UserMonitor currInstance = new UserMonitor();
-        return currInstance.stopMonitoringUser(this.userID, userToDelete, this.bearerToken, appContext);
-    }
-
-    // Delete a user from the list who are monitoring you
-    public boolean deleteMonitoringMeUser(int userToDelete, Context appContext) {
-        UserMonitor currInstance = new UserMonitor();
-        return currInstance.stopMonitoringUser(userToDelete, this.userID, this.bearerToken, appContext);
+        currInstance.stopMonitoringUser(monitorID, dltdUser, bearerToken, appContext);
     }
 
 
@@ -190,6 +154,7 @@ public class ProgramSingletonController {
         UserMonitor currInstance = new UserMonitor();
         try{
            tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -216,7 +181,7 @@ public class ProgramSingletonController {
         else return null;
     }
 
-    public ArrayList<Integer> getIDsWhoMonitorThis(Context appContext){
+      public ArrayList<String> getUsersWhoMonitorThisID(Context appContext){
         JSONArray tempArr = null;
         UserMonitor currInstance = new UserMonitor();
         try{
@@ -226,27 +191,13 @@ public class ProgramSingletonController {
             e.printStackTrace();
         }
         if (tempArr != null){
-            return createUserListID(tempArr, appContext);
+            return createUserList(tempArr, appContext);
         }
         else return null;
     }
 
-    // Get ids of monitoring me
-    public ArrayList<Integer> getUsersMonitoredIDs(Context appContext){
-        JSONArray tempArr = null;
-        UserMonitor currInstance = new UserMonitor();
-        try{
-            tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        if(tempArr != null) {
-            return createUserListID(tempArr, appContext);
-        }
-        else return null;
-    }
-
+    //Creates a list of users from the provided jsonArray and then stores them in an array list for easy access
+    //Used when displaying people in the user monitors.
     private ArrayList<String> createUserList(JSONArray jsonArr, Context appContext){
         JSONObject tempJSONObject;
         ArrayList<String> tempUserStorage = new ArrayList<>();
@@ -263,21 +214,7 @@ public class ProgramSingletonController {
         return tempUserStorage;
     }
 
-    private ArrayList<Integer> createUserListID(JSONArray jsonArr, Context appContext){
-        JSONObject tempJSONObject;
-        ArrayList<Integer> tempUserStorage = new ArrayList<>();
-        ArrayAdapter<Integer> tempArrAdapter;
-        for(int i = 0; i < jsonArr.length(); i++){
-            try {
-                tempJSONObject = jsonArr.getJSONObject(i);
-                tempUserStorage.add(tempJSONObject.getInt("id"));
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return tempUserStorage;
-    }
+
 
     /* group functions */
     /* need to implement/test */
@@ -351,5 +288,22 @@ public class ProgramSingletonController {
         bearerToken = currInstance.getBearerToken();
     }
 
+
+    /* These methods are related to messaging */
+    public JSONArray getMessagesForUser(Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        Log.d(TAG, "getMessagesForUser: Inputs " + userID + " " + bearerToken);
+        return currInstance.getMessagesForSingleUser(userID, bearerToken, currContext);
+    }
+
+    public void sendMsgToGroup(String message, int groupID, Boolean emergencyStatus, Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        currInstance.newMessageToGroup(message, groupID, emergencyStatus, bearerToken, currContext);
+    }
+
+    public void sendMsgToParents(String message, Boolean emergencyStatus, Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        currInstance.newMessageToParents(message, userID, emergencyStatus, bearerToken, currContext);
+    }
 
 }
