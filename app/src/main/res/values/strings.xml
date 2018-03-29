@@ -97,4 +97,5 @@
     <string name="editing_group">Editing Group</string>
     <string name="current_members_in_group">Current Members in Group:</string>
     <string name="tap_on_member_to_view_information">Tap on member to view information</string>
+    <string name="viewing_current_group_members_of">Viewing Current Group Members of:</string>
 </resources>
