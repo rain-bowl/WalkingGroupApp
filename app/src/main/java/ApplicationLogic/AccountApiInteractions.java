@@ -312,6 +312,8 @@ public class AccountApiInteractions {
         return list;
     }
 
+    // will delete later, backup
+
     /*
         public void getGroupDetails(String currToken, int groupID, Context currContext){
             AndroidNetworking.initialize(currContext);
@@ -390,6 +392,7 @@ public class AccountApiInteractions {
         }
     }
 
+    // will delete later, backup
     /*
     public void updateGroup(int groupID, final String newDescription, final double latitude, final double longitude, Context appContext){
         //Initialize androidNetworking library with current activity context
@@ -505,7 +508,7 @@ public class AccountApiInteractions {
         }
     }
 
-    public void setLastGpsLocation(String currToken, int currUserID, Location lastKnownLocation, Context currContext) {
+ /*   public void setLastGpsLocation(String currToken, int currUserID, Location lastKnownLocation, Context currContext) {
         JSONObject gpsInfo = new JSONObject();
         try {
             gpsInfo.put("lat", lastKnownLocation.getLatitude());
@@ -535,5 +538,5 @@ public class AccountApiInteractions {
             Log.d(TAG, "setLastGpsLocation: Server error code: "  + serverResponse.getError().getErrorCode());
             Log.d(TAG, "setLastGpsLocation: More error info: " + serverResponse.getError().getResponse());
         }
-    }
+    }*/
 }
