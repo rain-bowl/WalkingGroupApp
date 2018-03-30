@@ -2,18 +2,24 @@ package ApplicationLogic;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.text.Layout;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.graphics.Point;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.example.nurdan.lavaproject.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +30,8 @@ import static android.content.ContentValues.TAG;
 public class ProgramSingletonController {
     private String bearerToken;
     private int userID;
-    private String userEmail;
-    private JSONObject jsonResponse;
+    private int currGroupID;
+    private String currGroupName;
     private AccountApiInteractions currInstance;
     Boolean logInStatus = false;
     private static ProgramSingletonController instance;
@@ -33,6 +39,7 @@ public class ProgramSingletonController {
     private User currLoggedInUser;
     private ArrayList<Integer> groupID = new ArrayList<>();
     private ArrayList<String>  groupNames = new ArrayList<>();
+    private int currMemberID;
 
 
     private  ProgramSingletonController(){
@@ -50,6 +57,38 @@ public class ProgramSingletonController {
         }
     }
 
+    public int getCurrMemberID() {
+        return currMemberID;
+    }
+
+    public void setCurrMemberID(int currMemberID) {
+        this.currMemberID = currMemberID;
+    }
+
+    public void setUserID (int currUser) {
+        this.userID = currUser;
+    }
+
+    public void setCurrGroupID (int groupID) {
+        this.currGroupID = groupID;
+    }
+
+    public int getCurrGroupID () {
+        return this.currGroupID;
+    }
+
+    public String getCurrGroupName() {
+        return this.currGroupName;
+    }
+
+    public void setCurrGroupName(String currGroupName) {
+        this.currGroupName = currGroupName;
+    }
+
+    public void setBearerToken(String token) {
+        this.bearerToken = token;
+    }
+
     public int getUserID(){
         currInstance = new AccountApiInteractions();
         return currInstance.getUserID();
@@ -62,36 +101,6 @@ public class ProgramSingletonController {
     public User getCurrLoggedInUser(){
         return this.currLoggedInUser;
     }
-
-    public void setBearerToken(String t){
-        this.bearerToken = t;
-    }
-
-    public void setUserID(Integer id){
-        this.userID = id;
-    }
-
-    //used for test, can delete
-    /*
-    //saves curr email, bearer toekn
-    private void saveEmail(String email, String token, Context context){
-        userEmail = email;
-        bearerToken = token;
-    }
-
-    private String getEmail(Context context){
-        return userEmail;
-    }
-
-
-    public int getCurrUserID(Context appContext){
-        currInstance = new AccountApiInteractions();
-        userEmail = getEmail(appContext);
-        int tempUserID = currInstance.getDatabaseUserID(userEmail, appContext);
-        return tempUserID;
-    }
-
-    */
 
     public User getLoggedInUserProfile(){
         return this.currLoggedInUser;
@@ -144,12 +153,23 @@ public class ProgramSingletonController {
         return currLoggedInUser.returnJsonUserInfo();
     }
 
+    public JSONObject getUserInfoByID(Integer id, Context appContext) {
+        AccountApiInteractions currInstance = new AccountApiInteractions();
+        return currInstance.getUserInfoByID(id, this.bearerToken, appContext);
+    }
+
     //Networking method which sends a post request to server to edit user info.
     public Boolean editUserInformation(JSONObject newInformation, Context currContext){
         currInstance = new AccountApiInteractions();
+        Log.d(TAG, "editUserInformation: USER INFO JSON " + newInformation.toString());
+        return currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
+    }
 
-       currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
-        return null;
+    // Edit monitoring users
+    public Boolean editUserInformationById(JSONObject newInfo, Integer userMonitorID, Context currContext) {
+        currInstance = new AccountApiInteractions();
+        Log.d("EDITMONITOR", "" + userMonitorID + " JSON: " + newInfo.toString());
+        return currInstance.editDatabaseUserProfile(newInfo, currContext, userMonitorID, this.bearerToken);
     }
 
     //Adds new user to be monitored by another
@@ -189,16 +209,37 @@ public class ProgramSingletonController {
     public ArrayList<String> getUsersMonitored(Context appContext){
         Log.d(TAG, "getUsersMonitored: USERID" + this.userID);
         Log.d(TAG, "getUsersMonitored: TOKENBEARER " + this.bearerToken);
-         JSONArray tempArr = null;
+        JSONArray tempArr = null;
         UserMonitor currInstance = new UserMonitor();
         try{
-           tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
+            tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
+            Log.d(TAG, "getUsersMonitored temparr: " + tempArr);
         }
         catch (Exception e){
             e.printStackTrace();
         }
         if(tempArr != null) {
             return createUserList(tempArr, appContext);
+        }
+        else return null;
+    }
+
+
+    // Method to get users who are monitored by the currently logged in user.
+    public JSONArray getMonitoredUsersJSONArray(Context appContext){
+        Log.d(TAG, "getMonitoredUsersJSONArray: USERID" + this.userID);
+        Log.d(TAG, "getMonitoredUsersJSONArray: TOKENBEARER " + this.bearerToken);
+        JSONArray tempArr = null;
+        UserMonitor currInstance = new UserMonitor();
+        try{
+            tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
+            Log.d(TAG, "getMonitoredUsersJSONArray temparr: " + tempArr);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        if(tempArr != null) {
+            return tempArr;
         }
         else return null;
     }
@@ -312,6 +353,15 @@ public class ProgramSingletonController {
     public ArrayList<Integer> getGroupIDList(){
         return this.groupID;
     }
+
+
+    public JSONObject getUserByID(int ID, Context context){
+        currInstance = new AccountApiInteractions();
+        JSONObject currUserInfo = currInstance.getUserByID(this.bearerToken, ID, context);
+        Log.d(TAG, "getUserByID: currUserInfo: " + currUserInfo);
+        return currUserInfo;
+    }
+
     /* group functions */
     /* need to implement/test */
 
@@ -329,59 +379,81 @@ public class ProgramSingletonController {
     }
 
         //create new group
-    public void createNewGroup(String groupDescription, int leaderID, LatLng start, LatLng dest, Context appContext){
+    public void createNewGroup(String groupDescription, LatLng start, LatLng dest, Context appContext){
         currInstance = new AccountApiInteractions();
-        currInstance.createNewGroup(groupDescription, leaderID, start, dest, appContext);
-        bearerToken = currInstance.getBearerToken();
+        Log.d(TAG, "createNewGroup: USERID: " + this.userID);
+        Log.d(TAG, "createNewGroup: TOKENBEARER: " + this.bearerToken);
+        String currToken = this.bearerToken;
+        int leaderID = this.userID;
+        currInstance.createNewGroup(currToken, groupDescription, leaderID, start, dest, appContext);
     }
 
     //get group info
-    public void getGroupDetails(int groupID, Context appContext){
+    public JSONObject getGroupDetails(int groupID, Context appContext){
+        String currToken = this.bearerToken;
         currInstance = new AccountApiInteractions();
-        currInstance.getGroupDetails(groupID, appContext);
-        bearerToken = currInstance.getBearerToken();
+        return currInstance.getGroupDetails(currToken, groupID, appContext);
     }
 
     //get list of all groups
     public JSONArray getGroupList(Context appContext){
         currInstance = new AccountApiInteractions();
-        bearerToken = currInstance.getBearerToken();
-        return currInstance.getGroupList(appContext);
+        String currToken = this.bearerToken;
+        JSONArray list = null;
+        try{
+            list = currInstance.getGroupList(currToken, appContext);
+            Log.d(TAG, "getGroupList: " + list);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(list != null){
+            return list;
+        }
+        else {
+            return null;
+        }
     }
 
     //update existing group info
-    public void updateGroup(int groupID, final String newDescription, final double latitude, final double longitude, Context appContext){
+    public void updateGroup(int groupID, String newDescription, JSONArray latitude, JSONArray longitude, Context appContext){
         currInstance = new AccountApiInteractions();
-        currInstance.updateGroup(groupID, newDescription, latitude, longitude, appContext);
-        bearerToken = currInstance.getBearerToken();
+        if (newDescription == null) {
+            newDescription = "No Name";
+        }
+        if (latitude.length() == 0) {
+            latitude.put(0);
+        }
+        if (longitude.length() == 0) {
+            longitude.put(0);
+        }
+        currInstance.updateGroup(this.bearerToken, groupID, this.userID, newDescription, latitude, longitude, appContext);
     }
 
     // delete group
     public void deleteGroup(int groupID, Context appContext) {
         currInstance = new AccountApiInteractions();
-        currInstance.deleteGroup(groupID, appContext);
-        bearerToken = currInstance.getBearerToken();
+        currInstance.deleteGroup(this.bearerToken, groupID, appContext);
     }
 
     // get group members
-    public void getGroupMembers(int groupID, Context appContext){
+    public JSONArray getGroupMembers(int groupID, Context appContext){
         currInstance = new AccountApiInteractions();
-        currInstance.getGroupMembers(groupID, appContext);
-        bearerToken = currInstance.getBearerToken();
+        return currInstance.getGroupMembers(this.bearerToken, groupID, appContext);
     }
 
     // add group member
-    public void addGroupMember(int groupID, final int memberID, Context appContext) {
+    public void addGroupMember(int groupID, Context appContext) {
         currInstance = new AccountApiInteractions();
-        currInstance.addGroupMember(groupID, memberID, appContext);
-        bearerToken = currInstance.getBearerToken();
+        currInstance.addGroupMember(this.bearerToken, groupID, this.userID, appContext);
     }
 
     // remove group member
-    public void removeGroupMember(int groupID, final int memberID, Context appContext) {
+    // todo: implement support for removing monitored users
+    public void removeGroupMember(int groupID, Context appContext) {
         currInstance = new AccountApiInteractions();
-        currInstance.removeGroupMember(groupID, memberID, appContext);
-        bearerToken = currInstance.getBearerToken();
+        currInstance.removeGroupMember(this.bearerToken, groupID, this.userID, appContext);
     }
 
 
@@ -407,5 +479,13 @@ public class ProgramSingletonController {
         UserMessagingService currInstance = new UserMessagingService();
         currInstance.newMessageToParents(message, userID, emergencyStatus, bearerToken, currContext);
     }
+    public void setLastGpsLocation(Location lastKnown, Context appContext){
+        currInstance = new AccountApiInteractions();
+        currInstance.setLastGpsLocation(this.bearerToken, this.userID, lastKnown, appContext);
+    }
 
+    public JSONObject getLastGpsLocation(int UserID, Context appContext) {
+        currInstance = new AccountApiInteractions();
+        return currInstance.getLastGpsLocation(this.bearerToken, UserID, appContext);
+    }
 }

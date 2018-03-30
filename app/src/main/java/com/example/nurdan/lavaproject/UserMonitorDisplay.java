@@ -21,12 +21,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ProgressBar;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 import ApplicationLogic.ProgramSingletonController;
+import ApplicationLogic.UserMonitor;
 import UIFragmentClasses.AddUserDialogFragment;
 
 public class UserMonitorDisplay extends AppCompatActivity {
@@ -51,35 +54,79 @@ public class UserMonitorDisplay extends AppCompatActivity {
     private void setUpToolBar() {
         Toolbar toolbar = findViewById(R.id.monitorToolBar);
         setSupportActionBar(toolbar);
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        ListView listMonitorThem = (ListView) findViewById(R.id.usersMonitoredView);
+        ListView listMonitorMe = (ListView) findViewById(R.id.usersWhoMonitoreYouView);
+        Integer checkedMonitorThem = listMonitorThem.getCheckedItemPosition();
+        Integer checkedMonitorMe = listMonitorMe.getCheckedItemPosition();
         switch (item.getItemId()) {
             case R.id.add_monitor_user:
                 AppCompatDialogFragment addUserFragment = new AddUserDialogFragment();
                 addUserFragment.show(getSupportFragmentManager(), "addUsr");
                 break;
-            case R.id.delete_monitor_user:
-                SparseBooleanArray monitoredList = ((ListView) findViewById(R.id.usersMonitoredView)).getCheckedItemPositions();
-                SparseBooleanArray monitoringMelist = ((ListView) findViewById(R.id.usersWhoMonitoreYouView)).getCheckedItemPositions();
 
-                if(monitoredList == null && monitoringMelist == null) {
-                    Toast.makeText(this, "Select user to delete", Toast.LENGTH_SHORT).show();
+            case R.id.delete_monitor_user:
+                Log.d("CHECKED", "" + checkedMonitorMe);
+
+                if(checkedMonitorThem != -1) deleteMonitorUser(checkedMonitorThem, retrievedMonitoringIDs, R.id.usersMonitoredView);
+                else if(checkedMonitorMe != -1) deleteMonitorUser(checkedMonitorMe, retrievedMonitoringMeIDs, R.id.usersWhoMonitoreYouView);
+                break;
+
+            case R.id.info_monitor_user:
+                Intent otherUsers = new Intent(UserMonitorDisplay.this, display_other_user_info.class);
+                Integer checked = -1;
+                Boolean isMonitored;
+                if(checkedMonitorThem != -1) {
+                    checked = retrievedMonitoringIDs.get(checkedMonitorThem);
+                    isMonitored = true;
+                }
+                else if(checkedMonitorMe != -1) {
+                    checked = retrievedMonitoringMeIDs.get(checkedMonitorMe);
+                    isMonitored = false;
+                }
+                else {
+                    Toast.makeText(UserMonitorDisplay.this, "Must select user", Toast.LENGTH_SHORT).show();
                     break;
                 }
 
-                if(monitoredList != null) deleteMonitoringUsers(retrievedMonitoringIDs, R.id.usersMonitoredView);
-                if(monitoringMelist != null) deleteUsersMonitoringMe(retrievedMonitoringMeIDs, R.id.usersWhoMonitoreYouView);
+                otherUsers.putExtra("otherUserID", checked);
+                otherUsers.putExtra("isMonitored", isMonitored);
+                startActivity(otherUsers);
+                finish(); // in case information is modified
                 break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteMonitoringUsers(ArrayList<Integer> userIds, Integer listID) {
+    private void deleteMonitorUser(Integer userID, ArrayList<Integer> listID, Integer listviewID) {
+        ListView listMonitorThem = (ListView) findViewById(R.id.usersMonitoredView);
+        ListView listMonitorMe = (ListView) findViewById(R.id.usersWhoMonitoreYouView);
+        ListView list = findViewById(listviewID);
+
+        Log.d("DELETEUSER", "with ID " + listID.get(userID));
+
+        if(listMonitorMe == list) {
+            AsyncDeleteMonitoringMeUsers delUser = new AsyncDeleteMonitoringMeUsers();
+            Integer delId = listID.get(userID);
+            ArrayList<Integer> d = new ArrayList<>();
+            d.add(delId);
+            delUser.execute(d);
+        } else if (listMonitorThem == list) {
+            AsyncDeleteMonitoredUser delUser = new AsyncDeleteMonitoredUser();
+            Integer delId = listID.get(userID);
+            ArrayList<Integer> d = new ArrayList<>();
+            d.add(delId);
+            delUser.execute(d);
+        }
+    }
+
+    /*private void deleteMonitoringUsers(ArrayList<Integer> userIds, Integer listID) {
         ListView displayList = (ListView) findViewById(listID);
         SparseBooleanArray checked = displayList.getCheckedItemPositions();
         // check if item is checked
@@ -90,7 +137,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
         ArrayList<Integer> checkedUsers = new ArrayList<>();
         for (int i = 0, len = checked.size(); i < len; i++) {
             if (checked.valueAt(i)) {
-                String s = ((TextView) displayList.getChildAt(i)).getText().toString();
+                //String s = ((TextView) displayList.getChildAt(i)).getText().toString();
                 int id = userIds.get(i);
                 checkedUsers.add(id);
             }
@@ -100,31 +147,9 @@ public class UserMonitorDisplay extends AppCompatActivity {
 
         String lenUsers = String.format(Locale.CANADA, "Stopped monitoring %d users %s", checkedUsers.size(), Arrays.toString(checkedUsers.toArray()));
         Toast.makeText(this, lenUsers, Toast.LENGTH_SHORT).show();
-    }
+    }*/
 
-    private void deleteUsersMonitoringMe(ArrayList<Integer> userIds, Integer listID) {
-        ListView displayList = (ListView) findViewById(listID);
-        SparseBooleanArray checked = displayList.getCheckedItemPositions();
-        // check if item is checked
-        if (checked == null) {
-            Toast.makeText(this, "Select user to delete", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        ArrayList<Integer> checkedUsers = new ArrayList<>();
-        for (int i = 0, len = checked.size(); i < len; i++) {
-            if (checked.valueAt(i)) {
-                String s = ((TextView) displayList.getChildAt(i)).getText().toString();
-                int id = userIds.get(i);
-                checkedUsers.add(id);
-            }
-        }
-        AsyncDeleteMonitoringMeUsers deleteUsers = new AsyncDeleteMonitoringMeUsers();
-        deleteUsers.execute(checkedUsers);
 
-        String lenUsers = String.format(Locale.CANADA, "Stopped monitoring %d users %s", checkedUsers.size(), Arrays.toString(checkedUsers.toArray()));
-        Toast.makeText(this, lenUsers, Toast.LENGTH_SHORT).show();
-    }
-    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.taskmenu, menu);
@@ -151,9 +176,22 @@ public class UserMonitorDisplay extends AppCompatActivity {
                 ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.user_listview_display_layout, retrievedUsers);
                 displayMntrdUser.setAdapter(listViewAdapter);
             } else {
-                ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_multiple_choice, retrievedUsers);
-                displayMntrdUser.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+                ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_single_choice, retrievedUsers);
+                displayMntrdUser.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
                 displayMntrdUser.setAdapter(listViewAdapter);
+                displayMntrdUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        // Make sure only one item is selected
+                        ListView list1 = findViewById(R.id.usersMonitoredView);
+                        ListView list2 = findViewById(R.id.usersWhoMonitoreYouView);
+                        if(list1 == parent)
+                            list2.setItemChecked(-1, true);
+                        else
+                            list1.setItemChecked(-1, true);
+                    }
+                });
             }
     }
 
@@ -219,16 +257,29 @@ public class UserMonitorDisplay extends AppCompatActivity {
         @Override
         protected Void doInBackground(ArrayList<Integer>...arrayLists) {
             ArrayList<Integer> list = arrayLists[0];
+            Log.d("DELETEDUSER", " with size " + list.size());
+
             for (int i = 0, len = list.size(); i < len; i++) {
                 int id = list.get(i);
                 currInstanceSingleton.deleteMonitoringMeUser(id, UserMonitorDisplay.this);
-                Log.d("DELETEDUSER", " with ID " + id);
             }
             return null;
         }
         @Override
         protected void onPostExecute(Void param) {
             new getUsrsMntrThis().execute();
+        }
+    }
+
+    private class AsyncGetUserInfo extends  AsyncTask<ArrayList<Integer>, Void, Void> {
+        @Override
+        protected Void doInBackground(ArrayList<Integer>...arrayLists) {
+            ArrayList<Integer> list = arrayLists[0];
+            currInstanceSingleton.getUserInfoByID(list.get(0), UserMonitorDisplay.this);
+            return null;
+        }
+        @Override
+        protected  void onPostExecute(Void param) {
         }
     }
 }

@@ -1,6 +1,8 @@
 package ApplicationLogic;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -8,15 +10,21 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseAndJSONObjectRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.example.nurdan.lavaproject.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.os.Handler;
+import java.util.logging.LogRecord;
+
 import okhttp3.Response;
 
 import static com.google.android.gms.plus.PlusOneDummyView.TAG;
+import static java.security.AccessController.getContext;
 
 /*This class will contain all network calls as well as data formatting needed to implement the messaging between users.
 
@@ -24,6 +32,9 @@ import static com.google.android.gms.plus.PlusOneDummyView.TAG;
 public class UserMessagingService {
     private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
     private final String baseURL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443";
+    JSONObject currMsg= new JSONObject();
+    private ProgramSingletonController localMsg=ProgramSingletonController.getCurrInstance();
+
 
 
     /*Sends a message to the specified group. The message is held in as one string.
@@ -39,12 +50,29 @@ public class UserMessagingService {
             e.printStackTrace();
         }
 
+        Log.d(TAG, "newMessageToGroup: Before sending message to group #" + groupID + ", jsonobject: " + requestBody);
+
+
         AndroidNetworking.initialize(currContext);
         AndroidNetworking.post(baseURL + "/messages/togroup/" + groupID)
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
                 .addJSONObjectBody(requestBody)
-                .build();
+                .build()
+                .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener(){
+            @Override
+            public void onResponse(Response httpresp, JSONObject response) {
+                if(httpresp.code() == 201){
+                    Log.d(TAG, "newMessageToGroup onResponse: Success when sending message to group " + httpresp.code());
+                    Log.d(TAG, "newMessageToGroup onResponse: Success when sending message to group, response: " + response);
+                }
+            }
+
+            @Override
+            public void onError(ANError anError) {
+                Log.d(TAG, "onError: Error when sending message to groups!" + anError.getErrorDetail());
+            }
+        });
     }
 
     /*Sends a message to the parents of a user
@@ -219,5 +247,47 @@ public class UserMessagingService {
         return null;
     }
 
+    public JSONObject getMessageByDefault() {
+
+        ANRequest retrieveMessagesRequest = AndroidNetworking.get(baseURL + "&is-emergency=true")
+                .addHeaders("apiKey", apiKey)
+                .build();
+
+        ANResponse<JSONObject> serverResponse = retrieveMessagesRequest.executeForJSONObject();
+
+        if (serverResponse.isSuccess()) {
+            if (serverResponse.getOkHttpResponse().code() == 200) {
+                return serverResponse.getResult();
+            }
+        }
+        return null;
+    }
+
+
+    //update the message every 30s to show up,using Handler to  refresh the UI thread
+
+    private class setMessages extends  AsyncTask<Void,Void,Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            //anything that i can retrieve the Msg defalut
+            getMessageByDefault();
+
+
+            return null;
+        }
+    }
+    private void handlerMsgCall(){
+         Handler handler = new Handler();
+         Runnable runnableCode=new Runnable() {
+             @Override
+             public void run() {
+                setMessages messagebox=new setMessages();
+                messagebox.execute();
+             }
+         };
+        handler.postDelayed(runnableCode,60000);
+        handler.post(runnableCode);
+
+    }
 
 }

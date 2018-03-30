@@ -59,19 +59,5 @@ public class newMessageTargetsDialogFragment extends DialogFragment{
 
 
 
-   /* private class getUserNames extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... voids)
-        {
-            currInsance.getGroupNames(getContext());
-            return null;
-        }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            targetDisplay.setAdapter(null);
-            ArrayAdapter<String> groupNameAdapter = new ArrayAdapter<String>(getContext(), R.layout.user_listview_display_layout, currInsance.getGroupNamesList());
-            targetDisplay.setAdapter(groupNameAdapter);
-        }
-    }*/
 }

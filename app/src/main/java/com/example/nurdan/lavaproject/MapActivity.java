@@ -1,21 +1,18 @@
 package com.example.nurdan.lavaproject;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -24,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -31,10 +29,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.security.acl.Group;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
 
 public class MapActivity extends FragmentActivity implements
@@ -52,25 +52,103 @@ public class MapActivity extends FragmentActivity implements
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     private final LatLng mDefaultLocation = new LatLng(0, 0);
+    private LatLng destinationCoord = new LatLng(0, 0);
     private Location mLastKnownLocation;
     ArrayList<LatLng> MarkerPoints;
 
+    ArrayList<String> nameList = new ArrayList<>();
+    ArrayList<LatLng> groupStartPoints = new ArrayList<>();
+    ArrayList<LatLng> groupEndPoints = new ArrayList<>();
+    ArrayList<Double> latArray = new ArrayList<>();
+    ArrayList<Double> lngArray = new ArrayList<>();
+    ArrayList<String> monitoredNames = new ArrayList<>();
+    ArrayList<LatLng> monitoredLatLng = new ArrayList<>();
+    ArrayList<String> monitoredTime = new ArrayList<>();
+
     private ProgramSingletonController localInstance = ProgramSingletonController.getCurrInstance();
-
-
+    private boolean arrivalFlag = true;
+    JSONObject currGPS = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         MarkerPoints = new ArrayList<>();
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         getLocationPermission();
         initializeMapFrag();
         makeListBtn();
         makeCreateBtn();
+        setupBackBtn();
+        setOnOffBtn();
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        getGroupList test = new getGroupList();
+        test.execute();
+
+        Toast.makeText(getApplicationContext(), R.string.mapIntroText, Toast.LENGTH_LONG).show();
+
+        if (!arrivalFlag){
+            handleGPS();
+        }
+    }
+
+    private void arrivalCheck() {
+        for (int i = 0; i < monitoredNames.size(); i++){
+            LatLng currMonitoredCoord = monitoredLatLng.get(i);
+            if (currMonitoredCoord.latitude - destinationCoord.latitude <= +- 0.001 && currMonitoredCoord.longitude - destinationCoord.longitude <= +- 0.001){
+                Handler handler = new Handler();
+                Runnable runnableCode = new Runnable() {
+                    @Override
+                    public void run() {
+                        arrivalFlag = true;
+                    }
+                };
+                handler.postDelayed(runnableCode, 600000);
+                handler.post(runnableCode);
+            }
+        }
+    }
+
+    private void setOnOffBtn(){
+        Button list = findViewById(R.id.onOffBtn);
+        list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (arrivalFlag){
+                    if (destinationCoord == null || destinationCoord == mDefaultLocation){
+                        Toast.makeText(getApplicationContext(), "Please click the marker of the group that you wish to track first.", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        arrivalFlag = false;
+                        Toast.makeText(getApplicationContext(), "GPS Tracking ON, monitoring enabled", Toast.LENGTH_LONG).show();
+                        handleGPS();
+                    }
+                }
+                else {
+                    arrivalFlag = true;
+                    Toast.makeText(getApplicationContext(), "GPS Tracking OFF, monitoring disabled", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void handleGPS() {
+        if (!arrivalFlag){
+            Handler handler = new Handler();
+            Runnable runnableCode = new Runnable() {
+                @Override
+                public void run() {
+                    setGPS test2 = new setGPS();
+                    test2.execute();
+                    Log.d("Handlers", "Called on main thread");
+                    arrivalCheck();
+                    createMonitorMarkers();
+                }
+            };
+            handler.postDelayed(runnableCode, 30000);
+            handler.post(runnableCode);
+        }
     }
 
     private void makeListBtn () {
@@ -94,6 +172,16 @@ public class MapActivity extends FragmentActivity implements
                 else {
                     Toast.makeText(getApplicationContext(), "Please select start and destination", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+    }
+
+    private void setupBackBtn() {
+        Button btn = findViewById(R.id.mapBackBtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), MainMenu.class));
             }
         });
     }
@@ -124,6 +212,7 @@ public class MapActivity extends FragmentActivity implements
         if (MarkerPoints.size() > 2) {
             MarkerPoints.clear();
             mMap.clear();
+            createGroupMarkers();
         }
 
         MarkerPoints.add(point);
@@ -146,33 +235,165 @@ public class MapActivity extends FragmentActivity implements
     }
 
     @Override
-    public boolean onMarkerClick(final Marker marker) {
+    public boolean onMarkerClick(Marker marker) {
         marker.showInfoWindow();
+        LatLng markerTag = (LatLng) marker.getTag();
+        if (marker.getTag() != null && markerTag != mDefaultLocation){
+            destinationCoord = markerTag;
+            Log.d("onMarkerClick", "destinationCoord: " + destinationCoord);
+        }
         return false;
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-//        startActivity(new Intent(this, GroupActivity.class));
+        Toast.makeText(this, "To join group, click 'View Groups'.", Toast.LENGTH_LONG).show();
+    }
+
+    // setgps for curr user, get gps for monitored users
+    private class setGPS extends AsyncTask<Void, Void, Void> {
+        JSONArray retrievedMonitoredUsers;
+        ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            retrievedMonitoredUsers = currInstance.getMonitoredUsersJSONArray(getApplicationContext());
+            Log.d("getMonitoredUsersJSARR:", retrievedMonitoredUsers.toString());
+
+            for (int i = 0; i < retrievedMonitoredUsers.length(); i++) {
+                JSONObject childJSONObject = null;
+                try {
+                    childJSONObject = retrievedMonitoredUsers.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (childJSONObject != null) {
+                        double lat;
+                        double lng;
+                        monitoredNames.add(childJSONObject.getString("name"));
+                        lat = childJSONObject.getJSONObject("lastGpsLocation").getDouble("lat");
+                        lng = childJSONObject.getJSONObject("lastGpsLocation").getDouble("lng");
+                        monitoredLatLng.add(new LatLng(lat, lng));
+                        monitoredTime.add(childJSONObject.getJSONObject("lastGpsLocation").getString("timestamp"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            Log.d("getMonitoredUsersJSARR", "monitoredNames" + monitoredNames.toString());
+            Log.d("getMonitoredUsersJSARR", "monitoredLatLng" + monitoredLatLng.toString());
+            Log.d("getMonitoredUsersJSARR", "monitoredTime" + monitoredTime.toString());
+
+            // set/get lastgps
+
+            getDeviceLocation();
+            if (mLastKnownLocation != null) {
+                Log.d("test setLastGpsLocation", mLastKnownLocation.toString());
+                localInstance.setLastGpsLocation(mLastKnownLocation, getApplicationContext());
+
+                currGPS = localInstance.getLastGpsLocation(localInstance.getUserID(), getApplicationContext());
+                Log.d("test getLastGpsLocation", "curr gps of " + localInstance.getUserID() + ": " + currGPS.toString());
+            }
+            if(mLastKnownLocation == null)
+            {
+                Log.d("setLastGpsLocation", "mLastKnownLocation is null");
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if (mLocationPermissionGranted) {
+                createMonitorMarkers();
+            }
+        }
+    }
+
+    private class getGroupList extends AsyncTask<Void,Void,Void> {
+        JSONArray original;
+        ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            original = currInstance.getGroupList(getApplicationContext());
+
+            Log.d("testing getgrouplist: ", original.toString());
+            for (int i = 0; i < original.length(); i++) {
+                JSONObject childJSONObject = null;
+                try {
+                    childJSONObject = original.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (childJSONObject != null) {
+                        if (!childJSONObject.getString("groupDescription").equals("null")){
+                            nameList.add(childJSONObject.getString("groupDescription"));
+                            latArray.add(childJSONObject.getJSONArray("routeLatArray").getDouble(0));
+                            lngArray.add(childJSONObject.getJSONArray("routeLngArray").getDouble(0));
+                            LatLng end = new LatLng(childJSONObject.getJSONArray("routeLatArray").getDouble(1), childJSONObject.getJSONArray("routeLngArray").getDouble(1));
+                            Log.d("get destination point", "latlng end: " + end);
+                            groupEndPoints.add(end);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            Log.d("onpost: test name: ", nameList.toString());
+            Log.d("onpost: lat points: ", latArray.toString());
+            Log.d("onpost: lng points: ", lngArray.toString());
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if (mLocationPermissionGranted) {
+                createGroupMarkers();
+            }
+        }
     }
 
     private void createGroupMarkers(){
-        localInstance.getGroupList(getApplicationContext());
-        //todo: use cluster markers (googel it)
+        BitmapDescriptor colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+
+        for (int i = 0; i < nameList.size(); i++){
+            try {
+                groupStartPoints.add(new LatLng(latArray.get(i), lngArray.get(i)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            makeMarker(groupStartPoints.get(i), groupEndPoints.get(i),"Group: ", nameList.get(i), colour);
+        }
+
+        Log.d(TAG, "createGroupMarkers, done");
     }
 
-    private void createMarker(LatLng point, String markerName){
-        mMap.addMarker(new MarkerOptions()
-                .position(point)
-                .title(markerName));
+    private void createMonitorMarkers(){
+        for (int i = 0; i < monitoredNames.size(); i++){
+            BitmapDescriptor colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+            makeMarker(monitoredLatLng.get(i), mDefaultLocation, "Monitoring user: " + monitoredNames.get(i), " at: " + monitoredTime.get(i), colour);
+            Log.d(TAG, "createMonitorMarkers, created for user: " + monitoredNames.get(i) + " at: " + monitoredLatLng.get(i) + " at time: " + monitoredTime.get(i));
+        }
+    }
+
+    private void makeMarker(LatLng start, LatLng end, String markerTitle, String markerName, BitmapDescriptor colour){
+        MarkerOptions option = new MarkerOptions();
+        option.position(start);
+        option.title(markerTitle + markerName);
+        option.icon(colour);
+        option.alpha(0.7f);
+        mMap.addMarker(option).setTag(end);
     }
 
     private void getLocationPermission() {
-    /*
-     * Request location permission, so that we can get the location of the
-     * device. The result of the permission request is handled by a callback,
-     * onRequestPermissionsResult.
-     */
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -200,7 +421,6 @@ public class MapActivity extends FragmentActivity implements
                 updateLocationUI();
             }
         }
-
     }
 
     private void updateLocationUI() {
@@ -222,10 +442,6 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 
-    public static Intent makeIntent(Context context) {
-        return new Intent(context,MapActivity.class);
-    }
-
     private void getDeviceLocation() {
     /*
      * Get the best and most recent location of the device, which may be null in rare
@@ -240,6 +456,7 @@ public class MapActivity extends FragmentActivity implements
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = (Location) task.getResult();
+                            Log.d(TAG, "mLastKnownLocation: " + mLastKnownLocation);
                             if (mLastKnownLocation == null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mDefaultLocation.latitude,
