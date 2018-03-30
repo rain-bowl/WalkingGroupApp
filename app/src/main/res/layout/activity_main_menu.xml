@@ -10,7 +10,7 @@
         android:id="@+id/usrMonitor"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="117dp"
+        android:layout_marginEnd="116dp"
         android:layout_marginTop="16dp"
         android:text="@string/usrMonitors"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,27 +21,27 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="116dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="13dp"
         android:text="@string/mngGroups"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usrMonitor" />
+        app:layout_constraintTop_toBottomOf="@+id/inboxAccessBtn" />
 
     <Button
         android:id="@+id/usrLogout"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="116dp"
+        android:layout_marginEnd="117dp"
         android:layout_marginTop="16dp"
         android:text="@string/logout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/panicBtn" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="80dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="24dp"
         android:text="@string/walking_group_project"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,8 +51,8 @@
         android:id="@+id/mapbtn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="117dp"
-        android:layout_marginTop="101dp"
+        android:layout_marginEnd="116dp"
+        android:layout_marginTop="40dp"
         android:text="@string/title_activity_map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -67,4 +67,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mngGroups"
         app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <Button
+        android:id="@+id/panicBtn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="117dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/panicBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileBtn" />
+
+    <Button
+        android:id="@+id/inboxAccessBtn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="117dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/messageInboxBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usrMonitor" />
 </android.support.constraint.ConstraintLayout>

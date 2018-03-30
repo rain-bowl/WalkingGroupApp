@@ -8,6 +8,9 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.graphics.Point;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.example.nurdan.lavaproject.R;
@@ -145,13 +148,23 @@ public class ProgramSingletonController {
         return currLoggedInUser.returnJsonUserInfo();
     }
 
+    public JSONObject getUserInfoByID(Integer id, Context appContext) {
+        AccountApiInteractions currInstance = new AccountApiInteractions();
+        return currInstance.getUserInfoByID(id, this.bearerToken, appContext);
+    }
 
     //Networking method which sends a post request to server to edit user info.
     public Boolean editUserInformation(JSONObject newInformation, Context currContext){
         currInstance = new AccountApiInteractions();
+        Log.d(TAG, "editUserInformation: USER INFO JSON " + newInformation.toString());
+        return currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
+    }
 
-       currInstance.editDatabaseUserProfile(newInformation, currContext, userID, bearerToken);
-        return null;
+    // Edit monitoring users
+    public Boolean editUserInformationById(JSONObject newInfo, Integer userMonitorID, Context currContext) {
+        currInstance = new AccountApiInteractions();
+        Log.d("EDITMONITOR", "" + userMonitorID + " JSON: " + newInfo.toString());
+        return currInstance.editDatabaseUserProfile(newInfo, currContext, userMonitorID, this.bearerToken);
     }
 
     //Adds new user to be monitored by another
@@ -205,6 +218,9 @@ public class ProgramSingletonController {
         }
         else return null;
     }
+
+
+
 
 
     public ArrayList<String> getUsersWhoMonitorThis(Context appContext){
@@ -386,6 +402,23 @@ public class ProgramSingletonController {
         currInstance.removeGroupMember(this.bearerToken, groupID, this.userID, appContext);
     }
 
+
+    /* These methods are related to messaging */
+    public JSONArray getMessagesForUser(Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        Log.d(TAG, "getMessagesForUser: Inputs " + userID + " " + bearerToken);
+        return currInstance.getMessagesForSingleUser(userID, bearerToken, currContext);
+    }
+
+    public void sendMsgToGroup(String message, int groupID, Boolean emergencyStatus, Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        currInstance.newMessageToGroup(message, groupID, emergencyStatus, bearerToken, currContext);
+    }
+
+    public void sendMsgToParents(String message, Boolean emergencyStatus, Context currContext){
+        UserMessagingService currInstance = new UserMessagingService();
+        currInstance.newMessageToParents(message, userID, emergencyStatus, bearerToken, currContext);
+    }
     public void setLastGpsLocation(Location lastKnown, Context appContext){
         currInstance = new AccountApiInteractions();
         currInstance.setLastGpsLocation(this.bearerToken, this.userID, lastKnown, appContext);

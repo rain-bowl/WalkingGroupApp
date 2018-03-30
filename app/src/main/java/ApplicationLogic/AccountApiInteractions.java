@@ -171,10 +171,12 @@ public class AccountApiInteractions {
     /*Sends of the provided JsonObject input to the server to edit the users information. CURRENTLY NOT WORKING PROPERLY!!!*/
     public Boolean editDatabaseUserProfile(JSONObject jsonBody, Context currContext, int userID, String currBearer) {
         AndroidNetworking.initialize(currContext);
+        Log.d(TAG, "editDatabaseUserProfile: ID AND BEARER " + userID + "" + currBearer);
         ANRequest sendUserInfo = AndroidNetworking.post(baseURL + "/users/" + userID)
+                .setContentType("application/json")
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", currBearer)
-                .addApplicationJsonBody(jsonBody)
+                .addJSONObjectBody(jsonBody)
                 .build();
 
         ANResponse<JSONObject> serverResponse = sendUserInfo.executeForJSONObject();
@@ -191,6 +193,26 @@ public class AccountApiInteractions {
         }
 
         return false;
+    }
+
+    public JSONObject getUserInfoByID(int id, String bearerKey, Context currContext){
+        AndroidNetworking.initialize(currContext);
+
+        ANRequest getUserProfile = AndroidNetworking.get(baseURL + "/users/" + id)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearerKey)
+                .build();
+
+        ANResponse<JSONObject> serverResponse = getUserProfile.executeForJSONObject();
+        if(serverResponse.isSuccess()){
+            JSONObject response = serverResponse.getResult();
+            Log.d(TAG, "getUserProfileByID: SUCCESS " + response.toString());
+            return response;
+        }
+        else{
+            Log.d(TAG, "getUserProfileByID: FAILURE " + serverResponse.getError().getErrorBody());
+            return null;
+        }
     }
 
 
