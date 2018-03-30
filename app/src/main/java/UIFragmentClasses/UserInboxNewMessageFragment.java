@@ -117,7 +117,8 @@ public class UserInboxNewMessageFragment extends Fragment{
                 else{
                     Toast.makeText(getContext(),R.string.noSendDestinationWarning,Toast.LENGTH_LONG).show();
                 }
-
+                MessageInbox instance = (MessageInbox) getActivity();
+                instance.setFragment(new UserInboxDisplayFragment());
             }
         });
 
