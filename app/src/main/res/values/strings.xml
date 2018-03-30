@@ -128,4 +128,5 @@
     <string name="title_activity_monitor_map">Map</string>
     <string name="view_monitored_users">List Users</string>
     <string name="find_child">Find Child</string>
+    <string name="is_monitored_by_detail"> is monitored by:</string>
 </resources>

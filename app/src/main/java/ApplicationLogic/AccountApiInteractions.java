@@ -393,6 +393,8 @@ public class AccountApiInteractions {
         ANResponse<JSONObject> serverResponse = groupDetailsReq.executeForJSONObject();
         if (serverResponse.isSuccess()) {
             details = serverResponse.getResult();
+            Log.d(TAG, "getGroupDetails: success! respon: " + details);
+
         } else {
             Log.d(TAG, "getGroupDetails: Error from server" + serverResponse.getError());
         }

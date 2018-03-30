@@ -25,6 +25,7 @@ import ApplicationLogic.ProgramSingletonController;
 public class GroupMemberInfoActivity extends AppCompatActivity {
     ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
     int currMemberID;
+    String currMemberName;
     JSONObject currUserInfo;
     JSONObject monitorInfo;
     JSONArray monitoredByArray;
@@ -35,6 +36,8 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
     String monitorCell;
     String monitorHome;
     ListView monitorInfoList;
+    TextView currName;
+    ArrayList<String> info = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,7 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group_member_info);
 
         monitorInfoList = findViewById(R.id.monitorInfoList);
+        currName = findViewById(R.id.currName);
         setupBackBtn();
 
         currMemberID = currInstance.getCurrMemberID();
@@ -62,7 +66,8 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
         Log.d("GroupMemberInfoActivity", "getContactInfo monitorEmail: " + monitorEmail);
         Log.d("GroupMemberInfoActivity", "getContactInfo monitorCell: " + monitorCell);
         Log.d("GroupMemberInfoActivity", "getContactInfo monitorHome: " + monitorHome);
-        String output = "name: " + monitorName+" email: "+monitorEmail+" cell: "+monitorCell+ " home: "+monitorHome;
+        String output = monitorName+"\nEmail: "+monitorEmail+"\nCell: "+monitorCell+ "\nHome: "+monitorHome;
+        info.add(output);
         Log.d("GroupMemberInfoActivity", "getContactInfo output: " + output);
     }
 
@@ -74,6 +79,15 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return monitorValueInfo;
+    }
+
+    private void setInfo (String text) {
+        currName.setText(text);
+    }
+
+    private void setInfoView(ListView list, ArrayList<String> names) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
+        list.setAdapter(adapter);
     }
 
 // need to make it work rip, may change to dialog
@@ -90,6 +104,8 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
             currUserInfo = currInstance.getUserByID(currMemberID, getApplicationContext());
             Log.d("GroupMemberInfoActivity", "currUserInfo: " + currUserInfo);
             try {
+                currMemberName = currUserInfo.getString("name");
+                Log.d("GroupMemberInfoActivity", "currMemberName: " + currMemberName);
                 monitoredByArray = currUserInfo.getJSONArray("monitoredByUsers");
                 for (int i = 0; i < monitoredByArray.length(); i++){
                     int id = monitoredByArray.getJSONObject(i).getInt("id");
@@ -102,6 +118,12 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             return null;
+        }
+
+        @Override
+        public void onPostExecute (Void voida) {
+            setInfo(currMemberName);
+            setInfoView(monitorInfoList, info);
         }
     }
 

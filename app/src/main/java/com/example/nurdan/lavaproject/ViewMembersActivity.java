@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -23,8 +24,8 @@ public class ViewMembersActivity extends AppCompatActivity {
     ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
     ArrayList<String> membersNameList = new ArrayList<>();
     ArrayList<Integer> membersIDList = new ArrayList<>();
-    ArrayList<String> leaderNameList = new ArrayList<>();
-    ArrayList<Integer> leaderIDList = new ArrayList<>();
+    String leaderName;
+    int leaderID;
     ListView currMembers;
     int currGroupId;
     String currGroupName;
@@ -43,6 +44,20 @@ public class ViewMembersActivity extends AppCompatActivity {
 
         getMembers test2 = new getMembers();
         test2.execute();
+
+        ListClick(currMembers);
+    }
+
+    private void ListClick (final ListView list) {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
+                Object member = list.getItemAtPosition(position);
+                Log.d("ListClick", "member: " + member);
+                currInstance.setCurrMemberID(membersIDList.get(position));
+                Log.d("ListClick", "memberID: " + membersIDList.get(position));
+                startActivity(new Intent(getApplicationContext(), GroupMemberInfoActivity.class));
+            }
+        });
     }
 
     private class getMembers extends AsyncTask<Void,Void,Void> {
@@ -50,6 +65,21 @@ public class ViewMembersActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            JSONObject currGroupDetails = currInstance.getGroupDetails(currGroupId, getApplicationContext());
+            Log.d("getGroupDetails: ", currGroupDetails.toString());
+
+            try {
+                JSONObject leaderfield = currGroupDetails.getJSONObject("leader");
+                Log.d("getGroupDetails: ", "leaderfield: " + leaderfield);
+                leaderID = leaderfield.getInt("id");
+                leaderName = (currInstance.getUserByID(leaderID, getApplicationContext())).getString("name");
+                membersNameList.add(leaderName + " - Leader");
+                membersIDList.add(leaderID);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.d("currGroupDetails", "leaderName: " + leaderName);
+
             original = currInstance.getGroupMembers(currGroupId, getApplicationContext());
             Log.d("getGroupMembers: ", original.toString());
 
@@ -61,13 +91,9 @@ public class ViewMembersActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 try {
-                    JSONObject leaderField = new JSONObject();
-
                     if (childJSONObject != null) {
                         membersNameList.add(childJSONObject.getString("name"));
                         membersIDList.add(childJSONObject.getInt("id"));
-/*                        leaderField.getJSONObject("leader");
-                        leaderIDList.add(leaderField.getInt("id"));*/
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
