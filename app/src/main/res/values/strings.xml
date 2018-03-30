@@ -129,4 +129,6 @@
     <string name="view_monitored_users">List Users</string>
     <string name="find_child">Find Child</string>
     <string name="is_monitored_by_detail"> is monitored by:</string>
+    <string name="mapIntroText">To enable real-time monitoring for you/your parent(s), please click \'TRACK ON/OFF\'.</string>
+    <string name="track_on_off">Track ON/OFF</string>
 </resources>
