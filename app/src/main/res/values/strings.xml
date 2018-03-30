@@ -125,4 +125,10 @@
     <string name="current_members_in_group">Current Members in Group:</string>
     <string name="tap_on_member_to_view_information">Tap on member to view information</string>
     <string name="viewing_current_group_members_of">Viewing Current Group Members of:</string>
+    <string name="title_activity_monitor_map">Map</string>
+    <string name="view_monitored_users">List Users</string>
+    <string name="find_child">Find Child</string>
+    <string name="is_monitored_by_detail"> is monitored by:</string>
+    <string name="mapIntroText">To enable real-time monitoring for you/your parent(s), please click \'TRACK ON/OFF\'.</string>
+    <string name="track_on_off">Track ON/OFF</string>
 </resources>

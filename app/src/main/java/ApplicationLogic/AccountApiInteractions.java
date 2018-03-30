@@ -123,6 +123,25 @@ public class AccountApiInteractions {
         }
     }
 
+    public JSONObject getUserByID (String currToken, int ID, Context currContext){
+        String URLPath = baseURL + "/users/" + ID;
+        JSONObject list = null;
+        AndroidNetworking.initialize(currContext);
+        ANRequest groupListReq = AndroidNetworking.get(URLPath)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currToken)
+                .build();
+        ANResponse<JSONObject> serverResponse = groupListReq.executeForJSONObject();
+        if (serverResponse.isSuccess()) {
+            list = serverResponse.getResult();
+        } else {
+            Log.d(TAG, "getUserByID: Error from server" + serverResponse.getError());
+        }
+        if (list != null) {
+            Log.d(TAG, "onResponse: JSONObject b/f return: " + list.toString());
+        }
+        return list;
+    }
 
     //Class which recovers a users ID number from the database. This is needed to implement the user monitoring.
     public int getDatabaseUserID(String email, Context currContext, String bearer) {
@@ -240,6 +259,29 @@ public class AccountApiInteractions {
             }*/
         }
     }
+
+    public String getGroupName(String bearerToken, Context currContext, int groupID){
+        AndroidNetworking.initialize(currContext);
+
+        ANRequest groupNameRequest = AndroidNetworking.get(baseURL + "/groups/" + groupID)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearerToken)
+                .build();
+
+        ANResponse<JSONObject> serverResponse = groupNameRequest.executeForJSONObject();
+        if(serverResponse.getOkHttpResponse().code() == 200){
+            String temp;
+            try{
+                temp = serverResponse.getResult().getString("groupDescription");
+                return temp;
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
 
 
     //Recover bearer token on login
@@ -374,6 +416,8 @@ public class AccountApiInteractions {
         ANResponse<JSONObject> serverResponse = groupDetailsReq.executeForJSONObject();
         if (serverResponse.isSuccess()) {
             details = serverResponse.getResult();
+            Log.d(TAG, "getGroupDetails: success! respon: " + details);
+
         } else {
             Log.d(TAG, "getGroupDetails: Error from server" + serverResponse.getError());
         }

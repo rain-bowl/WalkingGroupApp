@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.nurdan.lavaproject.MessageInbox;
 import com.example.nurdan.lavaproject.R;
 
 import java.util.ArrayList;
@@ -23,10 +24,9 @@ import ApplicationLogic.ProgramSingletonController;
 
  */
 public class newMessageTargetsDialogFragment extends DialogFragment{
-    ArrayList<String> targetList;
+    ArrayList<Integer> groupID;
     ProgramSingletonController currInsance;
     ListView targetDisplay;
-    ArrayAdapter <String> messageTargetAdapter;
 
     public newMessageTargetsDialogFragment(){
         //empty constructor
@@ -42,29 +42,22 @@ public class newMessageTargetsDialogFragment extends DialogFragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         targetDisplay = view.findViewById(R.id.messageTargetsListview);
         currInsance = ProgramSingletonController.getCurrInstance();
+        groupID = currInsance.getGroupIDList();
+        ArrayAdapter<String> groupNameAdapter = new ArrayAdapter<String>(getContext(), R.layout.user_listview_display_layout, currInsance.getGroupNamesList());
+        targetDisplay.setAdapter(groupNameAdapter);
+
+        targetDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MessageInbox instance = (MessageInbox) getActivity();
+                instance.setGroupID(position);
+                dismiss();
+            }
+        });
 
     }
 
-   /* private class getUserNames extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected Void doInBackground(Void... voids) {
-            return null;
-        }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if(targetList == null || targetList.size() == 0){
-                targetList.add("There is nobody currently monitoring you");
-            }
-            messageTargetAdapter = new ArrayAdapter<String>(getContext(), R.layout.user_listview_display_layout, targetList);
-            targetDisplay.setAdapter(messageTargetAdapter);
 
-            targetDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                }
-            });
-        }
-    }*/
 }

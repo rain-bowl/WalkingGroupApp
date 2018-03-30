@@ -37,6 +37,8 @@ public class ProgramSingletonController {
     private static ProgramSingletonController instance;
     private List<LatLng> listOfPoints = new ArrayList<>();
     private User currLoggedInUser;
+    private ArrayList<Integer> groupID = new ArrayList<>();
+    private ArrayList<String>  groupNames = new ArrayList<>();
     private int currMemberID;
 
 
@@ -119,7 +121,8 @@ public class ProgramSingletonController {
         currInstance.getDatabaseUserProfile(email, appContext);
         this.userID = currLoggedInUser.getID();
         Log.d(TAG, "logIn: UserIDTEST " + this.userID   );
-        Log.d(TAG, "logIn: MONITORED BY TEST " + currLoggedInUser.getMonitorsOtherUsers());
+        Log.d(TAG, "logIn: MONITORED BY TEST " +currLoggedInUser.getMonitorsOtherUsers());
+        getGroupNames(appContext);
         //saveEmail(email, this.bearerToken, appContext);
 
         //save token in shared preferences
@@ -204,11 +207,11 @@ public class ProgramSingletonController {
     public ArrayList<String> getUsersMonitored(Context appContext){
         Log.d(TAG, "getUsersMonitored: USERID" + this.userID);
         Log.d(TAG, "getUsersMonitored: TOKENBEARER " + this.bearerToken);
-         JSONArray tempArr = null;
+        JSONArray tempArr = null;
         UserMonitor currInstance = new UserMonitor();
         try{
-           tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
-           Log.d(TAG, "getUsersMonitored temparr: " + tempArr);
+            tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
+            Log.d(TAG, "getUsersMonitored temparr: " + tempArr);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -220,7 +223,24 @@ public class ProgramSingletonController {
     }
 
 
-
+    // Method to get users who are monitored by the currently logged in user.
+    public JSONArray getMonitoredUsersJSONArray(Context appContext){
+        Log.d(TAG, "getMonitoredUsersJSONArray: USERID" + this.userID);
+        Log.d(TAG, "getMonitoredUsersJSONArray: TOKENBEARER " + this.bearerToken);
+        JSONArray tempArr = null;
+        UserMonitor currInstance = new UserMonitor();
+        try{
+            tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
+            Log.d(TAG, "getMonitoredUsersJSONArray temparr: " + tempArr);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        if(tempArr != null) {
+            return tempArr;
+        }
+        else return null;
+    }
 
 
     public ArrayList<String> getUsersWhoMonitorThis(Context appContext){
@@ -299,6 +319,43 @@ public class ProgramSingletonController {
             }
         }
         return tempUserStorage;
+    }
+    public void getGroupNames(Context currContext){
+        ArrayList<String> temp = new ArrayList<>();
+        JSONArray tempGroupID;
+        AccountApiInteractions currInstance = new AccountApiInteractions();
+        try{
+            JSONObject tempUserProfile = getUserInfo();
+            tempGroupID = tempUserProfile.getJSONArray("leadsGroups");
+            if(tempGroupID != null && tempGroupID.length() != 0) {
+                for (int i = 0; i < tempGroupID.length(); i++) {
+                    JSONObject tempJson = tempGroupID.getJSONObject(i);
+                    int tempID = tempJson.getInt("id");
+                    groupID.add(tempID);
+                    groupNames.add(currInstance.getGroupName(this.bearerToken, currContext, tempID));
+                }
+            }
+            else {
+                groupNames.add("You are not the leader of any groups!");
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public ArrayList<String> getGroupNamesList (){
+        return groupNames;
+    }
+    public ArrayList<Integer> getGroupIDList(){
+        return this.groupID;
+    }
+
+
+    public JSONObject getUserByID(int ID, Context context){
+        currInstance = new AccountApiInteractions();
+        JSONObject currUserInfo = currInstance.getUserByID(this.bearerToken, ID, context);
+        Log.d(TAG, "getUserByID: currUserInfo: " + currUserInfo);
+        return currUserInfo;
     }
 
     /* group functions */
