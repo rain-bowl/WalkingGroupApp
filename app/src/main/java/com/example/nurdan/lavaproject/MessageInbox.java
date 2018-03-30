@@ -13,7 +13,7 @@ import UIFragmentClasses.UserInboxDisplayFragment;
 import UIFragmentClasses.UserInboxNewMessageFragment;
 
 public class MessageInbox extends AppCompatActivity {
-
+    int groupID = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,5 +59,12 @@ public class MessageInbox extends AppCompatActivity {
     public static Intent getInboxIntent(Context activityContext){
         Intent inboxIntent = new Intent(activityContext, MessageInbox.class);
         return inboxIntent;
+    }
+    public void setGroupID(int id){
+        groupID = id;
+    }
+
+    public Integer getGroupID(){
+      return this.groupID;
     }
 }

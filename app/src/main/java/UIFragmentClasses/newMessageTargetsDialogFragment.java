@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.nurdan.lavaproject.MessageInbox;
 import com.example.nurdan.lavaproject.R;
 
 import java.util.ArrayList;
@@ -48,8 +49,8 @@ public class newMessageTargetsDialogFragment extends DialogFragment{
         targetDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UserInboxNewMessageFragment tempFragment = (UserInboxNewMessageFragment) getParentFragment();
-                tempFragment.setGroupID(position);
+                MessageInbox instance = (MessageInbox) getActivity();
+                instance.setGroupID(position);
                 dismiss();
             }
         });

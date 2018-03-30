@@ -17,9 +17,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.nurdan.lavaproject.MessageInbox;
 import com.example.nurdan.lavaproject.R;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import ApplicationLogic.ProgramSingletonController;
 
@@ -35,6 +38,7 @@ public class UserInboxNewMessageFragment extends Fragment{
     Boolean groupFlag = false;             //Flags which decide whether something is clicked on or not.
     ProgramSingletonController currSingletonInstance;
     JSONObject userInfo;
+    ArrayList<Integer> groupIDList;
     int userID;
     int groupID;
     @Nullable
@@ -46,6 +50,8 @@ public class UserInboxNewMessageFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         currSingletonInstance = ProgramSingletonController.getCurrInstance();
+        groupIDList = currSingletonInstance.getGroupIDList();
+        final MessageInbox messageInstance = (MessageInbox) getActivity();
         //Attach widgets
         final ToggleButton sendToParents = view.findViewById(R.id.sendToPrntsTgl);
         final ToggleButton sendToGroup = view.findViewById(R.id.sendToGrpTgl);
@@ -89,6 +95,11 @@ public class UserInboxNewMessageFragment extends Fragment{
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               int idIndex = messageInstance.getGroupID();
+               if (idIndex != -1) {
+                   groupID = groupIDList.get(idIndex);
+               }
+
                 Log.d(TAG, "onClick: Group Id Check " + groupID);
                 if(parentFlag && groupFlag){
                     currSingletonInstance.sendMsgToGroup(message, groupID, false, getContext());
@@ -130,8 +141,5 @@ public class UserInboxNewMessageFragment extends Fragment{
 
     }
 
-    public void  setGroupID(int ID){
-        groupID = ID;
     }
 
-}
