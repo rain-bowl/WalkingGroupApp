@@ -21,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -58,6 +59,9 @@ public class MapActivity extends FragmentActivity implements
     ArrayList<LatLng> groupPoints = new ArrayList<>();
     ArrayList<Double> latArray = new ArrayList<>();
     ArrayList<Double> lngArray = new ArrayList<>();
+    ArrayList<String> monitoredNames = new ArrayList<>();
+    ArrayList<LatLng> monitoredLatLng = new ArrayList<>();
+
     private ProgramSingletonController localInstance = ProgramSingletonController.getCurrInstance();
     private boolean arrivalFlag = false;
     JSONObject currGPS = new JSONObject();
@@ -91,7 +95,7 @@ public class MapActivity extends FragmentActivity implements
                 setGPS test2 = new setGPS();
                 test2.execute();
                 Log.d("Handlers", "Called on main thread");
-                //todo: implement arrival check
+                createMonitorMarkers();
             }
         };
         handler.postDelayed(runnableCode, 30000);
@@ -182,19 +186,51 @@ public class MapActivity extends FragmentActivity implements
     }
 
     @Override
-    public boolean onMarkerClick(final Marker marker) {
+    public boolean onMarkerClick(Marker marker) {
         marker.showInfoWindow();
         return false;
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this, "To join, click 'View Groups'.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "To join group, click 'View Groups'.", Toast.LENGTH_LONG).show();
     }
 
+    // setgps for curr user, get gps for monitored users
     private class setGPS extends AsyncTask<Void, Void, Void> {
+        JSONArray retrievedMonitoredUsers;
+        ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
+
         @Override
         protected Void doInBackground(Void... voids) {
+            retrievedMonitoredUsers = currInstance.getMonitoredUsersJSONArray(getApplicationContext());
+            Log.d("getMonitoredUsersJSARR:", retrievedMonitoredUsers.toString());
+
+            for (int i = 0; i < retrievedMonitoredUsers.length(); i++) {
+                JSONObject childJSONObject = null;
+                try {
+                    childJSONObject = retrievedMonitoredUsers.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (childJSONObject != null) {
+                        double lat;
+                        double lng;
+                        monitoredNames.add(childJSONObject.getString("name"));
+                        lat = childJSONObject.getJSONObject("lastGpsLocation").getDouble("lat");
+                        lng = childJSONObject.getJSONObject("lastGpsLocation").getDouble("lng");
+                        monitoredLatLng.add(new LatLng(lat, lng));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            Log.d("getMonitoredUsersJSARR", "monitoredNames" + monitoredNames.toString());
+            Log.d("getMonitoredUsersJSARR", "monitoredLatLng" + monitoredLatLng.toString());
+
+            // set/get lastgps
+
             getDeviceLocation();
             if (mLastKnownLocation != null) {
                 Log.d("test setLastGpsLocation", mLastKnownLocation.toString());
@@ -209,14 +245,25 @@ public class MapActivity extends FragmentActivity implements
             }
             return null;
         }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if (mLocationPermissionGranted) {
+                createMonitorMarkers();
+            }
+        }
     }
 
     private class getGroupList extends AsyncTask<Void,Void,Void> {
         JSONArray original;
         ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
+
         @Override
         protected Void doInBackground(Void... voids) {
             original = currInstance.getGroupList(getApplicationContext());
+
             Log.d("testing getgrouplist: ", original.toString());
             for (int i = 0; i < original.length(); i++) {
                 JSONObject childJSONObject = null;
@@ -256,21 +303,33 @@ public class MapActivity extends FragmentActivity implements
     }
 
     private void createGroupMarkers(){
+        BitmapDescriptor colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+
         for (int i = 0; i < nameList.size(); i++){
             try {
                 groupPoints.add(new LatLng(latArray.get(i), lngArray.get(i)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            makeMarker(groupPoints.get(i), nameList.get(i));
+            makeMarker(groupPoints.get(i), "Group: ", nameList.get(i), colour);
+        }
+
+        Log.d(TAG, "createGroupMarkers, done");
+    }
+
+    private void createMonitorMarkers(){
+        for (int i = 0; i < monitoredNames.size(); i++){
+            BitmapDescriptor colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+            makeMarker(monitoredLatLng.get(i), "Monitoring user: ", monitoredNames.get(i), colour);
+            Log.d(TAG, "createMonitorMarkers, created for user: " + monitoredNames.get(i) + " at: " + monitoredLatLng.get(i));
         }
     }
 
-    private void makeMarker(LatLng point, String markerName){
+    private void makeMarker(LatLng point, String markerTitle, String markerName, BitmapDescriptor colour){
         MarkerOptions option = new MarkerOptions();
         option.position(point);
-        option.title("Group: " + markerName);
-        option.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+        option.title(markerTitle + markerName);
+        option.icon(colour);
         option.alpha(0.7f);
         mMap.addMarker(option);
     }

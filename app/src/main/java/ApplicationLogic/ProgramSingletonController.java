@@ -204,11 +204,11 @@ public class ProgramSingletonController {
     public ArrayList<String> getUsersMonitored(Context appContext){
         Log.d(TAG, "getUsersMonitored: USERID" + this.userID);
         Log.d(TAG, "getUsersMonitored: TOKENBEARER " + this.bearerToken);
-         JSONArray tempArr = null;
+        JSONArray tempArr = null;
         UserMonitor currInstance = new UserMonitor();
         try{
-           tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
-           Log.d(TAG, "getUsersMonitored temparr: " + tempArr);
+            tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
+            Log.d(TAG, "getUsersMonitored temparr: " + tempArr);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -220,7 +220,24 @@ public class ProgramSingletonController {
     }
 
 
-
+    // Method to get users who are monitored by the currently logged in user.
+    public JSONArray getMonitoredUsersJSONArray(Context appContext){
+        Log.d(TAG, "getMonitoredUsersJSONArray: USERID" + this.userID);
+        Log.d(TAG, "getMonitoredUsersJSONArray: TOKENBEARER " + this.bearerToken);
+        JSONArray tempArr = null;
+        UserMonitor currInstance = new UserMonitor();
+        try{
+            tempArr = currInstance.getMonitoredUsers(userID, bearerToken, appContext);
+            Log.d(TAG, "getMonitoredUsersJSONArray temparr: " + tempArr);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        if(tempArr != null) {
+            return tempArr;
+        }
+        else return null;
+    }
 
 
     public ArrayList<String> getUsersWhoMonitorThis(Context appContext){
