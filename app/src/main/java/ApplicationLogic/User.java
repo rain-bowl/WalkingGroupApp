@@ -1,7 +1,13 @@
 package ApplicationLogic;
 
+import android.location.Location;
+
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.time.Instant;
+import java.time.ZonedDateTime;
 
 
 //This class will store all information regarding the currently logged in user. It will be filled up on login
@@ -45,7 +51,7 @@ public class User {
             homePhoneNumber = retrievedInfo.getString("homePhone");
             grade = retrievedInfo.getString("grade");
             teacherName = retrievedInfo.getString("teacherName");
-            emergencyContactInfoInstruction = retrievedInfo.getString("emercencyContactInfo");
+            emergencyContactInfoInstruction = retrievedInfo.getString("emergencyContactInfo");
             monitoredByUsers = retrievedInfo.getJSONArray("monitoredByUsers");
             monitorsOtherUsers = retrievedInfo.getJSONArray("monitorsUsers");
             memberOfGroups = retrievedInfo.getJSONArray("memberOfGroups");
@@ -193,8 +199,8 @@ public class User {
         return lastGpsLocation;
     }
 
-    public void setLastGpsLocation(JSONObject lastGpsLocation) {
-        this.lastGpsLocation = lastGpsLocation;
+    public void setLastGpsLocation(JSONObject lastKnownLocation) {
+        this.lastGpsLocation = lastKnownLocation;
     }
 
     public String getUserHref() {

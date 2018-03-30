@@ -54,7 +54,6 @@ public class UserMonitorDisplay extends AppCompatActivity {
     private void setUpToolBar() {
         Toolbar toolbar = findViewById(R.id.monitorToolBar);
         setSupportActionBar(toolbar);
-
     }
 
     @Override
@@ -150,7 +149,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
         Toast.makeText(this, lenUsers, Toast.LENGTH_SHORT).show();
     }*/
 
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.taskmenu, menu);
