@@ -8,6 +8,8 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseAndJSONObjectRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.example.nurdan.lavaproject.R;
 
@@ -39,12 +41,29 @@ public class UserMessagingService {
             e.printStackTrace();
         }
 
+        Log.d(TAG, "newMessageToGroup: Before sending message to group #" + groupID + ", jsonobject: " + requestBody);
+
+
         AndroidNetworking.initialize(currContext);
         AndroidNetworking.post(baseURL + "/messages/togroup/" + groupID)
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerToken)
                 .addJSONObjectBody(requestBody)
-                .build();
+                .build()
+                .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener(){
+            @Override
+            public void onResponse(Response httpresp, JSONObject response) {
+                if(httpresp.code() == 201){
+                    Log.d(TAG, "newMessageToGroup onResponse: Success when sending message to group " + httpresp.code());
+                    Log.d(TAG, "newMessageToGroup onResponse: Success when sending message to group, response: " + response);
+                }
+            }
+
+            @Override
+            public void onError(ANError anError) {
+                Log.d(TAG, "onError: Error when sending message to groups!" + anError.getErrorDetail());
+            }
+        });
     }
 
     /*Sends a message to the parents of a user

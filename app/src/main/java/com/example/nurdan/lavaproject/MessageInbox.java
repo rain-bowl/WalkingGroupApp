@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -62,9 +63,11 @@ public class MessageInbox extends AppCompatActivity {
     }
     public void setGroupID(int id){
         groupID = id;
+        Log.d("messageinbox", "setGroupID: id: " + id + "groupid: " + groupID);
     }
 
     public Integer getGroupID(){
-      return this.groupID;
+        Log.d("messageinbox", "getGroupID: groupid: " + groupID);
+        return this.groupID;
     }
 }
