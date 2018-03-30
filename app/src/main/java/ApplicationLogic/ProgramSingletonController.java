@@ -296,6 +296,12 @@ public class ProgramSingletonController {
         return currInstance.getMessagesForSingleUser(userID, bearerToken, currContext);
     }
 
+    public JSONObject getMessageObjById(int msgID, Context currContext) {
+        UserMessagingService currInstance = new UserMessagingService();
+        return currInstance.getMessageById(msgID, this.userID, this.bearerToken, currContext);
+    }
+
+
     public void sendMsgToGroup(String message, int groupID, Boolean emergencyStatus, Context currContext){
         UserMessagingService currInstance = new UserMessagingService();
         currInstance.newMessageToGroup(message, groupID, emergencyStatus, bearerToken, currContext);

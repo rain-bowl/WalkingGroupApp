@@ -118,9 +118,33 @@ public class UserMessagingService {
                 Log.d(TAG, "getMessagesForSingleUser: Server response " + serverResponse.getResult().toString());
                 return serverResponse.getResult();
             }
+        } else {
+            Log.d(TAG, "getMessagesForSingleUser: error " + serverResponse.getError().toString());
         }
         return null;
     }
+
+    // Get message by ID
+    public JSONObject getMessageById(int messageId, int userId, String bearerToken, Context currContext) {
+        AndroidNetworking.initialize(currContext);
+        ANRequest retrieveMessagesRequest = AndroidNetworking.get(baseURL + "/messages/" + messageId)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearerToken)
+                .build();
+
+        ANResponse serverResponse = retrieveMessagesRequest.executeForJSONObject();
+
+        if(serverResponse.isSuccess()) {
+            if(serverResponse.getOkHttpResponse().code() == 200) {
+                Log.d(TAG, "getSingleMessage: Server response for message id " + messageId + " " + serverResponse.getResult().toString());
+                return (JSONObject) serverResponse.getResult();
+            }
+        } else {
+            Log.d(TAG, "getSingleMessage: message id " + messageId + " error " + serverResponse.getError().getErrorCode());
+        }
+        return null;
+    }
+
 
      //Gets all read messages for a single user. These can be both emergency and non-emergency
     public JSONArray getReadMessagesForSingleUser(int userID, String bearerToken, Context currContext){

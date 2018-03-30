@@ -46,6 +46,8 @@ public class MessageInbox extends AppCompatActivity {
             case R.id.mainMenuInboxItem:
                 Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
                 startActivity(mainMenu);
+                finish();
+                break;
         }
         return true;
     }

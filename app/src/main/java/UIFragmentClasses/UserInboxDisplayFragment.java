@@ -1,6 +1,7 @@
 package UIFragmentClasses;
 
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.nurdan.lavaproject.R;
 
@@ -31,7 +34,9 @@ public class UserInboxDisplayFragment extends Fragment {
     ListView inbox;
     ProgramSingletonController currSingletonInstance;
     JSONArray rawMessages;
+    ArrayList<Integer> messageId;
     ArrayList<String> messageText;
+    ArrayAdapter<String> messageAdapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,6 +47,7 @@ public class UserInboxDisplayFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         inbox = (ListView) view.findViewById(R.id.messageDisplayListivew);
         messageText = new ArrayList<>();
+        messageId = new ArrayList<>();
         GetMessages loadMessages = new GetMessages();
         loadMessages.execute();
     }
@@ -58,23 +64,66 @@ public class UserInboxDisplayFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             if(rawMessages == null || rawMessages.length() == 0){
                 messageText.add("You do not have any messages");
-                messageText.add("TESTETEST");
             }
             else {
                 for(int i = 0; i < rawMessages.length(); i++){
                     try {
                         JSONObject tempObject = rawMessages.getJSONObject(i);
-                        messageText.add(tempObject.getString("text"));
+                        String stringObj = tempObject.getString("text");
+
+                        // truncate messages
+                        String subText = stringObj.substring(0, Math.min(stringObj.length(), 10));
+                        messageText.add(subText + "...");
+
+                        Integer mId = tempObject.getInt("id");
+                        messageId.add(mId);
                     }
                     catch (Exception e){
                         e.printStackTrace();
                     }
                 }
             }
-            Log.d(TAG, "onPostExecute: About to load arrayAdapter!!!");
-            ArrayAdapter<String> messageAdapter = new ArrayAdapter<String>(getContext(),R.layout.user_listview_display_layout, messageText);
-            inbox.setAdapter(messageAdapter);
-            
+            Log.d(TAG, "messageIds: " + messageId.toString());
+
+            setupEventListener(getContext());
+        }
+    }
+
+    // get full message when message is clicked
+    private void setupEventListener(final Context context) {
+
+        Log.d(TAG, "onPostExecute: About to load arrayAdapter!!!");
+        messageAdapter = new ArrayAdapter<String>(context,R.layout.user_listview_display_layout, messageText);
+        inbox.setAdapter(messageAdapter);
+        inbox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(context, "POS:" + messageId.get(position), Toast.LENGTH_SHORT).show();
+
+                getOneMessage getMsg = new getOneMessage();
+                getMsg.execute(messageId.get(position));
+
+            }
+        });
+    }
+
+    private class getOneMessage extends AsyncTask<Integer,Void,JSONObject> {
+        @Override
+        protected JSONObject doInBackground(Integer... ints) {
+            int msgId = ints[0];
+            currSingletonInstance = ProgramSingletonController.getCurrInstance();
+            return currSingletonInstance.getMessageObjById(msgId, getContext());
+        }
+        @Override
+        protected void onPostExecute(JSONObject aMessage) {
+            String messageStr = "";
+            String fromUser;
+            try {
+                messageStr = aMessage.getString("text");
+            } catch (Exception e) {}
+            messageAdapter.clear();
+            messageAdapter.add(messageStr);
+            messageAdapter.notifyDataSetChanged();
         }
     }
 
