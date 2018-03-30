@@ -260,6 +260,29 @@ public class AccountApiInteractions {
         }
     }
 
+    public String getGroupName(String bearerToken, Context currContext, int groupID){
+        AndroidNetworking.initialize(currContext);
+
+        ANRequest groupNameRequest = AndroidNetworking.get(baseURL + "/groups/" + groupID)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearerToken)
+                .build();
+
+        ANResponse<JSONObject> serverResponse = groupNameRequest.executeForJSONObject();
+        if(serverResponse.getOkHttpResponse().code() == 200){
+            String temp;
+            try{
+                temp = serverResponse.getResult().getString("groupDescription");
+                return temp;
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
 
     //Recover bearer token on login
     public String getBearerToken() {

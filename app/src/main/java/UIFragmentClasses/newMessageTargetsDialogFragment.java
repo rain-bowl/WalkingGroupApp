@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.nurdan.lavaproject.MessageInbox;
 import com.example.nurdan.lavaproject.R;
 
 import java.util.ArrayList;
@@ -23,10 +24,9 @@ import ApplicationLogic.ProgramSingletonController;
 
  */
 public class newMessageTargetsDialogFragment extends DialogFragment{
-    ArrayList<String> targetList;
+    ArrayList<Integer> groupID;
     ProgramSingletonController currInsance;
     ListView targetDisplay;
-    ArrayAdapter <String> messageTargetAdapter;
 
     public newMessageTargetsDialogFragment(){
         //empty constructor
@@ -42,8 +42,22 @@ public class newMessageTargetsDialogFragment extends DialogFragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         targetDisplay = view.findViewById(R.id.messageTargetsListview);
         currInsance = ProgramSingletonController.getCurrInstance();
+        groupID = currInsance.getGroupIDList();
+        ArrayAdapter<String> groupNameAdapter = new ArrayAdapter<String>(getContext(), R.layout.user_listview_display_layout, currInsance.getGroupNamesList());
+        targetDisplay.setAdapter(groupNameAdapter);
+
+        targetDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MessageInbox instance = (MessageInbox) getActivity();
+                instance.setGroupID(position);
+                dismiss();
+            }
+        });
 
     }
+
+
 
 
 }
