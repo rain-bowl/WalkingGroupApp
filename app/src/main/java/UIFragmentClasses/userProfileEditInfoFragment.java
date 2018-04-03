@@ -85,6 +85,7 @@ public class userProfileEditInfoFragment extends Fragment {
         grade = view.findViewById(R.id.userGradeInput);
         teacher = view.findViewById(R.id.userTeacherInput);
         emergencyInfo = view.findViewById(R.id.userEmergencyInput);
+        //Set the display fields with the information we currently have.
         try {
             name.setText(userInformation.getString("name"));
             email.setText(userInformation.getString("email"));
@@ -105,7 +106,6 @@ public class userProfileEditInfoFragment extends Fragment {
         submitChanges = view.findViewById(R.id.submitChangesBtn);
 
         //Listeners to all inputs
-
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

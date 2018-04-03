@@ -13,7 +13,9 @@ import org.json.JSONObject;
 
 import ApplicationLogic.ProgramSingletonController;
 import UIFragmentClasses.MandatoryRegisterInformationFragment;
+/*This class is responsible for handling the logic when registering a new user
 
+ */
 public class RegisterActivity extends AppCompatActivity {
     private ProgramSingletonController localInstance;
     JSONObject serverCallBody;
@@ -23,8 +25,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         serverCallBody = new JSONObject();
         replaceFragment(new MandatoryRegisterInformationFragment());
-
-
     }
 
     public void replaceFragment(Fragment fragmentClass){
@@ -33,59 +33,60 @@ public class RegisterActivity extends AppCompatActivity {
         fTInstance.commit();
 }
 //Adds the provided key and provided object(either string or int) to the JsonObject which is used in creating a new user.
-public void addJson(String key, String content){
-        try{
-           if(content != null){
-                serverCallBody.put(key, content);
+    public void addJson(String key, String content){
+            try{
+                if(content != null){
+                    serverCallBody.put(key, content);
+                 }
+                else {
+                    serverCallBody.put(key, "Not provided");
+                 }
+                Log.d("Tag", "addJson: Show jsonObject contents " + serverCallBody.toString());
             }
-            else {
-                serverCallBody.put(key, "Not provided");
+            catch (Exception e){
+                e.printStackTrace();
             }
-            Log.d("Tag", "addJson: Show jsonObject contents " + serverCallBody.toString());
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-}
-//Overridden method to handle cases of input being an integer.
-public void addJson(String key, int content){
-        try{
-           if(content != 0){
-                serverCallBody.put(key, content);
-            }
-            else {
-                serverCallBody.put(key, 0);
-            }
-            Log.d("Tag", "addJson: Show jsonObject contents " + serverCallBody.toString());
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-}
+    }
 
-public void executeRegisterAction(){
-    asyncRunner instance = new asyncRunner();
-    instance.execute();
-}
+//Overridden method to handle cases of input being an integer.
+    public void addJson(String key, int content){
+            try{
+                if(content != 0){
+                    serverCallBody.put(key, content);
+                }
+                else {
+                    serverCallBody.put(key, "Not Provided");
+                }
+                Log.d("Tag", "addJson: Show jsonObject contents " + serverCallBody.toString());
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+    }
+
+    public void executeRegisterAction(){
+        asyncRunner instance = new asyncRunner();
+        instance.execute();
+    }
 
 
     //Static intent method to access activity
    public static Intent registerActIntent(Context actContext){
        return new Intent(actContext, RegisterActivity.class);
-
     }
 
-private class asyncRunner extends AsyncTask<Void,Void,Boolean>{
-    @Override
-    protected Boolean doInBackground(Void... voids) {
-        Boolean successFlag;
-        localInstance = ProgramSingletonController.getCurrInstance();
-        successFlag = localInstance.createNewUser(serverCallBody, getApplicationContext());
-        if(successFlag){
-            Intent successRegistration = LoginActivity.loginActIntent(getApplicationContext());
-            startActivity(successRegistration);
+    //Private async class to execute the network call to send the information for the new user.
+    private class asyncRunner extends AsyncTask<Void,Void,Boolean>{
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            Boolean successFlag;
+            localInstance = ProgramSingletonController.getCurrInstance();
+            successFlag = localInstance.createNewUser(serverCallBody, getApplicationContext());
+            if(successFlag){
+                Intent successRegistration = LoginActivity.loginActIntent(getApplicationContext());
+                startActivity(successRegistration);
+            }
+            return true;
         }
-        return true;
     }
-}
 }

@@ -14,11 +14,7 @@ import android.widget.EditText;
 
 import com.example.nurdan.lavaproject.R;
 import com.example.nurdan.lavaproject.RegisterActivity;
-
-/**
- * Created by yavor on 19/03/18.
- */
-
+//Fragment which handles the input of all non mandatory user information during registration.
 public class NonMandatoryRegisterInfoFragment extends Fragment{
     String address, cellphone, homePhone, grade, teacherName, emergencyInfo;
     int birthYear, birthMonth;
@@ -58,6 +54,7 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
                     birthYear = Integer.parseInt(s.toString());
                 }
                 catch (Exception e){
+                    birthYear = 0;
                 }
             }
         });
@@ -79,7 +76,7 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
                   birthMonth = Integer.parseInt(s.toString());
               }
               catch (Exception e){
-
+                  birthMonth = 0;
               }
             }
         });

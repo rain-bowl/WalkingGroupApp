@@ -26,18 +26,20 @@ public class UserProfile extends AppCompatActivity {
 
     }
 
+    //Loads the fragment which is passed as a parameter into the fragment container in the activity layou
     public void loadFragment(Fragment fragmentClass){
         FragmentTransaction fTInstance = getSupportFragmentManager().beginTransaction();
         fTInstance.replace(R.id.userProfileFragmentContainer, fragmentClass);
-        // don't need to pass Bundle with userID when displaying logged in user's info
         fTInstance.commit();
     }
 
+    //Set up our tool bar
     private void setUpToolbar(){
         Toolbar profileToolbar = (Toolbar) findViewById(R.id.profileDisplayToolbar);
         setSupportActionBar(profileToolbar);
     }
 
+    //Set up references to the menu items
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_display_menu, menu);
@@ -46,7 +48,7 @@ public class UserProfile extends AppCompatActivity {
         mainMenuItem = menu.findItem(R.id.mainMenuItem);
         return true;
     }
-
+    //Listener for the toolbar items.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -68,6 +70,7 @@ public class UserProfile extends AppCompatActivity {
         return true;
     }
 
+    //Static intent used to navigate to this activity
     public static Intent userProfileIntent(Context activityContexts){
         Intent userProfileIntent = new Intent(activityContexts, UserProfile.class);
         return userProfileIntent;

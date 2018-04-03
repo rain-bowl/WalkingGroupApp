@@ -1,6 +1,4 @@
 package ApplicationLogic;
-
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -12,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
@@ -26,11 +23,9 @@ import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.example.nurdan.lavaproject.R;
 import com.example.nurdan.lavaproject.UserMonitorDisplay;
 import com.google.android.gms.maps.model.LatLng;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -39,12 +34,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import javax.net.ssl.HttpsURLConnection;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
-
 import static android.content.ContentValues.TAG;
 
 public class AccountApiInteractions {
@@ -57,7 +49,7 @@ public class AccountApiInteractions {
     private JSONArray groupList = new JSONArray();
 
 
-    //Creates a single user using the inputs
+    //Creates a single user using the inputs provided during registration
     public Boolean createNewUser(JSONObject jsonBody, Context appContext) {
         Boolean successFlag;
         Log.d(TAG, "createNewUser: Json Body recieved " + jsonBody.toString());
@@ -143,7 +135,7 @@ public class AccountApiInteractions {
         return list;
     }
 
-    //Class which recovers a users ID number from the database. This is needed to implement the user monitoring.
+    //Recovers a users ID number from the database. This is needed to implement the user monitoring.
     public int getDatabaseUserID(String email, Context currContext, String bearer) {
         Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearer);
         AndroidNetworking.initialize(currContext);
@@ -168,7 +160,8 @@ public class AccountApiInteractions {
     }
 
 
-    /*Sends of the provided JsonObject input to the server to edit the users information. CURRENTLY NOT WORKING PROPERLY!!!*/
+    /*Sends the provided JsonObject input to the server to edit the users information.
+      */
     public Boolean editDatabaseUserProfile(JSONObject jsonBody, Context currContext, int userID, String currBearer) {
         AndroidNetworking.initialize(currContext);
         Log.d(TAG, "editDatabaseUserProfile: ID AND BEARER " + userID + "" + currBearer);
@@ -195,6 +188,8 @@ public class AccountApiInteractions {
         return false;
     }
 
+
+    //Retrieves user information based on the used ID provided
     public JSONObject getUserInfoByID(int id, String bearerKey, Context currContext){
         AndroidNetworking.initialize(currContext);
 
@@ -216,7 +211,7 @@ public class AccountApiInteractions {
     }
 
 
-    //Retreives the user information based on their email.
+    //Retreives the user information based on the email which is provided. Used to retrieve user information during login.
     public void getDatabaseUserProfile(String email, Context currContext) {
         Log.d(TAG, "getDatabaseUserID: USERID bearer token" + bearerToken);
         AndroidNetworking.initialize(currContext);
@@ -233,33 +228,12 @@ public class AccountApiInteractions {
         ANResponse<JSONObject> serverResponse = getUserIDRequest.executeForJSONObject();
         if (serverResponse.isSuccess()) {
             JSONObject jsonServerResponse = serverResponse.getResult();
+            Log.d(TAG, "getDatabaseUserProfile: USER INFORMATION ON LOGIN " + jsonServerResponse.toString());
             ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
             currInstance.setUserInfo(jsonServerResponse);
-
-/*            try {
-               currUser.setID(jsonServerResponse.getInt("id"));
-               currUser.setName(jsonServerResponse.getString("name"));
-               currUser.setEmailAddress(jsonServerResponse.getString("email"));
-               currUser.setBirthyear(jsonServerResponse.getInt("birthYear"));
-               currUser.setBirthmonth(jsonServerResponse.getInt("birthMonth"));
-               currUser.setUserAddress(jsonServerResponse.getString("address"));
-               currUser.setCellPhoneNumber(jsonServerResponse.getString("cellPhone"));
-               currUser.setHomePhoneNumber(jsonServerResponse.getString("homePhone"));
-               currUser.setGrade(jsonServerResponse.getString("grade"));
-               currUser.setTeacherName(jsonServerResponse.getString("teacherName"));
-               currUser.setEmergencyContactInfoInstruction(jsonServerResponse.getString("emergencyContactInfo"));
-               currUser.setMonitoredByUsers(jsonServerResponse.getJSONArray("monitoredByUsers"));
-               currUser.setMonitorsOtherUsers(jsonServerResponse.getJSONArray("monitorsUsers"));
-               currUser.setMemberOfGroups(jsonServerResponse.getJSONArray("memberOfGroups"));
-               currUser.setLeaderOfGroups(jsonServerResponse.getJSONArray("leadsGroups"));
-                Log.d(TAG, "getDatabaseUserProfile: USER INFO RECIEVED " + currUser.getBirthyear());
-                currUser.setJsonObject(jsonServerResponse);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
         }
     }
-
+    //Retrieves the name of a single group and returns it. Used to list the different groups to implement the messaging feature.
     public String getGroupName(String bearerToken, Context currContext, int groupID){
         AndroidNetworking.initialize(currContext);
 
@@ -289,7 +263,7 @@ public class AccountApiInteractions {
         return bearerToken;
     }
 
-    //Recover user id
+    //Recover user id after login
     public int getUserID() {
         return userID;
     }
@@ -297,7 +271,7 @@ public class AccountApiInteractions {
 
     /*  classes for group implementation:    */
 
-    // create new group
+    // create new group and set its corrdinates as well as a leader.
     public void createNewGroup(final String currToken, String groupDescription, final int leaderID, LatLng start, LatLng dest, Context appContext) {
         final JSONObject jsonBody = new JSONObject();
         bearerToken = currToken;
@@ -356,6 +330,7 @@ public class AccountApiInteractions {
                 });
     }
 
+    //Return a list of all of the groups created. Used for testing.
     public JSONArray getGroupList(String currToken, Context appContext) {
         String URLPath = baseURL + "/groups";
         JSONArray list = null;
@@ -376,35 +351,8 @@ public class AccountApiInteractions {
         return list;
     }
 
-    // will delete later, backup
 
-    /*
-        public void getGroupDetails(String currToken, int groupID, Context currContext){
-            AndroidNetworking.initialize(currContext);
-            AndroidNetworking.get(baseURL + "/groups/" + groupID)
-                    .addHeaders("apiKey", apiKey)
-                    .addHeaders("Authorization", currToken)
-                    .build()
-                    .getAsJSONObject(new JSONObjectRequestListener() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                groupDetails = response.getJSONObject("id");
-                            }
-                            catch (Exception e){
-                                e.printStackTrace();
-                            }
-                            Log.d(TAG, "onResponse: JsonBody " + response.toString());
-                        }
-                        @Override
-                        public void onError(ANError anError) {
-                            Log.d(TAG, "onError body: " + anError.getErrorBody());
-                            Log.d(TAG, "onError detail: " + anError.getErrorDetail());
-                        }
-                    });
-        }
-        */
-    //gets group's details through groupID
+    //gets group's details through the provided groupID
     public JSONObject getGroupDetails(String currToken, int groupID, Context currContext) {
         String URLPath = baseURL + "/groups/" + groupID;
         JSONObject details = null;
@@ -427,7 +375,7 @@ public class AccountApiInteractions {
         return details;
     }
 
-    // update group
+    // Updates a groups location, leader and group name
     public void updateGroup(String currToken, int groupID, int leaderID, String newDescription, JSONArray latitude, JSONArray longitude, Context currContext) {
         JSONObject jsonBody = new JSONObject();
         try {
@@ -489,7 +437,7 @@ public class AccountApiInteractions {
                 });
     }
 */
-    // delete group
+    // deletes the group corresponding to the provided group ID
     public void deleteGroup(String currToken, int groupID, Context appContext) {
         String URLPath = baseURL + "/groups/" + groupID;
         AndroidNetworking.initialize(appContext);
@@ -508,7 +456,7 @@ public class AccountApiInteractions {
         }
     }
 
-    // get group members
+    // Returns a JSON array containing all of the members of the group corresponding to the group ID provided
     public JSONArray getGroupMembers(String currToken, int groupID, Context appContext) {
         String URLPath = baseURL + "/groups/" + groupID + "/memberUsers";
         JSONArray list = null;
@@ -529,7 +477,7 @@ public class AccountApiInteractions {
         return list;
     }
 
-    // add group member
+    // Adds a member to the group indicated by the groupID
     public void addGroupMember(String currToken, int groupID, final int memberID, Context currContext) {
         JSONObject jsonBody = new JSONObject();
         try {
@@ -555,7 +503,7 @@ public class AccountApiInteractions {
         }
     }
 
-    // remove group member
+    // Removes a member from the indicated group.
     public void removeGroupMember(String currToken, int groupID, final int memberID, Context appContext) {
         AndroidNetworking.initialize(appContext);
         String URLPath = baseURL + "/groups/" + groupID + "/memberUsers/" + memberID;
@@ -575,7 +523,7 @@ public class AccountApiInteractions {
         }
     }
 
-    //set gpslocation of curr user
+    //Sets the last known location of the current logged in user. Used to update the last know location after a trip has completed
     public void setLastGpsLocation(String currToken, int currUserID, Location lastKnownLocation, Context currContext) {
         JSONObject gpsInfo = new JSONObject();
         try {
@@ -611,7 +559,7 @@ public class AccountApiInteractions {
         }
     }
 
-    // get gps location of specified user
+    // Retrieves the last known GPS location for the specified user
     public JSONObject getLastGpsLocation(String currToken, int UserID, Context currContext) {
         JSONObject gpsInfo = new JSONObject();
 

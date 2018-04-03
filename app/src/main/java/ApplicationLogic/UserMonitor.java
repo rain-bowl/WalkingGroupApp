@@ -65,6 +65,10 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 
 
     }
+
+    /*Adds a user to monitor the currently logged in user. Method requires the ID's of both the current user and
+    the one which will monitor the current user.
+     */
     public Boolean addUsrToMonitorYou(int userId, int monitorID, String bearer, Context appContext){
         Boolean successFlag;
         AndroidNetworking.initialize(appContext);

@@ -106,7 +106,7 @@ public class MandatoryRegisterInformationFragment extends Fragment{
         });
 
 
-
+        //Button listener. Handles all edge cases for input
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -35,7 +35,8 @@ public class User {
     JSONObject userJsonInformation;
 
 
-    //Takes in json object and sets the user fields according to the information recieved. This is used throughout the entire application.
+    //Takes in json object and sets the user fields according to the information recieved.
+    // The information here is used throughout the entire application.
      public void setJsonObject(JSONObject retrievedInfo){
 
         try {
@@ -65,7 +66,8 @@ public class User {
 
         }
     }
-    //Simply returns the Json object to be used.
+
+    //Simply returns the Json object which contains the user information to be used.
      public JSONObject returnJsonUserInfo(){
         return this.userJsonInformation;
     }

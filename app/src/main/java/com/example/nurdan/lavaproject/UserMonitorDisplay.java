@@ -50,7 +50,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
         setUpToolBar();
         setUpListView();
     }
-
+    //Set up activity toolbar
     private void setUpToolBar() {
         Toolbar toolbar = findViewById(R.id.monitorToolBar);
         setSupportActionBar(toolbar);
@@ -125,31 +125,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
             delUser.execute(d);
         }
     }
-
-    /*private void deleteMonitoringUsers(ArrayList<Integer> userIds, Integer listID) {
-        ListView displayList = (ListView) findViewById(listID);
-        SparseBooleanArray checked = displayList.getCheckedItemPositions();
-        // check if item is checked
-        if (checked == null) {
-            Toast.makeText(this, "Select user to delete", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        ArrayList<Integer> checkedUsers = new ArrayList<>();
-        for (int i = 0, len = checked.size(); i < len; i++) {
-            if (checked.valueAt(i)) {
-                //String s = ((TextView) displayList.getChildAt(i)).getText().toString();
-                int id = userIds.get(i);
-                checkedUsers.add(id);
-            }
-        }
-        AsyncDeleteMonitoredUser deleteUsers = new AsyncDeleteMonitoredUser();
-        deleteUsers.execute(checkedUsers);
-
-        String lenUsers = String.format(Locale.CANADA, "Stopped monitoring %d users %s", checkedUsers.size(), Arrays.toString(checkedUsers.toArray()));
-        Toast.makeText(this, lenUsers, Toast.LENGTH_SHORT).show();
-    }*/
-
-
+   //Set up meny layout
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.taskmenu, menu);
@@ -160,7 +136,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
     public static Intent createUserMonitorIntent(Context currContext) {
         return new Intent(currContext, UserMonitorDisplay.class);
     }
-
+    //Calls the methods to retrieve the information which is shown to the user(Names) as well as ID's
     private void setUpListView() {
         getMntrUsers getMonitorees = new getMntrUsers();
         getUsrsMntrThis getMonitors = new getUsrsMntrThis();
@@ -168,6 +144,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
         getMonitors.execute();
     }
 
+    //Loads the information retreived by the setUpListview method into the UI.
     private void updateListView(ArrayList<String> retrievedUsers, ArrayList<Integer> retrievedUserIDs, int resourceID){
         ListView displayMntrdUser = (ListView) findViewById(resourceID);
         if (retrievedUsers.isEmpty()) {
@@ -194,7 +171,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
                 });
             }
     }
-
+    //Async classes to retrieve the user information.
     private class getMntrUsers extends AsyncTask<Void, Void, Void> {
         ListView displayMntrdUser;
         ArrayList<String> retrievedUsers;
