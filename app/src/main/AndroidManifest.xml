@@ -38,7 +38,8 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,7 +52,8 @@
         <activity android:name=".MainMenu" />
         <activity android:name=".UserMonitorDisplay" />
         <activity android:name=".EditUserInformation" />
-        <activity android:name=".UserProfile" />
+        <activity android:name=".UserProfile"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".MessageInbox" />
         <activity android:name=".EditGroupActivity" />
         <activity android:name=".GroupMemberInfoActivity" />
