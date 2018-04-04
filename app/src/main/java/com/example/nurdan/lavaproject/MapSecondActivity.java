@@ -353,7 +353,7 @@ public class MapSecondActivity extends AppCompatActivity{
             public void onClick(View view) {
                 leaderChecked.clear();
                 memberChecked.clear();
-                startActivity(new Intent(getApplicationContext(), MainMenu.class));
+                startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
             }
         });
     }

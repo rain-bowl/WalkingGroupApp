@@ -1,11 +1,9 @@
 package com.example.nurdan.lavaproject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-import ApplicationLogic.AccountApiInteractions;
+
 import ApplicationLogic.ProgramSingletonController;
 
 import static android.view.View.GONE;
@@ -53,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     public void startNextActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainMenu.class);// New activity
+        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);// New activity
         //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish(); // Kill login activity once you redirect to another activity

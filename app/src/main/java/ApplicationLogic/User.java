@@ -40,7 +40,6 @@ public class User {
      public void setJsonObject(JSONObject retrievedInfo){
 
         try {
-
             userJsonInformation = new JSONObject(retrievedInfo.toString());
             ID = retrievedInfo.getInt("id");
             emailAddress = retrievedInfo.getString("email");

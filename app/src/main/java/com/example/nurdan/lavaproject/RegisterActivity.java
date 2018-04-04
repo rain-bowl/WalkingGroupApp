@@ -51,12 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
 //Overridden method to handle cases of input being an integer.
     public void addJson(String key, int content){
             try{
-                if(content != 0){
                     serverCallBody.put(key, content);
-                }
-                else {
-                    serverCallBody.put(key, "Not Provided");
-                }
                 Log.d("Tag", "addJson: Show jsonObject contents " + serverCallBody.toString());
             }
             catch (Exception e){

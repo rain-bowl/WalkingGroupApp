@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.nurdan.lavaproject.MessageInbox;
+import com.example.nurdan.lavaproject.MessageInboxActivity;
 import com.example.nurdan.lavaproject.R;
 
 import org.json.JSONObject;
@@ -51,7 +51,7 @@ public class UserInboxNewMessageFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         currSingletonInstance = ProgramSingletonController.getCurrInstance();
         groupIDList = currSingletonInstance.getGroupIDList();
-        final MessageInbox messageInstance = (MessageInbox) getActivity();
+        final MessageInboxActivity messageInstance = (MessageInboxActivity) getActivity();
         //Attach widgets
         final ToggleButton sendToParents = view.findViewById(R.id.sendToPrntsTgl);
         final ToggleButton sendToGroup = view.findViewById(R.id.sendToGrpTgl);
@@ -117,7 +117,7 @@ public class UserInboxNewMessageFragment extends Fragment{
                 else{
                     Toast.makeText(getContext(),R.string.noSendDestinationWarning,Toast.LENGTH_LONG).show();
                 }
-                MessageInbox instance = (MessageInbox) getActivity();
+                MessageInboxActivity instance = (MessageInboxActivity) getActivity();
                 instance.setFragment(new UserInboxDisplayFragment());
             }
         });

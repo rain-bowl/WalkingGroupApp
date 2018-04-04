@@ -7,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,22 +15,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ProgressBar;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 
 import ApplicationLogic.ProgramSingletonController;
-import ApplicationLogic.UserMonitor;
 import UIFragmentClasses.AddUserDialogFragment;
 
-public class UserMonitorDisplay extends AppCompatActivity {
+public class UserMonitorActivity extends AppCompatActivity {
     ProgressBar displayProgress;
     ProgramSingletonController currInstanceSingleton = ProgramSingletonController.getCurrInstance();
 
@@ -76,7 +67,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
                 break;
 
             case R.id.info_monitor_user:
-                Intent otherUsers = new Intent(UserMonitorDisplay.this, display_other_user_info.class);
+                Intent otherUsers = new Intent(UserMonitorActivity.this, MonitoredUserInformationDisplayActivity.class);
                 Integer checked = -1;
                 Boolean isMonitored;
                 if(checkedMonitorThem != -1) {
@@ -88,7 +79,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
                     isMonitored = false;
                 }
                 else {
-                    Toast.makeText(UserMonitorDisplay.this, "Must select user", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserMonitorActivity.this, "Must select user", Toast.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -134,7 +125,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
 
     //Static class to return an intent used in navigating application.
     public static Intent createUserMonitorIntent(Context currContext) {
-        return new Intent(currContext, UserMonitorDisplay.class);
+        return new Intent(currContext, UserMonitorActivity.class);
     }
     //Calls the methods to retrieve the information which is shown to the user(Names) as well as ID's
     private void setUpListView() {
@@ -186,7 +177,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             Log.d("USERDISPLAY", "onPostExecute:Got here ");
             if(retrievedUsers == null) {
-                Toast.makeText(UserMonitorDisplay.this, "Could not retrieve monitored users", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserMonitorActivity.this, "Could not retrieve monitored users", Toast.LENGTH_SHORT).show();
                 return;
             }
             updateListView(retrievedUsers, retrievedMonitoringIDs, R.id.usersMonitoredView);
@@ -206,7 +197,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             if(retrievedUsers == null) {
-                Toast.makeText(UserMonitorDisplay.this, "Could not retrieve users monitoring you", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserMonitorActivity.this, "Could not retrieve users monitoring you", Toast.LENGTH_SHORT).show();
                 return;
             }
             updateListView(retrievedUsers, retrievedMonitoringMeIDs, R.id.usersWhoMonitoreYouView);
@@ -219,7 +210,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
             ArrayList<Integer> list = arrayLists[0];
             for (int i = 0, len = list.size(); i < len; i++) {
                 int id = list.get(i);
-                currInstanceSingleton.deleteMonitoredUsr(id, UserMonitorDisplay.this);
+                currInstanceSingleton.deleteMonitoredUsr(id, UserMonitorActivity.this);
                 Log.d("DELETEDUSER", " with ID " + id);
             }
             return null;
@@ -238,7 +229,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
 
             for (int i = 0, len = list.size(); i < len; i++) {
                 int id = list.get(i);
-                currInstanceSingleton.deleteMonitoringMeUser(id, UserMonitorDisplay.this);
+                currInstanceSingleton.deleteMonitoringMeUser(id, UserMonitorActivity.this);
             }
             return null;
         }
@@ -252,7 +243,7 @@ public class UserMonitorDisplay extends AppCompatActivity {
         @Override
         protected Void doInBackground(ArrayList<Integer>...arrayLists) {
             ArrayList<Integer> list = arrayLists[0];
-            currInstanceSingleton.getUserInfoByID(list.get(0), UserMonitorDisplay.this);
+            currInstanceSingleton.getUserInfoByID(list.get(0), UserMonitorActivity.this);
             return null;
         }
         @Override

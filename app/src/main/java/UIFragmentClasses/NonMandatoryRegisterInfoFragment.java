@@ -54,7 +54,7 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
                     birthYear = Integer.parseInt(s.toString());
                 }
                 catch (Exception e){
-                    birthYear = 0;
+                    birthYear = -1;
                 }
             }
         });
@@ -76,7 +76,7 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
                   birthMonth = Integer.parseInt(s.toString());
               }
               catch (Exception e){
-                  birthMonth = 0;
+                  birthMonth = -1;
               }
             }
         });
@@ -111,7 +111,6 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 grade = s.toString();
             }
         });

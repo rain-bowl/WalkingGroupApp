@@ -11,10 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 ;
 
-import UIFragmentClasses.userProfileEditInfoFragment;
-import UIFragmentClasses.userProfileDisplayFragment;
+import UIFragmentClasses.UserProfileEditInfoFragment;
+import UIFragmentClasses.UserProfileDisplayFragment;
 
-public class UserProfile extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity {
     MenuItem editItem, backItem, mainMenuItem;
 
     @Override
@@ -22,7 +22,7 @@ public class UserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         setUpToolbar();
-        loadFragment(new userProfileDisplayFragment());
+        loadFragment(new UserProfileDisplayFragment());
 
     }
 
@@ -55,24 +55,24 @@ public class UserProfile extends AppCompatActivity {
             case R.id.editItem:
                 backItem.setVisible(true);
                 editItem.setVisible(false);
-                loadFragment(new userProfileEditInfoFragment());
+                loadFragment(new UserProfileEditInfoFragment());
                 break;
             case R.id.mainMenuItem:
-                Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
+                Intent mainMenu = MainMenuActivity.mainMenuIntent(getApplicationContext());
                 startActivity(mainMenu);
                 finish(); // to remove activity from stack
                 break;
             case R.id.backItem:
                 backItem.setVisible(false);
                 editItem.setVisible(true);
-                loadFragment(new userProfileDisplayFragment());
+                loadFragment(new UserProfileDisplayFragment());
         }
         return true;
     }
 
     //Static intent used to navigate to this activity
     public static Intent userProfileIntent(Context activityContexts){
-        Intent userProfileIntent = new Intent(activityContexts, UserProfile.class);
+        Intent userProfileIntent = new Intent(activityContexts, UserProfileActivity.class);
         return userProfileIntent;
     }
 }

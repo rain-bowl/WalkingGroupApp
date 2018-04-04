@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import UIFragmentClasses.UserInboxDisplayFragment;
 import UIFragmentClasses.UserInboxNewMessageFragment;
 
-public class MessageInbox extends AppCompatActivity {
+public class MessageInboxActivity extends AppCompatActivity {
     int groupID = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class MessageInbox extends AppCompatActivity {
                 setFragment(new UserInboxDisplayFragment());
                 break;
             case R.id.mainMenuInboxItem:
-                Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
+                Intent mainMenu = MainMenuActivity.mainMenuIntent(getApplicationContext());
                 startActivity(mainMenu);
                 finish();
                 break;
@@ -60,7 +60,7 @@ public class MessageInbox extends AppCompatActivity {
     }
 
     public static Intent getInboxIntent(Context activityContext){
-        Intent inboxIntent = new Intent(activityContext, MessageInbox.class);
+        Intent inboxIntent = new Intent(activityContext, MessageInboxActivity.class);
         return inboxIntent;
     }
     public void setGroupID(int id){

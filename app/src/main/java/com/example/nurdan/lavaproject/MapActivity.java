@@ -181,7 +181,7 @@ public class MapActivity extends FragmentActivity implements
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), MainMenu.class));
+                startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
             }
         });
     }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.nurdan.lavaproject.MessageInbox">
+    tools:context="com.example.nurdan.lavaproject.MessageInboxActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/userMessageInboxToolbar"
