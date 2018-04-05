@@ -33,6 +33,7 @@ public class User {
     JSONArray unreadMessages;
     JSONArray readMessages;
     JSONObject userJsonInformation;
+    JSONArray pendingPermRequests;
 
 
     //Takes in json object and sets the user fields according to the information recieved. This is used throughout the entire application.
@@ -60,6 +61,7 @@ public class User {
             unreadMessages = retrievedInfo.getJSONArray("unreadMessages");
             readMessages = retrievedInfo.getJSONArray("readMessages");
             userHref = retrievedInfo.getString("href");
+            pendingPermRequests = retrievedInfo.getJSONArray("pendingPermissionRequests");
         }
         catch (Exception e){
 

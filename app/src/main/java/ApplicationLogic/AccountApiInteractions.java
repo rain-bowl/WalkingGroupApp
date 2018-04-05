@@ -330,6 +330,7 @@ public class AccountApiInteractions {
         AndroidNetworking.post(baseURL + "/groups")
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", currToken)
+                .addHeaders("PERMISSIONS-ENABLED", "true")
                 .addJSONObjectBody(jsonBody)
                 .build()
                 .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
@@ -446,6 +447,7 @@ public class AccountApiInteractions {
         ANRequest groupEditReq = AndroidNetworking.post(URLPath)
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", currToken)
+                .addHeaders("PERMISSIONS-ENABLED", "true")
                 .addJSONObjectBody(jsonBody)
                 .build();
         ANResponse<JSONObject> serverResponse = groupEditReq.executeForJSONObject();
