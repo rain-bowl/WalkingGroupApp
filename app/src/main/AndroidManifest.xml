@@ -57,6 +57,7 @@
         <activity android:name=".GroupMemberInfoActivity" />
         <activity android:name=".ViewMembersActivity" />
         <activity android:name=".display_other_user_info" />
+        <activity android:name=".single_message"></activity>
     </application>
 
 </manifest>
