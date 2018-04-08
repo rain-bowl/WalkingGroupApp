@@ -38,7 +38,8 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity"
+            android:noHistory="true"> <!-- Disable go back button -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import ApplicationLogic.ProgramSingletonController;
 import UIFragmentClasses.UserInboxDisplayFragment;
 import UIFragmentClasses.UserInboxNewMessageFragment;
 
@@ -19,6 +20,7 @@ public class MessageInbox extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_inbox);
+
         setUpToolbar();
         setFragment(new UserInboxDisplayFragment());
     }

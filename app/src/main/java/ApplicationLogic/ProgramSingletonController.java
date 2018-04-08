@@ -90,13 +90,11 @@ public class ProgramSingletonController {
     }
 
     public int getUserID(){
-        currInstance = new AccountApiInteractions();
-        return currInstance.getUserID();
+        return this.userID;
     }
 
     public String getBearerToken(){
-        currInstance = new AccountApiInteractions();
-        return currInstance.getBearerToken();
+        return this.bearerToken;
     }
     public User getCurrLoggedInUser(){
         return this.currLoggedInUser;
@@ -473,6 +471,10 @@ public class ProgramSingletonController {
         Log.d(TAG, "MessageChange: setting to " + isRead + " " + msgId);
         UserMessagingService currInstance = new UserMessagingService();
         currInstance.setMessageRead(isRead, msgId, this.userID, this.bearerToken, currContext);
+    }
+
+    public void rewardXP(Context context) {
+        currInstance.addUserXP(1, this.userID, this.bearerToken, context);
     }
 
 

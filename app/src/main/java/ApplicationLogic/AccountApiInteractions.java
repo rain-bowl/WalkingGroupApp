@@ -197,7 +197,6 @@ public class AccountApiInteractions {
 
     public JSONObject getUserInfoByID(int id, String bearerKey, Context currContext){
         AndroidNetworking.initialize(currContext);
-
         ANRequest getUserProfile = AndroidNetworking.get(baseURL + "/users/" + id)
                 .addHeaders("apiKey", apiKey)
                 .addHeaders("Authorization", bearerKey)
@@ -210,7 +209,7 @@ public class AccountApiInteractions {
             return response;
         }
         else{
-            Log.d(TAG, "getUserProfileByID: FAILURE " + serverResponse.getError().getErrorBody());
+            Log.d(TAG, "getUserProfileByID: FAILURE for ID " + id + " " + serverResponse.getError().getErrorBody());
             return null;
         }
     }
@@ -635,7 +634,17 @@ public class AccountApiInteractions {
         return gpsInfo;
     }
 
-    public void addUserXP(int xp) {
+    public void addUserXP(int xp, int id, String token, Context context) {
 
+        JSONObject userObj = getUserInfoByID(id, token, context);
+        int currXP = -1;
+        int totalXP = -1;
+        try {
+            currXP = userObj.getInt("currentPoints");
+            totalXP = userObj.getInt("totalPointsEarned");
+        } catch (Exception e) {}
+
+
+        Log.d("ADDXP", "Current xp: " + currXP + " Total xp: " + totalXP);
     }
 }
