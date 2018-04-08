@@ -82,13 +82,11 @@ public class ProgramSingletonController {
     }
     //Returns the id of the currently logged in user
     public int getUserID(){
-        currInstance = new AccountApiInteractions();
-        return currInstance.getUserID();
+        return this.userID;
     }
     //Returns the bearer token for the user
     public String getBearerToken(){
-        currInstance = new AccountApiInteractions();
-        return currInstance.getBearerToken();
+        return this.bearerToken;
     }
 
     //Creates a new user
