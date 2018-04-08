@@ -103,7 +103,7 @@
     <string name="errorMessageSend">There was an error when sending your message. Please check your internet connection and resend your message.</string>
     <string name="emptyMessageWarning">Please enter a message.</string>
     <string name="noMessageTargetsSelectedWarning">Please select the people to whom you would like to send your message to.</string>
-
+    <string name="permissionsMenuItemTitle">Permissions</string>
     <!-- Panic message strings -->
     <string name="panicMsgTitle">PANIC MESSAGE</string>
     <string name="panicMsgInstructions">This emergency message will be sent to all of the people who monitor you as
