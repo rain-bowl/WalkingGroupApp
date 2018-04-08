@@ -49,18 +49,20 @@ public class UserPermissionsDisplayFragment extends Fragment{
         permissionsDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Store information in parent activity
+                //Store information in parent activity to be communicated to the aler dialog which displays
+                //the message contents
                 Log.d(TAG, "onItemClick: Selected permission id " + permissionsList.get(position - 1).getPermissionId());
                 ((MessageInbox)getActivity()).setPermissionID(permissionsList.get(position - 1).getPermissionId());
                 ((MessageInbox)getActivity()).setPermissionMessage(permissionsList.get(position - 1).getMessage());
 
-                //Call alert dialog
+                //Call alert dialog to view the contents of the clicked message
                 FragmentTransaction fm = getFragmentManager().beginTransaction();
                 UserPermissionsMessageFragment displayMessage = new UserPermissionsMessageFragment();
                 displayMessage.show(fm, "Show fragment");
             }
         });
 
+        //Call async class
         getAllPermissions getPerm = new getAllPermissions();
         getPerm.execute();
 
@@ -80,9 +82,9 @@ public class UserPermissionsDisplayFragment extends Fragment{
             }
             deniedPerm = currInstance.getDeniedRequests();
             acceptedPerm = currInstance.getAcceptedRequests();
-            makePermissionList(pendingPerm, "PENDING");
-            makePermissionList(deniedPerm, "DENIED");
-            makePermissionList(acceptedPerm, "ACCEPTED");
+            makePermissionList(pendingPerm, getString(R.string.pendingStatus));
+            makePermissionList(deniedPerm, getString(R.string.denyStatus));
+            makePermissionList(acceptedPerm, getString(R.string.acptStatus));
 
 
             return null;
@@ -96,10 +98,16 @@ public class UserPermissionsDisplayFragment extends Fragment{
         }
     }
 
+    //Method which extracts all the necessary information to display and store/reference a particular
+    //request at a later time. Method simply takes in a Json array and a status. The results are kept
+    //in two array lists. The first keeps a Permission objects which store id, message and status of a
+    //permission. The second arraylist called permissionText will store a "preview" version of the text
+    //which limits the length of the displayed message to save space.
     private void makePermissionList(JSONArray permissionArr, String status){
         int tempPermId = -1;
         String tempMessage;
         JSONObject tempObject;
+
         //If the array containing permissions is not null then they will be added. Otherwise, nothing is done.
         if(permissionArr != null && permissionArr.length() != 0){
             for(int i = 0; i < permissionArr.length(); i++) {

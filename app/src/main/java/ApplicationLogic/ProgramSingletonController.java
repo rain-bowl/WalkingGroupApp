@@ -488,21 +488,24 @@ public class ProgramSingletonController {
     }
 
      /*------------------Everything related to user permissions ------------------------- */
+     //Grab denied requests
     public JSONArray getDeniedRequests(){
         UserPermissions currInstance = new UserPermissions();
         return currInstance.getDeniedRequests(userID, bearerToken);
     }
 
+    //Grab accepted requests
     public JSONArray getAcceptedRequests(){
         UserPermissions currInstance = new UserPermissions();
         return currInstance.getAcceptedRequests(userID, bearerToken);
     }
 
+    //Grab the message associated with a requests(its contents)
     public String getPermMessage(int messageId){
         UserPermissions currInstance = new UserPermissions();
         return currInstance.getRequestMessage(messageId, bearerToken);
     }
-
+    //Respond to a certain request identified by its id.
     public void respondToRequest(int permId, Boolean choice){
         UserPermissions currInstance = new UserPermissions();
         currInstance.respondToRequest(permId, bearerToken, choice);

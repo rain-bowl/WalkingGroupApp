@@ -111,6 +111,12 @@
     <string name="msgSend">SEND</string>
     <string name="panicCancel">Go Back</string>
 
+    <!-- Permissions -->
+    <string name="acpt">Accept</string>
+    <string name="deny">Deny</string>
+    <string name="acptStatus">*ACCEPTED*</string>
+    <string name="pendingStatus">*PENDING*</string>
+    <string name="denyStatus">*DENIED*</string>
 
     <!-- User Monitor Activity -->
     <string name="delete">Delete</string>
