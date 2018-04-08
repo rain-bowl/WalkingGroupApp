@@ -94,18 +94,20 @@ public class MapActivity extends FragmentActivity implements
     }
 
     private void arrivalCheck() {
-        for (int i = 0; i < monitoredNames.size(); i++){
-            LatLng currMonitoredCoord = monitoredLatLng.get(i);
-            if (currMonitoredCoord.latitude - destinationCoord.latitude <= +- 0.001 && currMonitoredCoord.longitude - destinationCoord.longitude <= +- 0.001){
-                Handler handler = new Handler();
-                Runnable runnableCode = new Runnable() {
-                    @Override
-                    public void run() {
-                        arrivalFlag = true;
-                    }
-                };
-                handler.postDelayed(runnableCode, 600000);
-                handler.post(runnableCode);
+        if (monitoredNames.size() != 0 && monitoredLatLng.size() != 0){
+            for (int i = 0; i < monitoredNames.size(); i++){
+                LatLng currMonitoredCoord = monitoredLatLng.get(i);
+                if (currMonitoredCoord.latitude - destinationCoord.latitude <= +- 0.001 && currMonitoredCoord.longitude - destinationCoord.longitude <= +- 0.001){
+                    Handler handler = new Handler();
+                    Runnable runnableCode = new Runnable() {
+                        @Override
+                        public void run() {
+                            arrivalFlag = true;
+                        }
+                    };
+                    handler.postDelayed(runnableCode, 600000);
+                    handler.post(runnableCode);
+                }
             }
         }
     }
@@ -332,11 +334,22 @@ public class MapActivity extends FragmentActivity implements
                     if (childJSONObject != null) {
                         if (!childJSONObject.getString("groupDescription").equals("null")){
                             nameList.add(childJSONObject.getString("groupDescription"));
-                            latArray.add(childJSONObject.getJSONArray("routeLatArray").getDouble(0));
-                            lngArray.add(childJSONObject.getJSONArray("routeLngArray").getDouble(0));
-                            LatLng end = new LatLng(childJSONObject.getJSONArray("routeLatArray").getDouble(1), childJSONObject.getJSONArray("routeLngArray").getDouble(1));
+                            if (childJSONObject.getJSONArray("routeLatArray").length() != 0){
+                                latArray.add(childJSONObject.getJSONArray("routeLatArray").getDouble(0));
+                                lngArray.add(childJSONObject.getJSONArray("routeLngArray").getDouble(0));
+                                latArray.add(childJSONObject.getJSONArray("routeLatArray").getDouble(1));
+                                lngArray.add(childJSONObject.getJSONArray("routeLngArray").getDouble(1));
+                            }
+                            else {
+                                latArray.add(0.0);
+                                lngArray.add(0.0);
+                                latArray.add(0.0);
+                                lngArray.add(0.0);
+                            }
+
+                        /*    LatLng end = new LatLng(childJSONObject.getJSONArray("routeLatArray").getDouble(1), childJSONObject.getJSONArray("routeLngArray").getDouble(1));
                             Log.d("get destination point", "latlng end: " + end);
-                            groupEndPoints.add(end);
+                            groupEndPoints.add(end);*/
                         }
                     }
                 } catch (JSONException e) {
@@ -364,23 +377,30 @@ public class MapActivity extends FragmentActivity implements
     private void createGroupMarkers(){
         BitmapDescriptor colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
 
-        for (int i = 0; i < nameList.size(); i++){
+        for (int i = 0; i < nameList.size() * 2; i += 2){
             try {
                 groupStartPoints.add(new LatLng(latArray.get(i), lngArray.get(i)));
+                groupEndPoints.add(new LatLng(latArray.get(i + 1), lngArray.get(i + 1)));
+
+                Log.d(TAG, "createGroupMarkers, groupStartPoints: " + groupStartPoints);
+                Log.d(TAG, "createGroupMarkers, groupEndPoints: " + groupEndPoints);
+
+                makeMarker(groupStartPoints.get(i/2), groupEndPoints.get(i/2),"Group: ", nameList.get(i/2), colour);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //makeMarker(groupStartPoints.get(i), groupEndPoints.get(i),"Group: ", nameList.get(i), colour);
         }
 
         Log.d(TAG, "createGroupMarkers, done");
     }
 
     private void createMonitorMarkers(){
-        for (int i = 0; i < monitoredNames.size(); i++){
-            BitmapDescriptor colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-            makeMarker(monitoredLatLng.get(i), mDefaultLocation, "Monitoring user: " + monitoredNames.get(i), " at: " + monitoredTime.get(i), colour);
-            Log.d(TAG, "createMonitorMarkers, created for user: " + monitoredNames.get(i) + " at: " + monitoredLatLng.get(i) + " at time: " + monitoredTime.get(i));
+        if (monitoredNames.size() != 0 && monitoredLatLng.size() != 0 && monitoredTime.size() != 0){
+            for (int i = 0; i < monitoredNames.size(); i++){
+                BitmapDescriptor colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                makeMarker(monitoredLatLng.get(i), mDefaultLocation, "Monitoring user: " + monitoredNames.get(i), " at: " + monitoredTime.get(i), colour);
+                Log.d(TAG, "createMonitorMarkers, created for user: " + monitoredNames.get(i) + " at: " + monitoredLatLng.get(i) + " at time: " + monitoredTime.get(i));
+            }
         }
     }
 
@@ -443,10 +463,10 @@ public class MapActivity extends FragmentActivity implements
     }
 
     private void getDeviceLocation() {
-    /*
-     * Get the best and most recent location of the device, which may be null in rare
-     * cases when a location is not available.
-     */
+        /*
+         * Get the best and most recent location of the device, which may be null in rare
+         * cases when a location is not available.
+         */
         try {
             if (mLocationPermissionGranted) {
                 Task locationResult = mFusedLocationProviderClient.getLastLocation();
