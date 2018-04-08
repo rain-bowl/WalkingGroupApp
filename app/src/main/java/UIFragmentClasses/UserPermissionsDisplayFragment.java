@@ -56,7 +56,7 @@ public class UserPermissionsDisplayFragment extends Fragment{
                 if(permissionsList.get(position).getPermissionId() != -1) {
                     ((MessageInbox) getActivity()).setPermissionID(permissionsList.get(position).getPermissionId());
                     ((MessageInbox) getActivity()).setPermissionMessage(permissionsList.get(position).getMessage());
-
+                    ((MessageInbox)getActivity()).setPermissionStatus(permissionsList.get(position).getStatus());
                     //Call alert dialog to view the contents of the clicked message
                     FragmentTransaction fm = getFragmentManager().beginTransaction();
                     UserPermissionsMessageFragment displayMessage = new UserPermissionsMessageFragment();

@@ -12,11 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:layout_marginStart="21dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="108dp"
         android:text="@string/deny"
-        app:layout_constraintEnd_toStartOf="@+id/permAccept"
-        app:layout_constraintStart_toEndOf="@+id/permBack"
+        app:layout_constraintEnd_toStartOf="@+id/permBack"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -24,19 +24,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="108dp"
         android:text="@string/acpt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/permDeny"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/permMessageDisplay"
-        android:layout_width="300dp"
-        android:layout_height="0dp"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="44dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,9 +44,11 @@
         android:id="@+id/permBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="108dp"
         android:text="@string/backMenu"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/permAccept"
+        app:layout_constraintStart_toEndOf="@+id/permDeny"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

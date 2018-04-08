@@ -19,7 +19,7 @@ import UIFragmentClasses.UserPermissionsMessageFragment;
 public class MessageInbox extends AppCompatActivity {
     int groupID = -1;
     int permissionID;
-    String permissionMessage;
+    String permissionMessage, permissionStatus;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,5 +95,12 @@ public class MessageInbox extends AppCompatActivity {
 
     public String getPermissionMessage(){
         return this.permissionMessage;
+    }
+
+    public String getPermissionStatus(){
+        return this.permissionStatus;
+    }
+    public void setPermissionStatus(String permStatus){
+        this.permissionStatus = permStatus;
     }
 }

@@ -68,5 +68,11 @@ public class UserPermissionsMessageFragment extends DialogFragment{
                 dismiss();
             }
         });
+
+        String tempPermStatus = ((MessageInbox)getActivity()).getPermissionStatus();
+        if(tempPermStatus.compareTo(getString(R.string.denyStatus)) == 0 || tempPermStatus.compareTo(getString(R.string.acptStatus)) == 0){
+            acpt.setVisibility(View.INVISIBLE);
+            deny.setVisibility(View.INVISIBLE);
+        }
     }
 }
