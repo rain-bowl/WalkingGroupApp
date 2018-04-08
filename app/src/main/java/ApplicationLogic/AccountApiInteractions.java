@@ -575,7 +575,15 @@ public class AccountApiInteractions {
             totalXP = userObj.getInt("totalPointsEarned");
         } catch (Exception e) {}
 
+        currXP += xp;
+        totalXP += xp;
 
-        Log.d("ADDXP", "Current xp: " + currXP + " Total xp: " + totalXP);
+        try {
+            userObj.put("currentPoints", currXP);
+            userObj.put("totalPointsEarned", totalXP);
+        } catch (Exception e) {}
+
+        editDatabaseUserProfile(userObj, context, id, token);
     }
+
 }
