@@ -370,7 +370,7 @@ public class MapActivity extends FragmentActivity implements
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            makeMarker(groupStartPoints.get(i), groupEndPoints.get(i),"Group: ", nameList.get(i), colour);
+            //makeMarker(groupStartPoints.get(i), groupEndPoints.get(i),"Group: ", nameList.get(i), colour);
         }
 
         Log.d(TAG, "createGroupMarkers, done");
