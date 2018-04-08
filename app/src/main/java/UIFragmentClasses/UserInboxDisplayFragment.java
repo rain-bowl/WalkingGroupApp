@@ -2,6 +2,7 @@ package UIFragmentClasses;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.nurdan.lavaproject.R;
+import com.example.nurdan.lavaproject.single_message;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -75,6 +77,7 @@ public class UserInboxDisplayFragment extends Fragment {
                         String subText = stringObj.substring(0, Math.min(stringObj.length(), 10));
                         messageText.add(subText + "...");
 
+                        // get corresponding id of messages
                         Integer mId = tempObject.getInt("id");
                         messageId.add(mId);
                     }
@@ -100,31 +103,14 @@ public class UserInboxDisplayFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(context, "POS:" + messageId.get(position), Toast.LENGTH_SHORT).show();
 
-                getOneMessage getMsg = new getOneMessage();
-                getMsg.execute(messageId.get(position));
+                Intent singleMessage = new Intent(getContext(), single_message.class);
+                singleMessage.putExtra("messageId", messageId.get(position));
+                startActivity(singleMessage);
+
 
             }
         });
     }
 
-    private class getOneMessage extends AsyncTask<Integer,Void,JSONObject> {
-        @Override
-        protected JSONObject doInBackground(Integer... ints) {
-            int msgId = ints[0];
-            currSingletonInstance = ProgramSingletonController.getCurrInstance();
-            return currSingletonInstance.getMessageObjById(msgId, getContext());
-        }
-        @Override
-        protected void onPostExecute(JSONObject aMessage) {
-            String messageStr = "";
-            String fromUser;
-            try {
-                messageStr = aMessage.getString("text");
-            } catch (Exception e) {}
-            messageAdapter.clear();
-            messageAdapter.add(messageStr);
-            messageAdapter.notifyDataSetChanged();
-        }
-    }
 
 }

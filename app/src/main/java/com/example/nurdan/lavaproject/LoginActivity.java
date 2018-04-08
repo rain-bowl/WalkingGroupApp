@@ -25,7 +25,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         loginProgress = findViewById(R.id.loginProgressBar);
         loginProgress.setVisibility(GONE);
-        //Check if the user is logged in
+
+
+        // uses shared preferences to check if user is logged in
         checkIfLoggedIn();
         //Create the login buttons+listeners
         createLogInBtns();
@@ -52,13 +54,11 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);// New activity
         //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        finish(); // Kill login activity once you redirect to another activity
     }
     //Create references to the UI buttons and their listeners
     public void createLogInBtns(){
         Button loginButton = findViewById(R.id.loginButton);
         Button registerButton = findViewById(R.id.regButton);
-
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {

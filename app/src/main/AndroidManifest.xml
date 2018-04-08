@@ -39,7 +39,8 @@
             android:name=".MapActivity"
             android:label="@string/title_activity_map" />
         <activity android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:noHistory="true"> <!-- Disable go back button -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,6 +60,7 @@
         <activity android:name=".GroupMemberInfoActivity" />
         <activity android:name=".ViewMembersActivity" />
         <activity android:name=".MonitoredUserInformationDisplayActivity" />
+        <activity android:name=".single_message"></activity>
     </application>
 
 </manifest>

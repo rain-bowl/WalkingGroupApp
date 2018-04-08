@@ -82,13 +82,11 @@ public class ProgramSingletonController {
     }
     //Returns the id of the currently logged in user
     public int getUserID(){
-        currInstance = new AccountApiInteractions();
-        return currInstance.getUserID();
+        return this.userID;
     }
     //Returns the bearer token for the user
     public String getBearerToken(){
-        currInstance = new AccountApiInteractions();
-        return currInstance.getBearerToken();
+        return this.bearerToken;
     }
 
     //Creates a new user
@@ -460,6 +458,16 @@ public class ProgramSingletonController {
     public JSONObject getMessageObjById(int msgID, Context currContext) {
         UserMessagingService currInstance = new UserMessagingService();
         return currInstance.getMessageById(msgID, this.userID, this.bearerToken, currContext);
+    }
+
+    public void setUserMessageRead(Boolean isRead, int msgId, Context currContext) {
+        Log.d(TAG, "MessageChange: setting to " + isRead + " " + msgId);
+        UserMessagingService currInstance = new UserMessagingService();
+        currInstance.setMessageRead(isRead, msgId, this.userID, this.bearerToken, currContext);
+    }
+
+    public void rewardXP(Context context) {
+        currInstance.addUserXP(1, this.userID, this.bearerToken, context);
     }
 
 

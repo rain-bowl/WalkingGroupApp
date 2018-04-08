@@ -134,4 +134,11 @@
     <string name="is_monitored_by_detail"> is monitored by:</string>
     <string name="mapIntroText">To enable real-time monitoring for you/your parent(s), please click \'TRACK ON/OFF\'.</string>
     <string name="track_on_off">Track ON/OFF</string>
+
+    <!-- User Levels -->
+    <string name="level1">1</string>
+    <string name="level2">5</string>
+    <string name="level3">10</string>
+    <string name="level4">15</string>
+    <string name="level5">20</string>
 </resources>
