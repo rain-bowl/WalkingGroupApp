@@ -634,4 +634,8 @@ public class AccountApiInteractions {
         }
         return gpsInfo;
     }
+
+    public void addUserXP(int xp) {
+
+    }
 }

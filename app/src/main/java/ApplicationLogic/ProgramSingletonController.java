@@ -469,6 +469,12 @@ public class ProgramSingletonController {
         return currInstance.getMessageById(msgID, this.userID, this.bearerToken, currContext);
     }
 
+    public void setUserMessageRead(Boolean isRead, int msgId, Context currContext) {
+        Log.d(TAG, "MessageChange: setting to " + isRead + " " + msgId);
+        UserMessagingService currInstance = new UserMessagingService();
+        currInstance.setMessageRead(isRead, msgId, this.userID, this.bearerToken, currContext);
+    }
+
 
     public void sendMsgToGroup(String message, int groupID, Boolean emergencyStatus, Context currContext){
         UserMessagingService currInstance = new UserMessagingService();
