@@ -4,19 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import ApplicationLogic.ProgramSingletonController;
 import UIFragmentClasses.PanicMessageFragment;
 
 
 // Class simply creates and contains listeners to help user navigate the application.
-public class MainMenu extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity {
     private ProgramSingletonController localInstance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,7 @@ public class MainMenu extends AppCompatActivity {
         usrMonitor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent userMonitor = UserMonitorDisplay.createUserMonitorIntent(getApplicationContext());
+                Intent userMonitor = UserMonitorActivity.createUserMonitorIntent(getApplicationContext());
                 startActivity(userMonitor);
 
             }
@@ -59,7 +57,7 @@ public class MainMenu extends AppCompatActivity {
         usrProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent userProfile = UserProfile.userProfileIntent(getApplicationContext());
+                Intent userProfile = UserProfileActivity.userProfileIntent(getApplicationContext());
                 startActivity(userProfile);
             }
         });
@@ -78,7 +76,7 @@ public class MainMenu extends AppCompatActivity {
                         .putInt("userID", -1)
                         .apply();
 
-                Intent intent = new Intent(MainMenu.this, LoginActivity.class);// New activity
+                Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);// New activity
                 startActivity(intent);
                 finish();
             }
@@ -87,7 +85,7 @@ public class MainMenu extends AppCompatActivity {
         messageInbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent inboxIntent = MessageInbox.getInboxIntent(getApplicationContext());
+                Intent inboxIntent = MessageInboxActivity.getInboxIntent(getApplicationContext());
                 startActivity(inboxIntent);
             }
         });
@@ -104,6 +102,6 @@ public class MainMenu extends AppCompatActivity {
 
 
     public static Intent mainMenuIntent(Context currActivityContext){
-        return new Intent(currActivityContext, MainMenu.class);
+        return new Intent(currActivityContext, MainMenuActivity.class);
     }
 }

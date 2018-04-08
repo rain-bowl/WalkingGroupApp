@@ -103,6 +103,7 @@
     <string name="errorMessageSend">There was an error when sending your message. Please check your internet connection and resend your message.</string>
     <string name="emptyMessageWarning">Please enter a message.</string>
     <string name="noMessageTargetsSelectedWarning">Please select the people to whom you would like to send your message to.</string>
+    <string name="notLeading">You are currently not the leader of any groups!</string>
 
     <!-- Panic message strings -->
     <string name="panicMsgTitle">PANIC MESSAGE</string>

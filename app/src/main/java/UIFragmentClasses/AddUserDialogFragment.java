@@ -27,7 +27,6 @@ import static android.content.ContentValues.TAG;
 import com.example.nurdan.lavaproject.R;
 
 public class AddUserDialogFragment extends AppCompatDialogFragment{
-    View currView;
     EditText usrInput;
     String emailInput = "";
     TextView usrWarning;
@@ -90,7 +89,7 @@ public class AddUserDialogFragment extends AppCompatDialogFragment{
 
     }
 
-
+    //Async private class. Calls the relevant methods to add a user to be monitored
     private class asyncReq extends AsyncTask<Void,Void,Void>{
         ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
         @Override

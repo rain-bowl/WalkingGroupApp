@@ -2,6 +2,8 @@ package ApplicationLogic;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.AsyncTask;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;

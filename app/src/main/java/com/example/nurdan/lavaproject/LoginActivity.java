@@ -1,11 +1,9 @@
 package com.example.nurdan.lavaproject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,10 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import ApplicationLogic.AccountApiInteractions;
 import ApplicationLogic.ProgramSingletonController;
 
 import static android.view.View.GONE;
@@ -34,10 +29,12 @@ public class LoginActivity extends AppCompatActivity {
 
         // uses shared preferences to check if user is logged in
         checkIfLoggedIn();
-
+        //Create the login buttons+listeners
         createLogInBtns();
     }
 
+    //The logged in user has their information stored in shared preferences. This method checks if
+    //there is any user information stored there. If there is, then we skip straight to the main menu
     public void checkIfLoggedIn() {
         localInstance = ProgramSingletonController.getCurrInstance();
         // skip login in case user already signed in
@@ -54,11 +51,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     public void startNextActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainMenu.class);
+        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);// New activity
         //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
-
+    //Create references to the UI buttons and their listeners
     public void createLogInBtns(){
         Button loginButton = findViewById(R.id.loginButton);
         Button registerButton = findViewById(R.id.regButton);
@@ -98,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                 String pass = passText.getText().toString();
                 successFlag = localInstance.logIn(user,pass, getApplicationContext());
                 Log.d("AsyncLogIn", "doInBackground: SuccessFlag " + successFlag);
+                //Clear the information so it is not stored inside the app.
                 pass = "";
                 user = "";
                 if(successFlag){
