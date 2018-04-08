@@ -12,9 +12,12 @@ import android.view.MenuItem;
 
 import UIFragmentClasses.UserInboxDisplayFragment;
 import UIFragmentClasses.UserInboxNewMessageFragment;
+import UIFragmentClasses.UserPermissionsDisplayFragment;
 
 public class MessageInbox extends AppCompatActivity {
     int groupID = -1;
+    int permissionID;
+    String permissionMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,8 @@ public class MessageInbox extends AppCompatActivity {
                 startActivity(mainMenu);
                 finish();
                 break;
+            case R.id.userPermissionsItem:
+                setFragment(new UserPermissionsDisplayFragment());
         }
         return true;
     }
@@ -71,5 +76,23 @@ public class MessageInbox extends AppCompatActivity {
     public Integer getGroupID(){
         Log.d("messageinbox", "getGroupID: groupid: " + groupID);
         return this.groupID;
+    }
+
+    //As per android documentation, all fragment to fragment communication should be done through the host acivity
+    //These methods facilitate to help this.
+    public void setPermissionID(int id){
+        this.permissionID = id;
+    }
+
+    public void setPermissionMessage(String message){
+        this.permissionMessage = message;
+    }
+
+    public int getPermissionID(){
+        return this.permissionID;
+    }
+
+    public String getPermissionMessage(){
+        return this.permissionMessage;
     }
 }

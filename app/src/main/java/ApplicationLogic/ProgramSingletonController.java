@@ -90,13 +90,11 @@ public class ProgramSingletonController {
     }
 
     public int getUserID(){
-        currInstance = new AccountApiInteractions();
-        return currInstance.getUserID();
+        return this.userID;
     }
 
     public String getBearerToken(){
-        currInstance = new AccountApiInteractions();
-        return currInstance.getBearerToken();
+        return this.bearerToken;
     }
     public User getCurrLoggedInUser(){
         return this.currLoggedInUser;
@@ -487,5 +485,21 @@ public class ProgramSingletonController {
     public JSONObject getLastGpsLocation(int UserID, Context appContext) {
         currInstance = new AccountApiInteractions();
         return currInstance.getLastGpsLocation(this.bearerToken, UserID, appContext);
+    }
+
+     /*------------------Everything related to user permissions ------------------------- */
+    public JSONArray getDeniedRequests(){
+        UserPermissions currInstance = new UserPermissions();
+        return currInstance.getDeniedRequests(userID, bearerToken);
+    }
+
+    public JSONArray getAcceptedRequests(){
+        UserPermissions currInstance = new UserPermissions();
+        return currInstance.getDeniedRequests(userID, bearerToken);
+    }
+
+    public String getPermMessage(int messageId){
+        UserPermissions currInstance = new UserPermissions();
+        return currInstance.getRequestMessage(messageId, bearerToken);
     }
 }

@@ -234,6 +234,12 @@ public class AccountApiInteractions {
         if (serverResponse.isSuccess()) {
             JSONObject jsonServerResponse = serverResponse.getResult();
             ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
+            try {
+                Log.d(TAG, "getDatabaseUserProfile: Test for permissions: " + jsonServerResponse.getString("pendingPermissionRequests").toString());
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
             currInstance.setUserInfo(jsonServerResponse);
 
 /*            try {
@@ -636,4 +642,7 @@ public class AccountApiInteractions {
         }
         return gpsInfo;
     }
+
+
+
 }

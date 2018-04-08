@@ -1,11 +1,15 @@
 package ApplicationLogic;
 
+import android.util.Log;
+
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import static android.content.ContentValues.TAG;
 
 /*This class implements all of the code related to working with any kind of user permissions */
 public class UserPermissions {
@@ -35,7 +39,7 @@ public class UserPermissions {
                 .build();
 
         ANResponse<JSONArray> permResponse = permRequest.executeForJSONArray();
-        if(permResponse.getOkHttpResponse().code() == 200){
+        if(permResponse.isSuccess()){
             return permResponse.getResult();
         }
         return null;
@@ -49,7 +53,7 @@ public class UserPermissions {
                 .build();
 
         ANResponse<JSONArray> permResponse = permRequest.executeForJSONArray();
-        if(permResponse.getOkHttpResponse().code() == 200){
+        if(permResponse.isSuccess()){
             return permResponse.getResult();
         }
         return null;
