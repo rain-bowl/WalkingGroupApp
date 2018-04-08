@@ -502,4 +502,9 @@ public class ProgramSingletonController {
         UserPermissions currInstance = new UserPermissions();
         return currInstance.getRequestMessage(messageId, bearerToken);
     }
+
+    public void respondToRequest(int permId, Boolean choice){
+        UserPermissions currInstance = new UserPermissions();
+        currInstance.respondToRequest(permId, bearerToken, choice);
+    }
 }

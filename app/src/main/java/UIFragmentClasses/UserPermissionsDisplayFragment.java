@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,8 @@ import java.util.ArrayList;
 import ApplicationLogic.Permission;
 import ApplicationLogic.ProgramSingletonController;
 import ApplicationLogic.UserPermissions;
+
+import static com.google.android.gms.wearable.DataMap.TAG;
 
 //Class which contains the logic to display and accept/deny the user permissions
 public class UserPermissionsDisplayFragment extends Fragment{
@@ -44,8 +49,15 @@ public class UserPermissionsDisplayFragment extends Fragment{
         permissionsDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Store information in parent activity
+                Log.d(TAG, "onItemClick: Selected permission id " + permissionsList.get(position).getPermissionId());
                 ((MessageInbox)getActivity()).setPermissionID(permissionsList.get(position).getPermissionId());
                 ((MessageInbox)getActivity()).setPermissionMessage(permissionsList.get(position).getMessage());
+
+                //Call alert dialog
+                FragmentTransaction fm = getFragmentManager().beginTransaction();
+                UserPermissionsMessageFragment displayMessage = new UserPermissionsMessageFragment();
+                displayMessage.show(fm, "Show fragment");
             }
         });
 

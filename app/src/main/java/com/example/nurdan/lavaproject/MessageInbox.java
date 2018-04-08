@@ -2,6 +2,7 @@ package com.example.nurdan.lavaproject;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import UIFragmentClasses.UserInboxDisplayFragment;
 import UIFragmentClasses.UserInboxNewMessageFragment;
 import UIFragmentClasses.UserPermissionsDisplayFragment;
+import UIFragmentClasses.UserPermissionsMessageFragment;
 
 public class MessageInbox extends AppCompatActivity {
     int groupID = -1;
@@ -61,7 +63,12 @@ public class MessageInbox extends AppCompatActivity {
         FragmentTransaction ftInstance = getSupportFragmentManager().beginTransaction();
         ftInstance.replace(R.id.inboxFragmentContainer, fragment);
         ftInstance.commit();
+    }
 
+    public void displayPermissionMessageFragment(){
+        FragmentManager fm = getSupportFragmentManager();
+        UserPermissionsMessageFragment msgFrag = new UserPermissionsMessageFragment();
+        msgFrag.setTargetFragment(msgFrag, 1);
     }
 
     public static Intent getInboxIntent(Context activityContext){
