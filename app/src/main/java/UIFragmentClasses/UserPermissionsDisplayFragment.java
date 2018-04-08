@@ -50,9 +50,9 @@ public class UserPermissionsDisplayFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Store information in parent activity
-                Log.d(TAG, "onItemClick: Selected permission id " + permissionsList.get(position).getPermissionId());
-                ((MessageInbox)getActivity()).setPermissionID(permissionsList.get(position).getPermissionId());
-                ((MessageInbox)getActivity()).setPermissionMessage(permissionsList.get(position).getMessage());
+                Log.d(TAG, "onItemClick: Selected permission id " + permissionsList.get(position - 1).getPermissionId());
+                ((MessageInbox)getActivity()).setPermissionID(permissionsList.get(position - 1).getPermissionId());
+                ((MessageInbox)getActivity()).setPermissionMessage(permissionsList.get(position - 1).getMessage());
 
                 //Call alert dialog
                 FragmentTransaction fm = getFragmentManager().beginTransaction();
@@ -101,7 +101,7 @@ public class UserPermissionsDisplayFragment extends Fragment{
         String tempMessage;
         JSONObject tempObject;
         //If the array containing permissions is not null then they will be added. Otherwise, nothing is done.
-        if(permissionArr != null){
+        if(permissionArr != null && permissionArr.length() != 0){
             for(int i = 0; i < permissionArr.length(); i++) {
                 try {
                     tempObject = permissionArr.getJSONObject(i);
@@ -111,8 +111,11 @@ public class UserPermissionsDisplayFragment extends Fragment{
                 }
                 tempMessage = currInstance.getPermMessage(tempPermId);
                 permissionsList.add(new Permission(status, tempMessage, tempPermId));
-                permissionText.add(status + " " + tempMessage.substring(0, 40));
+                permissionText.add(status + " " + tempMessage.substring(0, 60));
             }
+        }
+        else{
+            permissionText.add("You have no " + status + " requests");
         }
     }
 }

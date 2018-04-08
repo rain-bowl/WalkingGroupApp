@@ -495,7 +495,7 @@ public class ProgramSingletonController {
 
     public JSONArray getAcceptedRequests(){
         UserPermissions currInstance = new UserPermissions();
-        return currInstance.getDeniedRequests(userID, bearerToken);
+        return currInstance.getAcceptedRequests(userID, bearerToken);
     }
 
     public String getPermMessage(int messageId){

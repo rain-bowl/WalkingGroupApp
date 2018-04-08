@@ -65,12 +65,6 @@ public class MessageInbox extends AppCompatActivity {
         ftInstance.commit();
     }
 
-    public void displayPermissionMessageFragment(){
-        FragmentManager fm = getSupportFragmentManager();
-        UserPermissionsMessageFragment msgFrag = new UserPermissionsMessageFragment();
-        msgFrag.setTargetFragment(msgFrag, 1);
-    }
-
     public static Intent getInboxIntent(Context activityContext){
         Intent inboxIntent = new Intent(activityContext, MessageInbox.class);
         return inboxIntent;
