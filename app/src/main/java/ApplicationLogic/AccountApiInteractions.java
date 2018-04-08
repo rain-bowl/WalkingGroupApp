@@ -568,15 +568,15 @@ public class AccountApiInteractions {
     public void addUserXP(int xp, int id, String token, Context context) {
 
         JSONObject userObj = getUserInfoByID(id, token, context);
-        int currXP = -1;
-        int totalXP = -1;
+        int currXP = 0;
+        int totalXP = 0;
         try {
             currXP = userObj.getInt("currentPoints");
             totalXP = userObj.getInt("totalPointsEarned");
         } catch (Exception e) {}
 
         currXP += xp;
-        totalXP += xp;
+        if(xp > 0) totalXP += xp;
 
         try {
             userObj.put("currentPoints", currXP);

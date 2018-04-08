@@ -1,4 +1,5 @@
 package com.example.nurdan.lavaproject;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +11,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONObject;
+
 import ApplicationLogic.ProgramSingletonController;
 import UIFragmentClasses.UserInboxDisplayFragment;
 import UIFragmentClasses.UserInboxNewMessageFragment;
 
 public class MessageInboxActivity extends AppCompatActivity {
     int groupID = -1;
+    ProgramSingletonController currInstace;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,4 +78,5 @@ public class MessageInboxActivity extends AppCompatActivity {
         Log.d("messageinbox", "getGroupID: groupid: " + groupID);
         return this.groupID;
     }
+
 }

@@ -482,3 +482,21 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 }
+
+/*
+*
+    private class rewardUserXP extends AsyncTask<Context,Void,Void> {
+        @Override
+        protected Void doInBackground(Context... contexts) {
+            Context context = contexts[0];
+            currInstace = ProgramSingletonController.getCurrInstance();
+            currInstace.rewardXP(context);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+
+        }
+    }
+* */

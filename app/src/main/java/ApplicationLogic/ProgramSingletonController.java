@@ -467,11 +467,13 @@ public class ProgramSingletonController {
     }
 
     public void rewardXP(Context context) {
-        currInstance.addUserXP(1, this.userID, this.bearerToken, context);
+        AccountApiInteractions account = new AccountApiInteractions();
+        account.addUserXP(1, this.userID, this.bearerToken, context);
     }
 
     public void purchaseWithXP(int costXP, Context context) {
-        currInstance.addUserXP((-1) * costXP, this.userID, this.bearerToken, context);
+        AccountApiInteractions account = new AccountApiInteractions();
+        account.addUserXP((-1)*costXP, this.userID, this.bearerToken, context);
     }
 
 
