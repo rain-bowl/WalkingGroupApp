@@ -117,6 +117,7 @@
     <string name="acptStatus">*ACCEPTED*</string>
     <string name="pendingStatus">*PENDING*</string>
     <string name="denyStatus">*DENIED*</string>
+    <string name="noPermissionType">There are no permissions of this type!</string>
 
     <!-- User Monitor Activity -->
     <string name="delete">Delete</string>

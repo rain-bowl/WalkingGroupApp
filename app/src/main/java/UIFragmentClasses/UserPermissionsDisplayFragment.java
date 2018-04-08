@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.nurdan.lavaproject.MessageInbox;
 import com.example.nurdan.lavaproject.R;
@@ -49,16 +50,21 @@ public class UserPermissionsDisplayFragment extends Fragment{
         permissionsDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Store information in parent activity to be communicated to the aler dialog which displays
+                //Store information in parent activity to be communicated to the alert dialog which displays
                 //the message contents
-                Log.d(TAG, "onItemClick: Selected permission id " + permissionsList.get(position - 1).getPermissionId());
-                ((MessageInbox)getActivity()).setPermissionID(permissionsList.get(position - 1).getPermissionId());
-                ((MessageInbox)getActivity()).setPermissionMessage(permissionsList.get(position - 1).getMessage());
+                Log.d(TAG, "onItemClick: Selected permission id " + permissionsList.get(position).getPermissionId());
+                if(permissionsList.get(position).getPermissionId() != -1) {
+                    ((MessageInbox) getActivity()).setPermissionID(permissionsList.get(position).getPermissionId());
+                    ((MessageInbox) getActivity()).setPermissionMessage(permissionsList.get(position).getMessage());
 
-                //Call alert dialog to view the contents of the clicked message
-                FragmentTransaction fm = getFragmentManager().beginTransaction();
-                UserPermissionsMessageFragment displayMessage = new UserPermissionsMessageFragment();
-                displayMessage.show(fm, "Show fragment");
+                    //Call alert dialog to view the contents of the clicked message
+                    FragmentTransaction fm = getFragmentManager().beginTransaction();
+                    UserPermissionsMessageFragment displayMessage = new UserPermissionsMessageFragment();
+                    displayMessage.show(fm, "Show fragment");
+                }
+                else{
+                    Toast.makeText(getContext(), R.string.noPermissionType, Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -123,6 +129,7 @@ public class UserPermissionsDisplayFragment extends Fragment{
             }
         }
         else{
+            permissionsList.add(new Permission("NONE", "DEFAULT", -1));
             permissionText.add("You have no " + status + " requests");
         }
     }
