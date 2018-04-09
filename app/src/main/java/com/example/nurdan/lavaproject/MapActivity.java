@@ -409,8 +409,8 @@ public class MapActivity extends FragmentActivity implements
     }
 
     private long convertTimeStamp(String timestamp){
-        long millis = 0;
-        long currmill = 0;
+        long millis;
+        long currmill;
         long res = 0;
         try {
             millis = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.CANADA).parse(timestamp).getTime();
@@ -438,7 +438,10 @@ public class MapActivity extends FragmentActivity implements
         MarkerOptions option = new MarkerOptions();
         option.position(start);
         option.title(markerTitle + markerName);
-        option.icon(colour);
+    //    option.icon(colour);
+        option.icon(BitmapDescriptorFactory.fromResource(R.drawable.groupicon5));
+        // todo: implementing custom group markers for gamification, allow for purchase in store
+        //todo: implement custom group info window too, show group's avatar
         option.alpha(0.7f);
         mMap.addMarker(option).setTag(end);
     }
