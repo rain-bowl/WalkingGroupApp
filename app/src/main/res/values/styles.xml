@@ -11,8 +11,8 @@
     <!-- Level styles -->
 
     <style name="AppTheme.lvl1" parent="Theme.AppCompat">
-        <item name="colorPrimary">#1e2756</item>
-        <item name="colorPrimaryDark">#141831</item>
+        <item name="colorPrimary">#8080B3</item>
+        <item name="colorPrimaryDark">#1A1A59</item>
         <item name="colorAccent">#2aac4b</item>
     </style>
 

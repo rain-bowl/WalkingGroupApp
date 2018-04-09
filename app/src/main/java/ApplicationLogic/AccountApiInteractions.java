@@ -575,7 +575,7 @@ public class AccountApiInteractions {
             totalXP = userObj.getInt("totalPointsEarned");
         } catch (Exception e) {}
 
-        // purchasing if xp is negative
+        // purchasing if xp is negative otherwise add xp points
         if(xp < 0 && item != null) {
             // check if user does not have enough points to purchase
             if(currXP + xp < 0) return false;
