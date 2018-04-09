@@ -183,7 +183,7 @@ public class EditGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 newGroupName = newName.getText().toString();
-                if (newGroupName == currGroupName) {
+                if (newGroupName.equals(currGroupName)) {
                     startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
                 }
                 Toast.makeText(getApplicationContext(), "newGroupName: " + newGroupName, Toast.LENGTH_LONG).show();
