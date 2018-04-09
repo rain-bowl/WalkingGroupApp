@@ -1,7 +1,6 @@
 package UIFragmentClasses;
 
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.nurdan.lavaproject.MessageInbox;
+import com.example.nurdan.lavaproject.MessageInboxActivity;
 import com.example.nurdan.lavaproject.R;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class newMessageTargetsDialogFragment extends DialogFragment{
         targetDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MessageInbox instance = (MessageInbox) getActivity();
+                MessageInboxActivity instance = (MessageInboxActivity) getActivity();
                 instance.setGroupID(position);
                 dismiss();
             }

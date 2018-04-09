@@ -2,6 +2,8 @@ package ApplicationLogic;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.AsyncTask;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
@@ -33,7 +35,7 @@ public class UserMessagingService {
     private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
     private final String baseURL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443";
     JSONObject currMsg= new JSONObject();
-    private ProgramSingletonController localMsg=ProgramSingletonController.getCurrInstance();
+    private ProgramSingletonController currController=ProgramSingletonController.getCurrInstance();
 
 
 
@@ -245,6 +247,31 @@ public class UserMessagingService {
             }
         }
         return null;
+    }
+
+    // Set messsage as read or unread by logged in user
+    public void setMessageRead(boolean isRead, int messageId, int userId, String bearerToken, Context context) {
+        final Context currContext = context;
+        AndroidNetworking.initialize(currContext);
+        AndroidNetworking.post(baseURL + "/messages/" + messageId + "/readby/" + userId )
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearerToken)
+                .addApplicationJsonBody(isRead)
+                .build()
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        if(response.code() == 201){
+                            Toast.makeText(currContext, R.string.successfulMessageSend, Toast.LENGTH_LONG).show();
+                        }
+                        Log.d(TAG, "MessageStatus: " + response.code());
+                    }
+                    @Override
+                    public void onError(ANError anError) {
+                        Toast.makeText(currContext, R.string.errorMessageSend, Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "MessageStatus: " + anError.getErrorDetail());
+                    }
+                });
     }
 
     public JSONObject getMessageByDefault() {

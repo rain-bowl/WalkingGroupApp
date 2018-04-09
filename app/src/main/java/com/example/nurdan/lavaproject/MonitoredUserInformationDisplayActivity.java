@@ -8,12 +8,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import UIFragmentClasses.userProfileDisplayFragment;
-import UIFragmentClasses.userProfileEditInfoFragment;
+import UIFragmentClasses.UserProfileDisplayFragment;
+import UIFragmentClasses.UserProfileEditInfoFragment;
 
-public class display_other_user_info extends AppCompatActivity {
+public class MonitoredUserInformationDisplayActivity extends AppCompatActivity {
     MenuItem editItem;
     Integer otherUserID;
     Boolean isMonitored;
@@ -26,7 +25,7 @@ public class display_other_user_info extends AppCompatActivity {
         isMonitored = getIntent().getBooleanExtra("isMonitored", true);
 
         setUpToolbar();
-        loadFragment(new userProfileDisplayFragment());
+        loadFragment(new UserProfileDisplayFragment());
     }
 
     private void setUpToolbar(){
@@ -46,10 +45,10 @@ public class display_other_user_info extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.editItem:
-                loadFragment(new userProfileEditInfoFragment());
+                loadFragment(new UserProfileEditInfoFragment());
                 break;
             case R.id.mainMenuItem:
-                startActivity(new Intent(display_other_user_info.this, UserMonitorDisplay.class));
+                startActivity(new Intent(MonitoredUserInformationDisplayActivity.this, UserMonitorActivity.class));
                 finish();
                 break;
         }

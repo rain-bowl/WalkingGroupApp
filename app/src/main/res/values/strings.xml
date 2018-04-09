@@ -104,6 +104,8 @@
     <string name="emptyMessageWarning">Please enter a message.</string>
     <string name="noMessageTargetsSelectedWarning">Please select the people to whom you would like to send your message to.</string>
     <string name="permissionsMenuItemTitle">Permissions</string>
+    <string name="notLeading">You are currently not the leader of any groups!</string>
+
     <!-- Panic message strings -->
     <string name="panicMsgTitle">PANIC MESSAGE</string>
     <string name="panicMsgInstructions">This emergency message will be sent to all of the people who monitor you as
@@ -142,4 +144,11 @@
     <string name="is_monitored_by_detail"> is monitored by:</string>
     <string name="mapIntroText">To enable real-time monitoring for you/your parent(s), please click \'TRACK ON/OFF\'.</string>
     <string name="track_on_off">Track ON/OFF</string>
+
+    <!-- User Levels -->
+    <string name="level1">1</string>
+    <string name="level2">5</string>
+    <string name="level3">10</string>
+    <string name="level4">15</string>
+    <string name="level5">20</string>
 </resources>

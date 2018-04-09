@@ -11,12 +11,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import ApplicationLogic.ProgramSingletonController;
 import UIFragmentClasses.UserInboxDisplayFragment;
 import UIFragmentClasses.UserInboxNewMessageFragment;
 import UIFragmentClasses.UserPermissionsDisplayFragment;
 import UIFragmentClasses.UserPermissionsMessageFragment;
 
-public class MessageInbox extends AppCompatActivity {
+public class MessageInboxActivity extends AppCompatActivity {
     int groupID = -1;
     int permissionID;
     String permissionMessage, permissionStatus;
@@ -24,6 +25,7 @@ public class MessageInbox extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_inbox);
+
         setUpToolbar();
         setFragment(new UserInboxDisplayFragment());
     }
@@ -49,7 +51,7 @@ public class MessageInbox extends AppCompatActivity {
                 setFragment(new UserInboxDisplayFragment());
                 break;
             case R.id.mainMenuInboxItem:
-                Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
+                Intent mainMenu = MainMenuActivity.mainMenuIntent(getApplicationContext());
                 startActivity(mainMenu);
                 finish();
                 break;
@@ -66,7 +68,7 @@ public class MessageInbox extends AppCompatActivity {
     }
     //Static method to return an intent to this activity
     public static Intent getInboxIntent(Context activityContext){
-        Intent inboxIntent = new Intent(activityContext, MessageInbox.class);
+        Intent inboxIntent = new Intent(activityContext, MessageInboxActivity.class);
         return inboxIntent;
     }
 

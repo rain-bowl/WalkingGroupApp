@@ -13,19 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nurdan.lavaproject.R;
-import com.example.nurdan.lavaproject.UserProfile;
-import com.example.nurdan.lavaproject.display_other_user_info;
+import com.example.nurdan.lavaproject.UserProfileActivity;
+import com.example.nurdan.lavaproject.MonitoredUserInformationDisplayActivity;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import ApplicationLogic.ProgramSingletonController;
-import ApplicationLogic.User;
 
 import static com.google.android.gms.plus.PlusOneDummyView.TAG;
 
@@ -35,7 +31,7 @@ variables which will hold whatever edit the user wants to make. If they click on
 changing their mind then their data on the server is kept the same. If on they click on submit changes button
 then whatever has been modified will be submitted to server.
  */
-public class userProfileEditInfoFragment extends Fragment {
+public class UserProfileEditInfoFragment extends Fragment {
     String tempAddress, tempHomePhone, tempCellPhone, tempGrade, tempTeacheName, tempEmergencyInfo, tempName, tempEmail;
     int tempBirthMonth = 0;
     int tempBirthYear = 0;
@@ -85,6 +81,7 @@ public class userProfileEditInfoFragment extends Fragment {
         grade = view.findViewById(R.id.userGradeInput);
         teacher = view.findViewById(R.id.userTeacherInput);
         emergencyInfo = view.findViewById(R.id.userEmergencyInput);
+        //Set the display fields with the information we currently have.
         try {
             name.setText(userInformation.getString("name"));
             email.setText(userInformation.getString("email"));
@@ -105,7 +102,6 @@ public class userProfileEditInfoFragment extends Fragment {
         submitChanges = view.findViewById(R.id.submitChangesBtn);
 
         //Listeners to all inputs
-
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -156,7 +152,7 @@ public class userProfileEditInfoFragment extends Fragment {
                     tempBirthYear = Integer.parseInt(s.toString());
                 }
                 catch (Exception e){
-
+                    tempBirthYear = -1;
                 }
 
             }
@@ -179,7 +175,7 @@ public class userProfileEditInfoFragment extends Fragment {
                     tempBirthMonth = Integer.parseInt(s.toString());
                 }
                 catch (Exception e){
-
+                    tempBirthMonth = -1;
                 }
             }
         });
@@ -357,9 +353,9 @@ public class userProfileEditInfoFragment extends Fragment {
            protected void onPostExecute(Boolean aBoolean) {
                 Toast.makeText(getContext(), "Success", Toast.LENGTH_LONG).show();
                 if(isOwner)
-                    ((UserProfile)getActivity()).loadFragment(new userProfileDisplayFragment());
+                    ((UserProfileActivity)getActivity()).loadFragment(new UserProfileDisplayFragment());
                 else
-                    ((display_other_user_info)getActivity()).loadFragment(new userProfileDisplayFragment());
+                    ((MonitoredUserInformationDisplayActivity)getActivity()).loadFragment(new UserProfileDisplayFragment());
            }
        }
 

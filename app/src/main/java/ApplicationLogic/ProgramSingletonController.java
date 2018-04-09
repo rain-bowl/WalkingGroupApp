@@ -1,5 +1,4 @@
 package ApplicationLogic;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -7,18 +6,11 @@ import android.text.Layout;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.graphics.Point;
-
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.ANRequest;
-import com.androidnetworking.common.ANResponse;
 import com.google.android.gms.maps.model.LatLng;
-
 import com.example.nurdan.lavaproject.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,11 +80,11 @@ public class ProgramSingletonController {
     public void setBearerToken(String token) {
         this.bearerToken = token;
     }
-
+    //Returns the id of the currently logged in user
     public int getUserID(){
         return this.userID;
     }
-
+    //Returns the bearer token for the user
     public String getBearerToken(){
         return this.bearerToken;
     }
@@ -116,31 +108,33 @@ public class ProgramSingletonController {
        this.currLoggedInUser = new User();
         currInstance = new AccountApiInteractions();
         logInStatus = currInstance.userLogIn(email, password, appContext);
-        this.bearerToken = currInstance.getBearerToken();
-        Log.d(TAG, "logIn: Program singleton bearer token " + this.bearerToken);
-        currInstance.getDatabaseUserProfile(email, appContext);
-        this.userID = currLoggedInUser.getID();
-        Log.d(TAG, "logIn: UserIDTEST " + this.userID   );
-        Log.d(TAG, "logIn: MONITORED BY TEST " +currLoggedInUser.getMonitorsOtherUsers());
-        getGroupNames(appContext);
-        //saveEmail(email, this.bearerToken, appContext);
+        //If the login is successful then the user information is loaded in.
+        if (logInStatus) {
+            this.bearerToken = currInstance.getBearerToken();
+            Log.d(TAG, "logIn: Program singleton bearer token " + this.bearerToken);
 
-        //save token in shared preferences
-        SharedPreferences prefs = appContext.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
-        prefs.edit()
-                .putString("bearerToken", bearerToken)
-                .putInt("userID", userID)
-                .apply();
-
+            //Retrieve the profile of the user loggin in
+            currInstance.getDatabaseUserProfile(email, appContext);
+            this.userID = currLoggedInUser.getID();
+            Log.d(TAG, "logIn: UserIDTEST " + this.userID);
+            // Grab the group names of every group that this person is a part of
+            getGroupNames(appContext);
+            //save token in shared preferences, used to keep the user logged in.
+            SharedPreferences prefs = appContext.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+            prefs.edit()
+                    .putString("bearerToken", bearerToken)
+                    .putInt("userID", userID)
+                    .apply();
+        }
         return logInStatus;
     }
 
-     //Simple method which discards bearer token to log user out.
+    //Discard bearer token on user logout.
     public void userLogout(){
         bearerToken = null;
     }
 
-    //Sets the fields of the user class according to the information provided by the JsonObject. Used on logging in.
+    //Sets the fields of the user class according to the information provided by the JsonObject. Used when logging in.
     public void setUserInfo(JSONObject newInformation){
         currLoggedInUser.setJsonObject(newInformation);
     }
@@ -180,7 +174,7 @@ public class ProgramSingletonController {
         successFlag = currInstance.addMonitoredUser(userID, tempUsrID, this.bearerToken, appContext);
         return successFlag;
     }
-
+    //Adds a user to monitor you
     public Boolean addUsrMonitorYou(String userEmail, Context appContext){
         Log.d(TAG, "addUsrMonitorYou: Bearer Token " + this.bearerToken);
         Boolean successFlag;
@@ -203,7 +197,9 @@ public class ProgramSingletonController {
     }
 
 
-    // Method to get users who are monitored by the currently logged in user.
+    /*Method used to retrieve and format a list of users who the logged in user is monitoring. Uses the logged in user ID to retrieve the list
+
+     */
     public ArrayList<String> getUsersMonitored(Context appContext){
         Log.d(TAG, "getUsersMonitored: USERID" + this.userID);
         Log.d(TAG, "getUsersMonitored: TOKENBEARER " + this.bearerToken);
@@ -288,7 +284,8 @@ public class ProgramSingletonController {
         }
         else return null;
     }
-
+    //Method used to iterate through a Json Array which contains Json Objects as each entry. Retrieves the value associated with the "name" key
+    //and returns an array list containing all of the names.
     private ArrayList<String> createUserList(JSONArray jsonArr, Context appContext){
         JSONObject tempJSONObject;
         ArrayList<String> tempUserStorage = new ArrayList<>();
@@ -304,7 +301,8 @@ public class ProgramSingletonController {
        }
         return tempUserStorage;
     }
-
+    //Method used to iterate through a JSON Array which contains a JSON object as each entry. Retrieves the "id" key from each object and
+    //creates then returns an array list containing them. Used when deleting users from are monitoring you/you are monitoring
     private ArrayList<Integer> createUserListID(JSONArray jsonArr, Context appContext){
         JSONObject tempJSONObject;
         ArrayList<Integer> tempUserStorage = new ArrayList<>();
@@ -321,7 +319,7 @@ public class ProgramSingletonController {
         return tempUserStorage;
     }
 
-
+    //Retrieves the group names of all groups for which the logged in user is the leader of.
     public void getGroupNames(Context currContext){
         ArrayList<String> temp = new ArrayList<>();
         JSONArray tempGroupID;
@@ -338,21 +336,23 @@ public class ProgramSingletonController {
                 }
             }
             else {
-                groupNames.add("You are not the leader of any groups!");
+                groupNames.add(R.string.notLeading + "");
             }
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
+    //Retruns the array list containing the group names for which the current user is a leader of.
     public ArrayList<String> getGroupNamesList (){
         return groupNames;
     }
+    //Returns the array list containg the ID's of all groups for which the current user is a leader of.
     public ArrayList<Integer> getGroupIDList(){
         return this.groupID;
     }
 
-
+    //Retreives the information for a user by their ID
     public JSONObject getUserByID(int ID, Context context){
         currInstance = new AccountApiInteractions();
         JSONObject currUserInfo = currInstance.getUserByID(this.bearerToken, ID, context);
@@ -376,7 +376,7 @@ public class ProgramSingletonController {
         return listOfPoints;
     }
 
-        //create new group
+    //Create a new group based on name, starting point and their destination
     public void createNewGroup(String groupDescription, LatLng start, LatLng dest, Context appContext){
         currInstance = new AccountApiInteractions();
         Log.d(TAG, "createNewGroup: USERID: " + this.userID);
@@ -386,14 +386,14 @@ public class ProgramSingletonController {
         currInstance.createNewGroup(currToken, groupDescription, leaderID, start, dest, appContext);
     }
 
-    //get group info
+    //Get the info for the specified group
     public JSONObject getGroupDetails(int groupID, Context appContext){
         String currToken = this.bearerToken;
         currInstance = new AccountApiInteractions();
         return currInstance.getGroupDetails(currToken, groupID, appContext);
     }
 
-    //get list of all groups
+    //get list of all groups, used for testing purposes
     public JSONArray getGroupList(Context appContext){
         currInstance = new AccountApiInteractions();
         String currToken = this.bearerToken;
@@ -480,6 +480,20 @@ public class ProgramSingletonController {
     public JSONObject getMessageObjById(int msgID, Context currContext) {
         UserMessagingService currInstance = new UserMessagingService();
         return currInstance.getMessageById(msgID, this.userID, this.bearerToken, currContext);
+    }
+
+    public void setUserMessageRead(Boolean isRead, int msgId, Context currContext) {
+        Log.d(TAG, "MessageChange: setting to " + isRead + " " + msgId);
+        UserMessagingService currInstance = new UserMessagingService();
+        currInstance.setMessageRead(isRead, msgId, this.userID, this.bearerToken, currContext);
+    }
+
+    public void rewardXP(Context context) {
+        currInstance.addUserXP(1, this.userID, this.bearerToken, context);
+    }
+
+    public void purchaseWithXP(int costXP, Context context) {
+        currInstance.addUserXP((-1) * costXP, this.userID, this.bearerToken, context);
     }
 
 

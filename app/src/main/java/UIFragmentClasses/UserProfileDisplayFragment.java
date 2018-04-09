@@ -31,7 +31,7 @@ import static android.content.ContentValues.TAG;
 /*Holds logic for displaying the user profile information.
 It quite simply grabs the JSONObject through the singleton and sets all of the fields one by one.
  */
-public class userProfileDisplayFragment extends Fragment{
+public class UserProfileDisplayFragment extends Fragment{
     ProgramSingletonController currInstance;
     ListView dispalyMonitorees;
     JSONObject userInformation = null;
@@ -76,11 +76,23 @@ public class userProfileDisplayFragment extends Fragment{
         TextView emergencyInfo = view.findViewById(R.id.userEmergencyInput);
 
         try {
-            Log.d(TAG, "onViewCreated: test" + userInformation.getString("emergencyContactInfo"));
+            //Populate text views
+            Log.d(TAG, "onViewCreated: test" + userInformation.getString("birthYear"));
             name.setText(userInformation.getString("name"));
             email.setText(userInformation.getString("email"));
-            birthYear.setText(userInformation.getString("birthYear"));
-            birthMonth.setText(userInformation.getString("birthMonth"));
+            //We use the value of
+            if(userInformation.getInt("birthYear") == 0){
+                birthYear.setText("Not Provided");
+            }
+            else {
+                birthYear.setText(userInformation.getString("birthYear"));
+            }
+            if(userInformation.getInt("birthMonth") == 0){
+                birthMonth.setText("Not Provided");
+            }
+            else {
+                birthMonth.setText(userInformation.getString("birthMonth"));
+            }
             address.setText(userInformation.getString("address"));
             homePhone.setText(userInformation.getString("homePhone"));
             cellPhone.setText(userInformation.getString("cellPhone"));

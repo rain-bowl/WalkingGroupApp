@@ -11,10 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 ;
 
-import UIFragmentClasses.userProfileEditInfoFragment;
-import UIFragmentClasses.userProfileDisplayFragment;
+import UIFragmentClasses.UserProfileEditInfoFragment;
+import UIFragmentClasses.UserProfileDisplayFragment;
 
-public class UserProfile extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity {
     MenuItem editItem, backItem, mainMenuItem;
 
     @Override
@@ -22,22 +22,24 @@ public class UserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         setUpToolbar();
-        loadFragment(new userProfileDisplayFragment());
+        loadFragment(new UserProfileDisplayFragment());
 
     }
 
+    //Loads the fragment which is passed as a parameter into the fragment container in the activity layou
     public void loadFragment(Fragment fragmentClass){
         FragmentTransaction fTInstance = getSupportFragmentManager().beginTransaction();
         fTInstance.replace(R.id.userProfileFragmentContainer, fragmentClass);
-        // don't need to pass Bundle with userID when displaying logged in user's info
         fTInstance.commit();
     }
 
+    //Set up our tool bar
     private void setUpToolbar(){
         Toolbar profileToolbar = (Toolbar) findViewById(R.id.profileDisplayToolbar);
         setSupportActionBar(profileToolbar);
     }
 
+    //Set up references to the menu items
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_display_menu, menu);
@@ -46,30 +48,31 @@ public class UserProfile extends AppCompatActivity {
         mainMenuItem = menu.findItem(R.id.mainMenuItem);
         return true;
     }
-
+    //Listener for the toolbar items.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.editItem:
                 backItem.setVisible(true);
                 editItem.setVisible(false);
-                loadFragment(new userProfileEditInfoFragment());
+                loadFragment(new UserProfileEditInfoFragment());
                 break;
             case R.id.mainMenuItem:
-                Intent mainMenu = MainMenu.mainMenuIntent(getApplicationContext());
+                Intent mainMenu = MainMenuActivity.mainMenuIntent(getApplicationContext());
                 startActivity(mainMenu);
                 finish(); // to remove activity from stack
                 break;
             case R.id.backItem:
                 backItem.setVisible(false);
                 editItem.setVisible(true);
-                loadFragment(new userProfileDisplayFragment());
+                loadFragment(new UserProfileDisplayFragment());
         }
         return true;
     }
 
+    //Static intent used to navigate to this activity
     public static Intent userProfileIntent(Context activityContexts){
-        Intent userProfileIntent = new Intent(activityContexts, UserProfile.class);
+        Intent userProfileIntent = new Intent(activityContexts, UserProfileActivity.class);
         return userProfileIntent;
     }
 }

@@ -38,7 +38,9 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:noHistory="true"> <!-- Disable go back button -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,15 +50,17 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MapSecondActivity" />
         <activity android:name=".GroupActivity" />
-        <activity android:name=".MainMenu" />
-        <activity android:name=".UserMonitorDisplay" />
-        <activity android:name=".EditUserInformation" />
-        <activity android:name=".UserProfile" />
-        <activity android:name=".MessageInbox" />
+        <activity android:name=".MainMenuActivity" />
+        <activity android:name=".UserMonitorActivity" />
+        <activity android:name=".EditUserInformationActivity" />
+        <activity android:name=".UserProfileActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".MessageInboxActivity" />
         <activity android:name=".EditGroupActivity" />
         <activity android:name=".GroupMemberInfoActivity" />
         <activity android:name=".ViewMembersActivity" />
-        <activity android:name=".display_other_user_info" />
+        <activity android:name=".MonitoredUserInformationDisplayActivity" />
+        <activity android:name=".single_message"></activity>
     </application>
 
 </manifest>
