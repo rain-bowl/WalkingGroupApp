@@ -3,6 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/userPermissionsItem"
+        android:title="@string/permissionsMenuItemTitle"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/newMessageItem"
         android:title="@string/newMessage"
         app:showAsAction="always" />
