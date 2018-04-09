@@ -118,6 +118,7 @@
     <string name="pendingStatus">*PENDING*</string>
     <string name="denyStatus">*DENIED*</string>
     <string name="noPermissionType">There are no permissions of this type!</string>
+    <string name="changeLeader">New Leader</string>
 
     <!-- User Monitor Activity -->
     <string name="delete">Delete</string>

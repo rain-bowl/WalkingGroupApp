@@ -435,7 +435,7 @@ public class AccountApiInteractions {
     }
 
     // update group
-    public void updateGroup(String currToken, int groupID, int leaderID, String newDescription, JSONArray latitude, JSONArray longitude, Context currContext) {
+    public void updateGroup(String currToken, int groupID, int leaderID, String newDescription, JSONArray latitude, JSONArray longitude, Context currContext, Boolean newLeaderFlag) {
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("groupDescription", newDescription);
@@ -447,23 +447,46 @@ public class AccountApiInteractions {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        String URLPath = baseURL + "/groups/" + groupID;
-        AndroidNetworking.initialize(currContext);
-        ANRequest groupEditReq = AndroidNetworking.post(URLPath)
-                .addHeaders("apiKey", apiKey)
-                .addHeaders("Authorization", currToken)
-                .addHeaders("PERMISSIONS-ENABLED", "true")
-                .addJSONObjectBody(jsonBody)
-                .build();
-        ANResponse<JSONObject> serverResponse = groupEditReq.executeForJSONObject();
-        Log.d(TAG, "updateGroup: JSON BODY INPUT BEFORE SEND " + jsonBody.toString());
-        if (serverResponse.isSuccess()) {
-            Log.d(TAG, "updateGroup: Success in sending edited information!!");
-        } else {
-            Log.d(TAG, "updateGroup: Server error when modding info detail: " + serverResponse.getError().getErrorDetail());
-            Log.d(TAG, "updateGroup: Server error when modding info " + serverResponse.getError().getErrorBody());
-            Log.d(TAG, "updateGroup: More error info " + serverResponse.getError().getResponse());
+        //If true then that means that we have a new group leader selected. This will set the permissions on.
+        if(newLeaderFlag) {
+            Log.d(TAG, "updateGroup: NEW LEADER");
+            String URLPath = baseURL + "/groups/" + groupID;
+            AndroidNetworking.initialize(currContext);
+            ANRequest groupEditReq = AndroidNetworking.post(URLPath)
+                    .addHeaders("apiKey", apiKey)
+                    .addHeaders("Authorization", currToken)
+                    .addHeaders("PERMISSIONS-ENABLED", "true")
+                    .addJSONObjectBody(jsonBody)
+                    .build();
+            ANResponse<JSONObject> serverResponse = groupEditReq.executeForJSONObject();
+            Log.d(TAG, "updateGroup: JSON BODY INPUT BEFORE SEND " + jsonBody.toString());
+            if (serverResponse.isSuccess()) {
+                Log.d(TAG, "updateGroup: Success in sending edited information!!");
+                Log.d(TAG, "updateGroup: Server response on success edit " + serverResponse.getOkHttpResponse().code());
+            } else {
+                Log.d(TAG, "updateGroup: Server error when modding info detail: " + serverResponse.getError().getErrorDetail());
+                Log.d(TAG, "updateGroup: Server error when modding info " + serverResponse.getError().getErrorBody());
+                Log.d(TAG, "updateGroup: More error info " + serverResponse.getError().getResponse());
+            }
+        }
+        //If no new leader is selected then there is no need for permissions so it is excluded.
+        else{
+             String URLPath = baseURL + "/groups/" + groupID;
+            AndroidNetworking.initialize(currContext);
+            ANRequest groupEditReq = AndroidNetworking.post(URLPath)
+                    .addHeaders("apiKey", apiKey)
+                    .addHeaders("Authorization", currToken)
+                    .addJSONObjectBody(jsonBody)
+                    .build();
+            ANResponse<JSONObject> serverResponse = groupEditReq.executeForJSONObject();
+            Log.d(TAG, "updateGroup: JSON BODY INPUT BEFORE SEND " + jsonBody.toString());
+            if (serverResponse.isSuccess()) {
+                Log.d(TAG, "updateGroup: Success in sending edited information!!");
+            } else {
+                Log.d(TAG, "updateGroup: Server error when modding info detail: " + serverResponse.getError().getErrorDetail());
+                Log.d(TAG, "updateGroup: Server error when modding info " + serverResponse.getError().getErrorBody());
+                Log.d(TAG, "updateGroup: More error info " + serverResponse.getError().getResponse());
+            }
         }
     }
 

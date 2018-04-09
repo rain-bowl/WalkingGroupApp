@@ -426,7 +426,22 @@ public class ProgramSingletonController {
         if (longitude.length() == 0) {
             longitude.put(0);
         }
-        currInstance.updateGroup(this.bearerToken, groupID, this.userID, newDescription, latitude, longitude, appContext);
+        currInstance.updateGroup(this.bearerToken, groupID, this.userID, newDescription, latitude, longitude, appContext, false);
+    }
+
+    //Overriden method which is used to set a new leader for a group and generate a permission for it.
+    public void updateGroup(int newLeaderId,int groupID, String newDescription, JSONArray latitude, JSONArray longitude, Context appContext){
+        currInstance = new AccountApiInteractions();
+        if (newDescription == null) {
+            newDescription = "No Name";
+        }
+        if (latitude.length() == 0) {
+            latitude.put(0);
+        }
+        if (longitude.length() == 0) {
+            longitude.put(0);
+        }
+        currInstance.updateGroup(this.bearerToken, groupID, newLeaderId, newDescription, latitude, longitude, appContext, true);
     }
 
     // delete group
@@ -455,7 +470,7 @@ public class ProgramSingletonController {
     }
 
 
-    /* These methods are related to messaging */
+    /* --------------------------- These methods are related to messaging --------------------------------*/
     public JSONArray getMessagesForUser(Context currContext){
         UserMessagingService currInstance = new UserMessagingService();
         Log.d(TAG, "getMessagesForUser: Inputs " + userID + " " + bearerToken);
