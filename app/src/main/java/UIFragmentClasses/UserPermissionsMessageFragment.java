@@ -1,5 +1,6 @@
 package UIFragmentClasses;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -58,6 +59,8 @@ public class UserPermissionsMessageFragment extends DialogFragment{
             public void onClick(View v) {
                 currInstance.respondToRequest(permId, false);
                 dismiss();
+                Intent mailboxIntent = MessageInbox.getInboxIntent(getContext());
+                startActivity(mailboxIntent);
             }
         });
 
@@ -66,6 +69,8 @@ public class UserPermissionsMessageFragment extends DialogFragment{
             public void onClick(View v) {
                 currInstance.respondToRequest(permId, true);
                 dismiss();
+                Intent mailboxIntent = MessageInbox.getInboxIntent(getContext());
+                startActivity(mailboxIntent);
             }
         });
 

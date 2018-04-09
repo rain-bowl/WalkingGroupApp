@@ -46,16 +46,16 @@ public class EditGroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_group);
         currMembers = findViewById(R.id.membersListView);
-
-
+        //Get id of the current selected group from singleton class
         currGroupId = currInstance.getCurrGroupID();
         Log.d("currGroupId: ", "currGroupId = " + currGroupId);
+
         //Set up all buttons
         setupBackBtn();
         createSubmitBtn();
         setupNewLeaderBtn();
 
-
+        //Grab information to be displayed to the user
         editGroup test = new editGroup();
         test.execute();
 
@@ -147,6 +147,7 @@ public class EditGroupActivity extends AppCompatActivity {
                     newLeaderID = membersIDList.get(position);
                     Log.d("ListClick", "onItemClick: New Leader ID " + newLeaderID);
                     newLeader = false;
+                    Toast.makeText(getApplicationContext(), getText(R.string.submitChanges), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -189,6 +190,7 @@ public class EditGroupActivity extends AppCompatActivity {
                 submitEdit test3 = new submitEdit();
                 test3.execute();
                 startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
+                finish();
             }
         });
     }
@@ -206,7 +208,7 @@ public class EditGroupActivity extends AppCompatActivity {
         });
     }
 
-    //Simpy set the bck button. Closes current activity and removes it from stack
+    //Simply set the back button. Closes current activity and removes it from stack
     private void setupBackBtn() {
         Button btn = findViewById(R.id.editBackBtn);
         btn.setOnClickListener(new View.OnClickListener() {

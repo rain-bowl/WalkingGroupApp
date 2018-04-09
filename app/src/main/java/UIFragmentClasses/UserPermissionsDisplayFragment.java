@@ -33,10 +33,10 @@ import static com.google.android.gms.wearable.DataMap.TAG;
 //Class which contains the logic to display and accept/deny the user permissions
 public class UserPermissionsDisplayFragment extends Fragment{
     ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
-    ArrayList<Permission> permissionsList = new ArrayList<>();
-    ArrayList<String> permissionText = new ArrayList<>();
+    ArrayList<Permission> permissionsList = new ArrayList<>();  //Store Permission instances containing information regarding each permission
+    ArrayList<String> permissionText = new ArrayList<>();       //Store a shortened version of the permission state + a preview of its contents
     ListView permissionsDisplay;
-    MessageInbox mInbox;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,11 +57,13 @@ public class UserPermissionsDisplayFragment extends Fragment{
                     ((MessageInbox) getActivity()).setPermissionID(permissionsList.get(position).getPermissionId());
                     ((MessageInbox) getActivity()).setPermissionMessage(permissionsList.get(position).getMessage());
                     ((MessageInbox)getActivity()).setPermissionStatus(permissionsList.get(position).getStatus());
+
                     //Call alert dialog to view the contents of the clicked message
                     FragmentTransaction fm = getFragmentManager().beginTransaction();
                     UserPermissionsMessageFragment displayMessage = new UserPermissionsMessageFragment();
                     displayMessage.show(fm, "Show fragment");
                 }
+                //Display default message to inform user that they have no permissions of this type.
                 else{
                     Toast.makeText(getContext(), R.string.noPermissionType, Toast.LENGTH_LONG).show();
                 }

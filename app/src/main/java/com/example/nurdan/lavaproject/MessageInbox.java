@@ -38,7 +38,7 @@ public class MessageInbox extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.user_inbox_menu, menu);
         return true;
     }
-
+    //Handle the taskbar options
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -64,11 +64,12 @@ public class MessageInbox extends AppCompatActivity {
         ftInstance.replace(R.id.inboxFragmentContainer, fragment);
         ftInstance.commit();
     }
-
+    //Static method to return an intent to this activity
     public static Intent getInboxIntent(Context activityContext){
         Intent inboxIntent = new Intent(activityContext, MessageInbox.class);
         return inboxIntent;
     }
+
     public void setGroupID(int id){
         groupID = id;
         Log.d("messageinbox", "setGroupID: id: " + id + "groupid: " + groupID);
@@ -100,7 +101,9 @@ public class MessageInbox extends AppCompatActivity {
     public String getPermissionStatus(){
         return this.permissionStatus;
     }
+
     public void setPermissionStatus(String permStatus){
         this.permissionStatus = permStatus;
     }
+
 }
