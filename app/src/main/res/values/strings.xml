@@ -103,6 +103,7 @@
     <string name="errorMessageSend">There was an error when sending your message. Please check your internet connection and resend your message.</string>
     <string name="emptyMessageWarning">Please enter a message.</string>
     <string name="noMessageTargetsSelectedWarning">Please select the people to whom you would like to send your message to.</string>
+    <string name="permissionsMenuItemTitle">Permissions</string>
     <string name="notLeading">You are currently not the leader of any groups!</string>
 
     <!-- Panic message strings -->
@@ -112,6 +113,15 @@
     <string name="msgSend">SEND</string>
     <string name="panicCancel">Go Back</string>
 
+    <!-- Permissions -->
+    <string name="acpt">Accept</string>
+    <string name="deny">Deny</string>
+    <string name="acptStatus">*ACCEPTED*</string>
+    <string name="pendingStatus">*PENDING*</string>
+    <string name="denyStatus">*DENIED*</string>
+    <string name="noPermissionType">There are no permissions of this type!</string>
+    <string name="changeLeader">New Leader</string>
+    <string name="submitChanges">Please click the Submit button to request permission from your monitors. Nothing will be updated until they all approve this new change.</string>
 
     <!-- User Monitor Activity -->
     <string name="delete">Delete</string>

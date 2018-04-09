@@ -88,6 +88,13 @@ public class ProgramSingletonController {
     public String getBearerToken(){
         return this.bearerToken;
     }
+    public User getCurrLoggedInUser(){
+        return this.currLoggedInUser;
+    }
+
+    public User getLoggedInUserProfile(){
+        return this.currLoggedInUser;
+    }
 
     //Creates a new user
     public Boolean createNewUser(JSONObject jsonBody, Context appContext){
@@ -419,7 +426,22 @@ public class ProgramSingletonController {
         if (longitude.length() == 0) {
             longitude.put(0);
         }
-        currInstance.updateGroup(this.bearerToken, groupID, this.userID, newDescription, latitude, longitude, appContext);
+        currInstance.updateGroup(this.bearerToken, groupID, this.userID, newDescription, latitude, longitude, appContext, false);
+    }
+
+    //Overriden method which is used to set a new leader for a group and generate a permission for it.
+    public void updateGroup(int newLeaderId,int groupID, String newDescription, JSONArray latitude, JSONArray longitude, Context appContext){
+        currInstance = new AccountApiInteractions();
+        if (newDescription == null) {
+            newDescription = "No Name";
+        }
+        if (latitude.length() == 0) {
+            latitude.put(0);
+        }
+        if (longitude.length() == 0) {
+            longitude.put(0);
+        }
+        currInstance.updateGroup(this.bearerToken, groupID, newLeaderId, newDescription, latitude, longitude, appContext, true);
     }
 
     // delete group
@@ -448,7 +470,7 @@ public class ProgramSingletonController {
     }
 
 
-    /* These methods are related to messaging */
+    /* --------------------------- These methods are related to messaging --------------------------------*/
     public JSONArray getMessagesForUser(Context currContext){
         UserMessagingService currInstance = new UserMessagingService();
         Log.d(TAG, "getMessagesForUser: Inputs " + userID + " " + bearerToken);
@@ -494,5 +516,29 @@ public class ProgramSingletonController {
     public JSONObject getLastGpsLocation(int UserID, Context appContext) {
         currInstance = new AccountApiInteractions();
         return currInstance.getLastGpsLocation(this.bearerToken, UserID, appContext);
+    }
+
+     /*------------------Everything related to user permissions ------------------------- */
+     //Grab denied requests
+    public JSONArray getDeniedRequests(){
+        UserPermissions currInstance = new UserPermissions();
+        return currInstance.getDeniedRequests(userID, bearerToken);
+    }
+
+    //Grab accepted requests
+    public JSONArray getAcceptedRequests(){
+        UserPermissions currInstance = new UserPermissions();
+        return currInstance.getAcceptedRequests(userID, bearerToken);
+    }
+
+    //Grab the message associated with a requests(its contents)
+    public String getPermMessage(int messageId){
+        UserPermissions currInstance = new UserPermissions();
+        return currInstance.getRequestMessage(messageId, bearerToken);
+    }
+    //Respond to a certain request identified by its id.
+    public void respondToRequest(int permId, Boolean choice){
+        UserPermissions currInstance = new UserPermissions();
+        currInstance.respondToRequest(permId, bearerToken, choice);
     }
 }

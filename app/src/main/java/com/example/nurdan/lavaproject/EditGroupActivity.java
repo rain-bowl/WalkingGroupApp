@@ -36,20 +36,26 @@ public class EditGroupActivity extends AppCompatActivity {
     JSONArray lngArr = new JSONArray();
     ArrayList<String> membersNameList = new ArrayList<>();
     ArrayList<Integer> membersIDList = new ArrayList<>();
+    //Shows state of program if current leaded wants to change leadership of the group
+    Boolean newLeader = false;
+    //Holds the ID of the new leader chosen
+    int newLeaderID = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_group);
         currMembers = findViewById(R.id.membersListView);
-
-
+        //Get id of the current selected group from singleton class
         currGroupId = currInstance.getCurrGroupID();
         Log.d("currGroupId: ", "currGroupId = " + currGroupId);
 
+        //Set up all buttons
         setupBackBtn();
         createSubmitBtn();
+        setupNewLeaderBtn();
 
+        //Grab information to be displayed to the user
         editGroup test = new editGroup();
         test.execute();
 
@@ -81,7 +87,7 @@ public class EditGroupActivity extends AppCompatActivity {
             edName.setText(currGroupName);
         }
     }
-
+    //Retrieves the members of a group
     private class getMembers extends AsyncTask<Void,Void,Void> {
         JSONArray original;
 
@@ -119,29 +125,47 @@ public class EditGroupActivity extends AppCompatActivity {
         }
     }
 
+    //Sets up the listview contents
     private void setMemberView(ListView list, ArrayList<String> names) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
         list.setAdapter(adapter);
     }
 
+    //Implements handles for listview. If the newleader flag is selected then it will collect the user Id of the selected group member
+    //Otherwise, it displays the information for the selected user
     private void ListClick (final ListView list) {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
-                Object member = list.getItemAtPosition(position);
-                Log.d("ListClick", "member: " + member);
-                currInstance.setCurrMemberID(membersIDList.get(position));
-                Log.d("ListClick", "memberID: " + membersIDList.get(position));
-                startActivity(new Intent(getApplicationContext(), GroupMemberInfoActivity.class));
+                if(!newLeader) {
+                    Object member = list.getItemAtPosition(position);
+                    Log.d("ListClick", "member: " + member);
+                    currInstance.setCurrMemberID(membersIDList.get(position));
+                    Log.d("ListClick", "memberID: " + membersIDList.get(position));
+                    startActivity(new Intent(getApplicationContext(), GroupMemberInfoActivity.class));
+                }
+                else{
+                    newLeaderID = membersIDList.get(position);
+                    Log.d("ListClick", "onItemClick: New Leader ID " + newLeaderID);
+                    newLeader = false;
+                    Toast.makeText(getApplicationContext(), getText(R.string.submitChanges), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
 
-    //used previously, probably gonna delete
+    //Submits the edited information. Uses 2 overloaded methods, one which simply edits the name of the group and another which can also
+    //edit the new leader.
     private class submitEdit extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void ... voids) {
-            currInstance.updateGroup(currGroupId, newGroupName, latArr, lngArr, getApplicationContext());
+            if(newLeaderID == -1) {
+                currInstance.updateGroup(currGroupId, newGroupName, latArr, lngArr, getApplicationContext());
+            }
+            else{
+                currInstance.updateGroup(newLeaderID, currGroupId, newGroupName, latArr, lngArr, getApplicationContext());
+                currInstance.addGroupMember(currGroupId, getApplicationContext());
+            }
             return null;
         }
         @Override
@@ -149,7 +173,8 @@ public class EditGroupActivity extends AppCompatActivity {
         }
     }
 
-//todo: fix updategroup, returns error rn
+    //creates the submit button which will launch the async task to either edit the group name or change the group leader + possibly
+    //edit group name as well.
     public void createSubmitBtn(){
         Button submitBtn = findViewById(R.id.submitBtn);
         final EditText newName = findViewById(R.id.editName);
@@ -165,10 +190,25 @@ public class EditGroupActivity extends AppCompatActivity {
                 submitEdit test3 = new submitEdit();
                 test3.execute();
                 startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
+                finish();
             }
         });
     }
 
+    //Sets up the new leader button. When clicked, it sets the newLeader boolean flag to true which indicates that the user wants to select a
+    //new group leader
+    private void setupNewLeaderBtn(){
+        Button newLeaderBtn = findViewById(R.id.newLeaderBtn);
+        newLeaderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplication(), "Please select a new leader from the list", Toast.LENGTH_LONG).show();
+                newLeader = true;
+            }
+        });
+    }
+
+    //Simply set the back button. Closes current activity and removes it from stack
     private void setupBackBtn() {
         Button btn = findViewById(R.id.editBackBtn);
         btn.setOnClickListener(new View.OnClickListener() {
