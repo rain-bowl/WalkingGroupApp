@@ -31,7 +31,6 @@ public class PanicMessageFragment extends DialogFragment{
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         backBtn = view.findViewById(R.id.panicMsgCnclBtn);
         sendMsgBtn = view.findViewById(R.id.panicMsgSendBtn);
         emergencyMsgText = view.findViewById(R.id.panicMsgInput);
@@ -43,6 +42,7 @@ public class PanicMessageFragment extends DialogFragment{
             }
         });
 
+        //Check if the message has text and send it if that is the case
         sendMsgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +57,7 @@ public class PanicMessageFragment extends DialogFragment{
             }
         });
 
-
+        //Listener for text input
         emergencyMsgText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

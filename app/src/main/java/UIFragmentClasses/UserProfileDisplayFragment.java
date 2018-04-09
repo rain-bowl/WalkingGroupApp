@@ -105,6 +105,7 @@ public class UserProfileDisplayFragment extends Fragment{
         }
     }
 
+    //Async class to retrieve the user profile
     private class asyncGetUserInfo extends AsyncTask<View, Void, Void> {
         View v;
         @Override

@@ -46,7 +46,7 @@ public class UserPermissionsMessageFragment extends DialogFragment{
         Log.d(TAG, "onViewCreated: Recieved permission id " + ((MessageInboxActivity)getActivity()).getPermissionID());
         permId = ((MessageInboxActivity)getActivity()).getPermissionID();
 
-        //Button listeners
+        //Button listeners. If a permission is denied or accepted then the user returns to their mail inbox
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +74,8 @@ public class UserPermissionsMessageFragment extends DialogFragment{
             }
         });
 
+        //Grab status of the selected permission from host activity. If it is accepted or denied then we hide the
+        //accept and deny buttons from the user
         String tempPermStatus = ((MessageInboxActivity)getActivity()).getPermissionStatus();
         if(tempPermStatus.compareTo(getString(R.string.denyStatus)) == 0 || tempPermStatus.compareTo(getString(R.string.acptStatus)) == 0){
             acpt.setVisibility(View.INVISIBLE);

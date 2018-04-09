@@ -48,8 +48,10 @@ public class UserInboxDisplayFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         inbox = (ListView) view.findViewById(R.id.messageDisplayListivew);
+        //Two array lists to hold the text and the id of a message
         messageText = new ArrayList<>();
         messageId = new ArrayList<>();
+        //Run async method to get messages
         GetMessages loadMessages = new GetMessages();
         loadMessages.execute();
     }
@@ -64,6 +66,7 @@ public class UserInboxDisplayFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            //If there are no messages, display a notification
             if(rawMessages == null || rawMessages.length() == 0){
                 messageText.add("You do not have any messages");
             }
@@ -101,8 +104,6 @@ public class UserInboxDisplayFragment extends Fragment {
         inbox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(context, "POS:" + messageId.get(position), Toast.LENGTH_SHORT).show();
-
                 Intent singleMessage = new Intent(getContext(), single_message.class);
                 singleMessage.putExtra("messageId", messageId.get(position));
                 startActivity(singleMessage);
