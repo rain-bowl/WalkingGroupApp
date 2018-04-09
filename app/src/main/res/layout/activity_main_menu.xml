@@ -91,6 +91,19 @@
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <Button
+        android:id="@+id/gotoStore"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="117dp"
+        android:layout_marginLeft="117dp"
+        android:layout_marginStart="117dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/store"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileBtn" />
+
+    <Button
         android:id="@+id/panicBtn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
@@ -101,7 +114,7 @@
         android:text="@string/panicBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/gotoStore" />
 
     <Button
         android:id="@+id/usrLogout"

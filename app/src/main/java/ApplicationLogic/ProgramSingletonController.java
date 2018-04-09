@@ -488,12 +488,14 @@ public class ProgramSingletonController {
         currInstance.setMessageRead(isRead, msgId, this.userID, this.bearerToken, currContext);
     }
 
-    public void rewardXP(Context context) {
-        currInstance.addUserXP(1, this.userID, this.bearerToken, context);
+    public boolean rewardXP(Context context) {
+        AccountApiInteractions account = new AccountApiInteractions();
+        return account.changeUserXP("", 1, this.userID, this.bearerToken, context);
     }
 
-    public void purchaseWithXP(int costXP, Context context) {
-        currInstance.addUserXP((-1) * costXP, this.userID, this.bearerToken, context);
+    public boolean purchaseWithXP(String item, int costXP, Context context) {
+        AccountApiInteractions account = new AccountApiInteractions();
+        return account.changeUserXP(item, (-1)*costXP, this.userID, this.bearerToken, context);
     }
 
 

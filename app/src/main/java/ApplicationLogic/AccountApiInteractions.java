@@ -596,25 +596,37 @@ public class AccountApiInteractions {
         return gpsInfo;
     }
 
-    public void addUserXP(int xp, int id, String token, Context context) {
+    public boolean changeUserXP(String item, int xp, int id, String token, Context context) {
 
         JSONObject userObj = getUserInfoByID(id, token, context);
-        int currXP = -1;
-        int totalXP = -1;
+        int currXP = 0;
+        int totalXP = 0;
         try {
             currXP = userObj.getInt("currentPoints");
             totalXP = userObj.getInt("totalPointsEarned");
         } catch (Exception e) {}
 
-        currXP += xp;
-        totalXP += xp;
+        // purchasing if xp is negative otherwise add xp points
+        if(xp < 0 && item != null) {
+            // check if user does not have enough points to purchase
+            if(currXP + xp < 0) return false;
+            currXP += xp;
+
+            // add item to their list of possessions
+            try {
+                userObj.put("customJson", "{\"purchased\": " + item + "}");
+            } catch (Exception e) {}
+        } else {
+            currXP += xp;
+            totalXP += xp;
+        }
 
         try {
             userObj.put("currentPoints", currXP);
             userObj.put("totalPointsEarned", totalXP);
         } catch (Exception e) {}
 
-        editDatabaseUserProfile(userObj, context, id, token);
+        return editDatabaseUserProfile(userObj, context, id, token);
     }
 
 }

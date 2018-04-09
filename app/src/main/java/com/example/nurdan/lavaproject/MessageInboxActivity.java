@@ -1,4 +1,5 @@
 package com.example.nurdan.lavaproject;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.androidnetworking.utils.Utils;
+
+import org.json.JSONObject;
+
 import ApplicationLogic.ProgramSingletonController;
 import UIFragmentClasses.UserInboxDisplayFragment;
 import UIFragmentClasses.UserInboxNewMessageFragment;
@@ -21,14 +26,17 @@ public class MessageInboxActivity extends AppCompatActivity {
     int groupID = -1;
     int permissionID;
     String permissionMessage, permissionStatus;
+    ProgramSingletonController currInstace;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //MainMenuActivity.setPrefTheme(MessageInboxActivity.this);
         setContentView(R.layout.activity_message_inbox);
 
         setUpToolbar();
         setFragment(new UserInboxDisplayFragment());
     }
+
 
     private void setUpToolbar(){
         Toolbar inboxToolBar = (Toolbar) findViewById(R.id.userMessageInboxToolbar);

@@ -8,4 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Level styles -->
+
+    <style name="AppTheme.lvl1" parent="Theme.AppCompat">
+        <item name="colorPrimary">#8080B3</item>
+        <item name="colorPrimaryDark">#1A1A59</item>
+        <item name="colorAccent">#2aac4b</item>
+    </style>
+
+    <style name="AppTheme.lvl1.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.Dark.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.Dark.PopupOverlay" parent="ThemeOverlay.AppCompat" />
+
 </resources>

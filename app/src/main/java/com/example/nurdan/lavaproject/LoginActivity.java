@@ -22,16 +22,21 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // set preferred theme
+        MainMenuActivity.setPrefTheme(this);
+
         setContentView(R.layout.activity_login);
         loginProgress = findViewById(R.id.loginProgressBar);
         loginProgress.setVisibility(GONE);
 
 
         // uses shared preferences to check if user is logged in
-        checkIfLoggedIn();
+        //checkIfLoggedIn();
         //Create the login buttons+listeners
         createLogInBtns();
     }
+
 
     //The logged in user has their information stored in shared preferences. This method checks if
     //there is any user information stored there. If there is, then we skip straight to the main menu
@@ -100,7 +105,9 @@ public class LoginActivity extends AppCompatActivity {
                 user = "";
                 if(successFlag){
                     SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
-                    prefs.edit().putBoolean("isLoggedIn", true).apply();
+                    prefs.edit()
+                            .putBoolean("isLoggedIn", true)
+                            .apply();
                     String t = prefs.getString("bearerToken", "");
                     Log.d("AsyncLogin", "onPostExecute: " + t);
                 }

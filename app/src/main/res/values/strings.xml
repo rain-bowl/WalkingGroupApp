@@ -145,6 +145,9 @@
     <string name="mapIntroText">To enable real-time monitoring for you/your parent(s), please click \'TRACK ON/OFF\'.</string>
     <string name="track_on_off">Track ON/OFF</string>
 
+
+    <!-- Store related -->
+    <string name="store">Store</string>
     <!-- User Levels -->
     <string name="level1">1</string>
     <string name="level2">5</string>

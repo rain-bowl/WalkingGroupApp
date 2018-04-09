@@ -38,9 +38,10 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map" />
-        <activity android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:noHistory="true"> <!-- Disable go back button -->
+        <activity
+            android:name=".LoginActivity"
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustPan"> <!-- Disable go back button -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,14 +54,16 @@
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".UserMonitorActivity" />
         <activity android:name=".EditUserInformationActivity" />
-        <activity android:name=".UserProfileActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".UserProfileActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MessageInboxActivity" />
         <activity android:name=".EditGroupActivity" />
         <activity android:name=".GroupMemberInfoActivity" />
         <activity android:name=".ViewMembersActivity" />
         <activity android:name=".MonitoredUserInformationDisplayActivity" />
-        <activity android:name=".single_message"></activity>
+        <activity android:name=".single_message" />
+        <activity android:name=".StoreActivity"></activity>
     </application>
 
 </manifest>
