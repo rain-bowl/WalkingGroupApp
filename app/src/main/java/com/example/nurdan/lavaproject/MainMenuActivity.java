@@ -19,9 +19,11 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setPrefTheme(this);
         setContentView(R.layout.activity_main_menu);
         createBtns();
     }
+
 
     private void createBtns(){
         Button mapBtn = findViewById(R.id.mapbtn);
@@ -31,6 +33,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Button usrProfile = findViewById(R.id.profileBtn);
         Button messageInbox = findViewById(R.id.inboxAccessBtn);
         Button panicBtn = findViewById(R.id.panicBtn);
+        Button gotoStore = findViewById(R.id.gotoStore);
 
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,10 +101,27 @@ public class MainMenuActivity extends AppCompatActivity {
                 panicFrag.show(fm, "Show panic message fragment");
             }
         });
+
+        gotoStore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent store = new Intent(MainMenuActivity.this, StoreActivity.class);
+                startActivity(store);
+            }
+        });
     }
 
 
     public static Intent mainMenuIntent(Context currActivityContext){
         return new Intent(currActivityContext, MainMenuActivity.class);
+    }
+
+
+    public static void setPrefTheme(Context context) {
+
+        SharedPreferences prefs = context.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+        String theme = prefs.getString("currentTheme", "");
+        if(theme.equals("Dark Blue Theme"))
+            context.setTheme(R.style.AppTheme_lvl1_NoActionBar);
     }
 }

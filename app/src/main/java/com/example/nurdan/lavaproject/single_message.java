@@ -45,8 +45,8 @@ public class single_message extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.single_msg_back:
-                //Intent mainMenu = new Intent(single_message.this, MessageInbox.class);
-                // can finish activity since there is no direct way to get to this activity
+                //Intent mainMenu = new Intent(single_message.this, MessageInboxActivity.class);
+                //startActivity(mainMenu);
                 finish();
                 break;
         }

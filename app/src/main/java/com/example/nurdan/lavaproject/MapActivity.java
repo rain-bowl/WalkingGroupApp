@@ -1,5 +1,6 @@
 package com.example.nurdan.lavaproject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -110,6 +111,10 @@ public class MapActivity extends FragmentActivity implements
                 }
             }
         }
+
+        // add points to the user
+        rewardUserXP addXP = new rewardUserXP();
+        addXP.execute(MapActivity.this);
     }
 
     private void setOnOffBtn(){
@@ -501,16 +506,12 @@ public class MapActivity extends FragmentActivity implements
             Log.e("Exception: %s", e.getMessage());
         }
     }
-}
-
-/*
-*
     private class rewardUserXP extends AsyncTask<Context,Void,Void> {
         @Override
         protected Void doInBackground(Context... contexts) {
             Context context = contexts[0];
-            currInstace = ProgramSingletonController.getCurrInstance();
-            currInstace.rewardXP(context);
+            localInstance = ProgramSingletonController.getCurrInstance();
+            localInstance.rewardXP(context);
             return null;
         }
 
@@ -519,4 +520,4 @@ public class MapActivity extends FragmentActivity implements
 
         }
     }
-* */
+}

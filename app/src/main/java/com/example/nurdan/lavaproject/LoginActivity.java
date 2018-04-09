@@ -28,10 +28,11 @@ public class LoginActivity extends AppCompatActivity {
 
 
         // uses shared preferences to check if user is logged in
-        checkIfLoggedIn();
+        //checkIfLoggedIn();
         //Create the login buttons+listeners
         createLogInBtns();
     }
+
 
     //The logged in user has their information stored in shared preferences. This method checks if
     //there is any user information stored there. If there is, then we skip straight to the main menu

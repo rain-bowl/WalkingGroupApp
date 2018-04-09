@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.androidnetworking.utils.Utils;
+
 import org.json.JSONObject;
 
 import ApplicationLogic.ProgramSingletonController;
@@ -23,11 +25,13 @@ public class MessageInboxActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //MainMenuActivity.setPrefTheme(MessageInboxActivity.this);
         setContentView(R.layout.activity_message_inbox);
 
         setUpToolbar();
         setFragment(new UserInboxDisplayFragment());
     }
+
 
     private void setUpToolbar(){
         Toolbar inboxToolBar = (Toolbar) findViewById(R.id.userMessageInboxToolbar);
