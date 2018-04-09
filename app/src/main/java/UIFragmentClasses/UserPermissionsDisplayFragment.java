@@ -16,7 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.nurdan.lavaproject.MessageInbox;
+import com.example.nurdan.lavaproject.MessageInboxActivity;
 import com.example.nurdan.lavaproject.R;
 
 import org.json.JSONArray;
@@ -54,9 +54,9 @@ public class UserPermissionsDisplayFragment extends Fragment{
                 //the message contents
                 Log.d(TAG, "onItemClick: Selected permission id " + permissionsList.get(position).getPermissionId());
                 if(permissionsList.get(position).getPermissionId() != -1) {
-                    ((MessageInbox) getActivity()).setPermissionID(permissionsList.get(position).getPermissionId());
-                    ((MessageInbox) getActivity()).setPermissionMessage(permissionsList.get(position).getMessage());
-                    ((MessageInbox)getActivity()).setPermissionStatus(permissionsList.get(position).getStatus());
+                    ((MessageInboxActivity) getActivity()).setPermissionID(permissionsList.get(position).getPermissionId());
+                    ((MessageInboxActivity) getActivity()).setPermissionMessage(permissionsList.get(position).getMessage());
+                    ((MessageInboxActivity)getActivity()).setPermissionStatus(permissionsList.get(position).getStatus());
 
                     //Call alert dialog to view the contents of the clicked message
                     FragmentTransaction fm = getFragmentManager().beginTransaction();

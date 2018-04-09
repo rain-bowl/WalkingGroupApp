@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.nurdan.lavaproject.MessageInbox;
+import com.example.nurdan.lavaproject.MessageInboxActivity;
 import com.example.nurdan.lavaproject.R;
 
 import ApplicationLogic.ProgramSingletonController;
@@ -40,11 +40,11 @@ public class UserPermissionsMessageFragment extends DialogFragment{
         back = view.findViewById(R.id.permBack);
         messageDisplay = view.findViewById(R.id.permMessageDisplay);
         //Show full message
-        messageDisplay.setText(((MessageInbox)getActivity()).getPermissionMessage());
-        Log.d(TAG, "onViewCreated: Message " + ((MessageInbox)getActivity()).getPermissionMessage());
+        messageDisplay.setText(((MessageInboxActivity)getActivity()).getPermissionMessage());
+        Log.d(TAG, "onViewCreated: Message " + ((MessageInboxActivity)getActivity()).getPermissionMessage());
         //Store permission id
-        Log.d(TAG, "onViewCreated: Recieved permission id " + ((MessageInbox)getActivity()).getPermissionID());
-        permId = ((MessageInbox)getActivity()).getPermissionID();
+        Log.d(TAG, "onViewCreated: Recieved permission id " + ((MessageInboxActivity)getActivity()).getPermissionID());
+        permId = ((MessageInboxActivity)getActivity()).getPermissionID();
 
         //Button listeners
         back.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +59,7 @@ public class UserPermissionsMessageFragment extends DialogFragment{
             public void onClick(View v) {
                 currInstance.respondToRequest(permId, false);
                 dismiss();
-                Intent mailboxIntent = MessageInbox.getInboxIntent(getContext());
+                Intent mailboxIntent = MessageInboxActivity.getInboxIntent(getContext());
                 startActivity(mailboxIntent);
             }
         });
@@ -69,12 +69,12 @@ public class UserPermissionsMessageFragment extends DialogFragment{
             public void onClick(View v) {
                 currInstance.respondToRequest(permId, true);
                 dismiss();
-                Intent mailboxIntent = MessageInbox.getInboxIntent(getContext());
+                Intent mailboxIntent = MessageInboxActivity.getInboxIntent(getContext());
                 startActivity(mailboxIntent);
             }
         });
 
-        String tempPermStatus = ((MessageInbox)getActivity()).getPermissionStatus();
+        String tempPermStatus = ((MessageInboxActivity)getActivity()).getPermissionStatus();
         if(tempPermStatus.compareTo(getString(R.string.denyStatus)) == 0 || tempPermStatus.compareTo(getString(R.string.acptStatus)) == 0){
             acpt.setVisibility(View.INVISIBLE);
             deny.setVisibility(View.INVISIBLE);
