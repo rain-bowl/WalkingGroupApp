@@ -23,9 +23,9 @@ import ApplicationLogic.ProgramSingletonController;
 
  */
 public class newMessageTargetsDialogFragment extends DialogFragment{
-    ArrayList<Integer> groupID;
+    ArrayList<Integer> groupID;             //Contains the id's of all groups
     ProgramSingletonController currInsance;
-    ListView targetDisplay;
+    ListView targetDisplay;                 //Display all groups
 
     public newMessageTargetsDialogFragment(){
         //empty constructor
@@ -41,10 +41,13 @@ public class newMessageTargetsDialogFragment extends DialogFragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         targetDisplay = view.findViewById(R.id.messageTargetsListview);
         currInsance = ProgramSingletonController.getCurrInstance();
+        //Load up all group id's
         groupID = currInsance.getGroupIDList();
+
+        //Set adapter and display them
         ArrayAdapter<String> groupNameAdapter = new ArrayAdapter<String>(getContext(), R.layout.user_listview_display_layout, currInsance.getGroupNamesList());
         targetDisplay.setAdapter(groupNameAdapter);
-
+        //Set the group id in the hosting activity to communicate between the 2 fragments
         targetDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -281,7 +281,7 @@ public class UserProfileEditInfoFragment extends Fragment {
                 tempEmergencyInfo = s.toString();
             }
         });
-
+        //Collect input and use helper methods(See below)
         submitChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -309,7 +309,7 @@ public class UserProfileEditInfoFragment extends Fragment {
         });
     }
 
-//The following two overriden methods will take in an input, compare it to what we have and if it has changed then the
+//The following two overridden methods will take in an input, compare it to what we have and if it has changed then the
     //new input will replace the old one.
     private void createJsonBody(String key, String value){
         try {
@@ -334,7 +334,8 @@ public class UserProfileEditInfoFragment extends Fragment {
            }
        }
 
-
+        //Edits the information and depends on a boolean input indicating if the user we are changing the information for
+        // is the owner(logged in user). If it is not then the user id is required.
        private class sendNewData extends AsyncTask<Boolean,Void, Boolean>{
            Boolean isOwner;
            @Override
@@ -348,7 +349,7 @@ public class UserProfileEditInfoFragment extends Fragment {
                     currInstance.editUserInformationById(userInformation, userMonitorID, getContext());
                 return null;
            }
-
+            //Load appropriate fragment
            @Override
            protected void onPostExecute(Boolean aBoolean) {
                 Toast.makeText(getContext(), "Success", Toast.LENGTH_LONG).show();
@@ -358,7 +359,7 @@ public class UserProfileEditInfoFragment extends Fragment {
                     ((MonitoredUserInformationDisplayActivity)getActivity()).loadFragment(new UserProfileDisplayFragment());
            }
        }
-
+    //Async class to retrieve user info. Used upon entering the fragment.
     private class asyncGetUserInfo extends AsyncTask<View, Void, Void> {
         View v;
         @Override

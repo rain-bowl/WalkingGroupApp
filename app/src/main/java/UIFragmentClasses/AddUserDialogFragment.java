@@ -19,11 +19,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import ApplicationLogic.ProgramSingletonController;
-
 import static android.content.ContentValues.TAG;
-
 import com.example.nurdan.lavaproject.R;
 
 public class AddUserDialogFragment extends AppCompatDialogFragment{
@@ -41,6 +38,7 @@ public class AddUserDialogFragment extends AppCompatDialogFragment{
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        //Instances for all widgets
         usrInput = view.findViewById(R.id.emailInput);
         usrWarning = view.findViewById(R.id.emptyInptWrn);
         addUsrMonitor = view.findViewById(R.id.addUsrMonitor);
@@ -49,6 +47,7 @@ public class AddUserDialogFragment extends AppCompatDialogFragment{
         addUsrBtn = view.findViewById(R.id.addUsrBtn);
         usrWarning.setVisibility(View.INVISIBLE);
 
+        //Listener for text input
         usrInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -69,12 +68,14 @@ public class AddUserDialogFragment extends AppCompatDialogFragment{
         addUsrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //If input is not empty then we search for user
                 if(emailInput.length() != 0){
                     asyncReq instance = new asyncReq();
                     instance.execute();
                     dismiss();
                 }
                 else {
+                    //Warn that inpput is emtpty
                     usrWarning.setVisibility(View.VISIBLE);
                 }
             }
@@ -94,6 +95,7 @@ public class AddUserDialogFragment extends AppCompatDialogFragment{
         ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
         @Override
         protected Void doInBackground(Void... voids) {
+            //Go through all 3 combinations of the checkboxes and execute the needed methods
             if(addUsrMonitor.isChecked() && addUsrMonitoree.isChecked()){
                 currInstance.addUsrMonitor(emailInput, getContext());
                 currInstance.addUsrMonitorYou(emailInput, getContext());
@@ -102,7 +104,7 @@ public class AddUserDialogFragment extends AppCompatDialogFragment{
                 Boolean flag = currInstance.addUsrMonitor(emailInput, getContext());
                 Log.d(TAG, "doInBackground: FLAG:" + flag);
                 if(flag){
-                    Log.d(TAG, "doInBackground: Added!!!!!");
+                    Log.d(TAG, "doInBackground: Added!");
                 }
             }
             else if (addUsrMonitoree.isChecked()){

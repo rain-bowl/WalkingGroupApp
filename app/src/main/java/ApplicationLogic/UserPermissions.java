@@ -16,13 +16,19 @@ import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
 
-/*This class implements all of the code related to working with any kind of user permissions */
+/**
+ * This class implements all of the methods related to settigns the user permissions
+ */
 public class UserPermissions {
     private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
     private final String baseURL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443";
 
-    //Method to handle the response to a request. Requires the Id of the permission as well as a boolean value to indicate
-    //the response from the user.
+    /**
+     * Handles the response to a permission
+     * @param permisID          Id of the permission
+     * @param bearerToken       Bearer token
+     * @param status            Boolean value representing whether or not a permission is denied or accepted
+     */
     public void respondToRequest(int permisID, String bearerToken, Boolean status){
         //Default value is denied, if status == true then it is set to approved
         String userChoice = "DENIED";
@@ -48,7 +54,12 @@ public class UserPermissions {
                 });
     }
 
-    //Synchronous method to retrieve the accepted requests. Returns a JSON array containing all of the requests
+    /**
+     * Synchronous method that retrieves all of the accepted requests for a particular user
+     * @param userID            ID of the user
+     * @param bearerToken       Bearer token
+     * @return                  JSON array containing all permissions
+     */
     public JSONArray getAcceptedRequests(int userID, String bearerToken){
         ANRequest permRequest = AndroidNetworking.get(baseURL + "/permissions?userId=" + userID + "&statusForUser=APPROVED")
                 .addHeaders("apiKey", apiKey)
@@ -67,7 +78,12 @@ public class UserPermissions {
         return null;
     }
 
-    //Synchronous method to retrieve the denied requests. Returns a JSON array containing all of the requests
+    /**
+     * Synchronous method to retrieve all of the permissions which have been denied
+     * @param userID        User id representing the user we want to retrieve permissions for
+     * @param bearerToken   Bearer token
+     * @return              Json array containing all of the denied permissions
+     */
     public JSONArray getDeniedRequests(int userID, String bearerToken){
         ANRequest permRequest = AndroidNetworking.get(baseURL + "/permissions?userId=" + userID + "&statusForUser=DENIED")
                 .addHeaders("apiKey", apiKey)
@@ -86,7 +102,13 @@ public class UserPermissions {
         return null;
     }
 
-    //Method retrieves the message attached to a particular request. Used to display the request to the user.
+    /**
+     * Synchronous method which retrieves the message which is attached to a particular permission. Used to display
+     * this to the user.
+     * @param requestID         Id of the permission to be retrieved
+     * @param bearerToken       Bearer token
+     * @return                  Message for the permission in string format
+     */
     public String getRequestMessage (int requestID, String bearerToken){
         ANRequest getRequestMessage = AndroidNetworking.get(baseURL + "/permissions/" + requestID)
                 .addHeaders("apiKey", apiKey)

@@ -6,8 +6,17 @@ import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.support.v7.widget.Toolbar;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
 
 import ApplicationLogic.ProgramSingletonController;
 import UIFragmentClasses.PanicMessageFragment;
@@ -15,13 +24,27 @@ import UIFragmentClasses.PanicMessageFragment;
 
 // Class simply creates and contains listeners to help user navigate the application.
 public class MainMenuActivity extends AppCompatActivity {
-    private ProgramSingletonController localInstance;
+    private ProgramSingletonController localInstance = ProgramSingletonController.getCurrInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setPrefTheme(this);
         setContentView(R.layout.activity_main_menu);
+        setupToolbar();
         createBtns();
+
+        //Load user profile if it is null indicating that the user has closed the app and opened it again.
+        SharedPreferences userInfo = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+        if(userInfo.getBoolean("isLoggedIn", false)){
+            String userProfileString = userInfo.getString("userProfile", null);
+            try {
+                JSONObject userProfile = new JSONObject(userProfileString);
+                localInstance.setUserInfo(userProfile);
+            }
+            catch (Exception e){
+
+            }
+        }
     }
 
 
@@ -29,9 +52,6 @@ public class MainMenuActivity extends AppCompatActivity {
         Button mapBtn = findViewById(R.id.mapbtn);
         Button mngGroups = findViewById(R.id.mngGroups);
         Button usrMonitor = findViewById(R.id.usrMonitor);
-        Button usrLogout = findViewById(R.id.usrLogout);
-        Button usrProfile = findViewById(R.id.profileBtn);
-        Button messageInbox = findViewById(R.id.inboxAccessBtn);
         Button panicBtn = findViewById(R.id.panicBtn);
         Button gotoStore = findViewById(R.id.gotoStore);
         Button leaderboardBtn = findViewById(R.id.leaderboard_btn);
@@ -58,41 +78,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
             }
         });
-        usrProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent userProfile = UserProfileActivity.userProfileIntent(getApplicationContext());
-                startActivity(userProfile);
-            }
-        });
 
-        //Logs out user by discarding currently saved bearer token and returns them to the log in menu
-        usrLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProgramSingletonController currInstence = ProgramSingletonController.getCurrInstance();
-                currInstence.userLogout();
-
-                // reset login credentials
-                SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
-                prefs.edit()
-                        .putString("bearerToken", "")
-                        .putInt("userID", -1)
-                        .apply();
-
-                Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);// New activity
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        messageInbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent inboxIntent = MessageInboxActivity.getInboxIntent(getApplicationContext());
-                startActivity(inboxIntent);
-            }
-        });
 
         panicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,5 +117,49 @@ public class MainMenuActivity extends AppCompatActivity {
         String theme = prefs.getString("currentTheme", "");
         if(theme.equals("Dark Blue Theme"))
             context.setTheme(R.style.AppTheme_lvl1_NoActionBar);
+    }
+
+    public void setupToolbar(){
+        Toolbar mainMenuToolbar = findViewById(R.id.mainMenuToolbar);
+        setSupportActionBar(mainMenuToolbar);
+        getSupportActionBar().setTitle(null);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.mailInboxMenuItem:
+                Intent inboxIntent = MessageInboxActivity.getInboxIntent(getApplicationContext());
+                startActivity(inboxIntent);
+                break;
+            case R.id.userProfileMenuItem:
+                Intent userProfile = UserProfileActivity.userProfileIntent(getApplicationContext());
+                startActivity(userProfile);
+                break;
+            //Logs out user by discarding currently saved bearer token and returns them to the log in menu
+            case R.id.mainMenuLogoutItem:
+                ProgramSingletonController currInstence = ProgramSingletonController.getCurrInstance();
+                currInstence.userLogout();
+
+                // reset login credentials upon logging out
+                SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+                prefs.edit()
+                        .putBoolean("isLoggedIn", false)
+                        .putString("bearerToken", "")
+                        .putString("userProfile" , "")
+                        .putInt("userID", -1)
+                        .apply();
+
+                Intent loginIntent = LoginActivity.loginActIntent(getApplicationContext());
+                startActivity(loginIntent);
+                finish();
+                break;
+        }
+        return true;
     }
 }
