@@ -78,7 +78,7 @@ public class EditGroupActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void param) {
             try {
-                //Set fields
+                //Set fields to edit
                 currGroupName = currGroupDetails.getString("groupDescription");
                 latArr = currGroupDetails.getJSONArray("routeLatArray");
                 lngArr = currGroupDetails.getJSONArray("routeLngArray");
@@ -180,8 +180,7 @@ public class EditGroupActivity extends AppCompatActivity {
         }
     }
 
-    //creates the submit button which will launch the async task to either edit the group name or change the group leader + possibly
-    //edit group name as well.
+    //creates the submit button which will launch the async task to either edit the group name or change the group leader
     public void createSubmitBtn(){
         Button submitBtn = findViewById(R.id.submitBtn);
         final EditText newName = findViewById(R.id.editName);
@@ -190,9 +189,11 @@ public class EditGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 newGroupName = newName.getText().toString();
+                // check if name was changed, if not then return to list of groups
                 if (newGroupName.equals(currGroupName)) {
                     startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
                 }
+                // make editgroup request to server
                 submitEdit test3 = new submitEdit();
                 test3.execute();
                 startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));

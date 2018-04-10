@@ -34,6 +34,7 @@ public class UserMonitorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_user_monitor_display);
         displayProgress = findViewById(R.id.displayProgress);
         displayProgress.setVisibility(View.GONE);
@@ -48,6 +49,7 @@ public class UserMonitorActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(null);
     }
 
+    //Listener for different buttons in toolbar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         ListView listMonitorThem = (ListView) findViewById(R.id.usersMonitoredView);
@@ -56,6 +58,7 @@ public class UserMonitorActivity extends AppCompatActivity {
         Integer checkedMonitorMe = listMonitorMe.getCheckedItemPosition();
         switch (item.getItemId()) {
             case R.id.add_monitor_user:
+                //load new fragment
                 AppCompatDialogFragment addUserFragment = new AddUserDialogFragment();
                 addUserFragment.show(getSupportFragmentManager(), "addUsr");
                 break;
@@ -68,6 +71,7 @@ public class UserMonitorActivity extends AppCompatActivity {
                 break;
 
             case R.id.info_monitor_user:
+                //Show the info of the selected user, goes to a new activity
                 Intent otherUsers = new Intent(UserMonitorActivity.this, MonitoredUserInformationDisplayActivity.class);
                 Integer checked = -1;
                 Boolean isMonitored;
@@ -139,6 +143,7 @@ public class UserMonitorActivity extends AppCompatActivity {
     //Loads the information retreived by the setUpListview method into the UI.
     private void updateListView(ArrayList<String> retrievedUsers, ArrayList<Integer> retrievedUserIDs, int resourceID){
         ListView displayMntrdUser = (ListView) findViewById(resourceID);
+        //Handle the case of the number of retrieved users being 0
         if (retrievedUsers.isEmpty()) {
                 retrievedUserIDs.clear();
                 retrievedUsers.add("There are no users currently monitored");
@@ -170,6 +175,7 @@ public class UserMonitorActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             displayMntrdUser = (ListView) findViewById(R.id.usersMonitoredView);
+            //Simply calling singleton methods to get information
             retrievedUsers = currInstanceSingleton.getUsersMonitored(getApplicationContext());
             retrievedMonitoringIDs = currInstanceSingleton.getUsersMonitoredIDs(getApplicationContext());
             return null;
@@ -177,6 +183,7 @@ public class UserMonitorActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.d("USERDISPLAY", "onPostExecute:Got here ");
+            //Case of possible network error, display a toast
             if(retrievedUsers == null) {
                 Toast.makeText(UserMonitorActivity.this, "Could not retrieve monitored users", Toast.LENGTH_SHORT).show();
                 return;
@@ -185,6 +192,8 @@ public class UserMonitorActivity extends AppCompatActivity {
         }
     }
 
+    //Another async class which is similar to the one above. Retrieves the users who monitor the logged in user.
+    //Sets up 2 array lists with one holding the names and the other their id's
     private class getUsrsMntrThis extends AsyncTask<Void, Void, Void> {
         ListView displayMonitors;
         ArrayList<String> retrievedUsers;
@@ -197,6 +206,7 @@ public class UserMonitorActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(Void aVoid) {
+            //Network error case
             if(retrievedUsers == null) {
                 Toast.makeText(UserMonitorActivity.this, "Could not retrieve users monitoring you", Toast.LENGTH_SHORT).show();
                 return;
@@ -205,6 +215,7 @@ public class UserMonitorActivity extends AppCompatActivity {
         }
     }
 
+    //Delete a user who is being monitored by the current logged in user
     private class AsyncDeleteMonitoredUser extends AsyncTask<ArrayList<Integer>, Void, Void> {
         @Override
         protected Void doInBackground(ArrayList<Integer>... arrayLists) {
@@ -222,6 +233,7 @@ public class UserMonitorActivity extends AppCompatActivity {
         }
     }
 
+    //Delete a user who is monitoring the current logged in user
     private class AsyncDeleteMonitoringMeUsers extends AsyncTask<ArrayList<Integer>, Void, Void> {
         @Override
         protected Void doInBackground(ArrayList<Integer>...arrayLists) {

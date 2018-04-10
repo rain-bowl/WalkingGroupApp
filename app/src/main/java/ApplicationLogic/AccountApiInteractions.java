@@ -716,7 +716,7 @@ public class AccountApiInteractions {
      * @param id                user id
      * @param token             bearer token
      * @param context           Context for library
-     * @return
+     * @return                  Boolean value indicating success of the request to the server
      */
     public boolean changeUserXP(String item, int xp, int id, String token, Context context) {
 
@@ -731,13 +731,34 @@ public class AccountApiInteractions {
         // purchasing if xp is negative otherwise add xp points
         if(xp < 0 && item != null) {
             // check if user does not have enough points to purchase
-            if(currXP + xp < 0) return false;
+            if(currXP + xp < 0) {
+                Log.d(TAG, "Not enough points " + xp + " " + currXP);
+                return false;
+            }
             currXP += xp;
 
+            String previousPurchase = "";
+            try {
+                previousPurchase = userObj.getString("customJson");
+            } catch (Exception e) {}
+
+            previousPurchase = previousPurchase.substring(0, previousPurchase.length() - 1);
+
+            if(previousPurchase.toLowerCase().contains(item.toLowerCase())) {
+                Log.d(TAG, "ALREADY HAS ITEM " + item + " in " + previousPurchase);
+                return false;
+            }
+
+            String newPurchase = previousPurchase + "," + item + "}";
+
+            Log.d(TAG, "previous " + previousPurchase + " new " + newPurchase);
             // add item to their list of possessions
             try {
-                userObj.put("customJson", "{\"purchased\": " + item + "}");
+                //userObj.put("customJson", "{\"purchased\": " + item + "}");
+                userObj.put("customJson", newPurchase);
             } catch (Exception e) {}
+
+
         } else {
             currXP += xp;
             totalXP += xp;

@@ -88,8 +88,17 @@ public class ProgramSingletonController {
         return this.userID;
     }
 
-
-
+    /**
+     * Sets up the currently logged in user after they close the application and open it again.
+     * @param userID        The user ID recovered from shared preferences
+     * @param bearerToken   Bearer token recovered from shared preferences
+     */
+    public void setUpLoggedInUser(int userID, String bearerToken){
+        this.userID = userID;
+        this.bearerToken = bearerToken;
+        //Create a new user instance to store the user profile in
+        currLoggedInUser = new User();
+    }
 
     /**
      * Creates a new user based on the provided information
@@ -136,6 +145,21 @@ public class ProgramSingletonController {
                     .apply();
         }
         return logInStatus;
+    }
+
+    public void savePurchasedItemsToPrefs(Context appContext) {
+        String purchasedString = "";
+        JSONObject purchasedItems = new JSONObject();
+        try {
+             purchasedString = this.getUserInfo().getString("customJson");
+        } catch (Exception e) {}
+
+        if(purchasedString.toLowerCase().contains(("Dark Blue Theme").toLowerCase())) {
+            SharedPreferences prefs = appContext.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+            prefs.edit()
+                    .putString("currentTheme", "Dark Blue Theme")
+                    .apply();
+        }
     }
 
     //Discard bearer token on user logout.
@@ -194,6 +218,7 @@ public class ProgramSingletonController {
         Log.d(TAG, "addUsrMonitorYou: Bearer Token " + this.bearerToken);
         Boolean successFlag;
         AccountApiInteractions getMonitorID = new AccountApiInteractions();
+
         UserMonitor currMonitorInstance = new UserMonitor();
         int tempMonitorID = getMonitorID.getDatabaseUserID(userEmail, appContext, this.bearerToken);
         successFlag = currMonitorInstance.addUsrToMonitorYou(userID, tempMonitorID, this.bearerToken, appContext);
@@ -253,7 +278,7 @@ public class ProgramSingletonController {
         else return null;
     }
 
-
+    //Method to get the users who monitor the logged in user. Returns them in an array list
     public ArrayList<String> getUsersWhoMonitorThis(Context appContext){
         JSONArray tempArr = null;
         UserMonitor currInstance = new UserMonitor();
@@ -269,6 +294,7 @@ public class ProgramSingletonController {
         else return null;
     }
 
+    //Retrieve the ids of the people who monitor the current user
     public ArrayList<Integer> getIDsWhoMonitorThis(Context appContext){
         JSONArray tempArr = null;
         UserMonitor currInstance = new UserMonitor();
@@ -568,6 +594,16 @@ public class ProgramSingletonController {
     }
 
     /**
+     * Retrieves all pending requests for the logged in user. This could be done from the user profile retreived
+     * from the server during login but if we retrieve them this way, their display is easier to update.
+     * @return  Json array containing the pending permissions
+     */
+    public JSONArray getPendingRequests(){
+        UserPermissions currInstance = new UserPermissions();
+        return currInstance.getPendingRequests(userID, bearerToken);
+    }
+
+    /**
      * Grab the message associated with a request
      * @param messageId         id of request
      * @return                  The message in string format
@@ -586,4 +622,5 @@ public class ProgramSingletonController {
         UserPermissions currInstance = new UserPermissions();
         currInstance.respondToRequest(permId, bearerToken, choice);
     }
+
 }

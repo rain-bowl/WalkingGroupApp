@@ -27,20 +27,25 @@ public class GroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_group);
 
         localInstance = ProgramSingletonController.getCurrInstance();
+
+        // check if start and end for group were selected, sends user back to map if not done properly
         startEnd = localInstance.returnLatLng(getApplicationContext());
         if (startEnd.size() != 2) {
             Toast.makeText(this, "Please reselect coordinates.", Toast.LENGTH_LONG).show();
             startEnd.clear();
             finish();
         }
+        // otherwise, sets start and end coords
         else{
             start = startEnd.get(0);
             end = startEnd.get(1);
         }
 
+        // creates string for display
         if (start != null && end != null){
             startLatLng = start.toString();
             endLatLng = end.toString();
@@ -51,15 +56,16 @@ public class GroupActivity extends AppCompatActivity {
         setUpCoord();
     }
 
+    // shows group creator where the start and end points are
     private void setUpCoord(){
         final TextView startpt = findViewById(R.id.startCoord);
         final TextView endpt = findViewById(R.id.endCoord);
-
 
         startpt.setText(startLatLng);
         endpt.setText(endLatLng);
     }
 
+    // makes create button, sends request to server to create new gorup upon clicking
     public void createBtn(){
         Button createButton = findViewById(R.id.create_btn);
         final EditText group = findViewById(R.id.groupName);
@@ -77,6 +83,7 @@ public class GroupActivity extends AppCompatActivity {
         });
     }
 
+    // back button
     private void setupBackbtn() {
         Button btn = findViewById(R.id.back_btn);
         btn.setOnClickListener(new View.OnClickListener() {

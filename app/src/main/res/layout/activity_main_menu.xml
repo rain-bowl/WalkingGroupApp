@@ -19,14 +19,17 @@
         android:id="@+id/appTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="80dp"
+        android:layout_marginEnd="78dp"
+        android:layout_marginRight="78dp"
         android:layout_marginStart="80dp"
         android:layout_marginTop="45dp"
         android:text="@string/walking_group_project"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainMenuToolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/mainMenuToolbar"
+        android:layout_marginLeft="80dp" />
 
     <Button
         android:id="@+id/mapbtn"
@@ -34,11 +37,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="118dp"
         android:layout_marginStart="118dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="48dp"
         android:text="@string/title_activity_map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainMenuToolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/appTitle" />
 
     <Button
         android:id="@+id/usrMonitor"
@@ -50,7 +53,7 @@
         android:text="@string/usrMonitors"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mngGroups" />
+        app:layout_constraintTop_toBottomOf="@+id/mapbtn" />
 
     <Button
         android:id="@+id/mngGroups"
@@ -61,9 +64,8 @@
         android:layout_marginTop="16dp"
         android:text="@string/mngGroups"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapbtn" />
+        app:layout_constraintTop_toBottomOf="@+id/usrMonitor" />
 
     <Button
         android:id="@+id/leaderboard_btn"
@@ -79,31 +81,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mngGroups" />
 
-    <Button
-        android:id="@+id/gotoStore"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="117dp"
-        android:layout_marginStart="117dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/store"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/leaderboard_btn" />
 
-    <Button
-        android:id="@+id/panicBtn"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="117dp"
-        android:layout_marginStart="117dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/panicBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gotoStore" />
+
+ <Button
+     android:id="@+id/gotoStore"
+     android:layout_width="150dp"
+     android:layout_height="wrap_content"
+     android:layout_marginEnd="117dp"
+     android:layout_marginStart="117dp"
+     android:layout_marginTop="16dp"
+     android:text="@string/store"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/leaderboard_btn" />
+
+ <Button
+     android:id="@+id/panicBtn"
+     android:layout_width="150dp"
+     android:layout_height="wrap_content"
+     android:layout_marginEnd="117dp"
+     android:layout_marginStart="117dp"
+     android:layout_marginTop="16dp"
+     android:text="@string/panicBtn"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/gotoStore" />
 
 
 

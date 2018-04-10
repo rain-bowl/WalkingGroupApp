@@ -33,6 +33,7 @@ public class ViewMembersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_view_members);
         setupBackBtn();
         currGroupId = currInstance.getCurrGroupID();

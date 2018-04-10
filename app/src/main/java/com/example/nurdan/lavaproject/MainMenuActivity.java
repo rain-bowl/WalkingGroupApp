@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,15 +40,16 @@ public class MainMenuActivity extends AppCompatActivity {
             String userProfileString = userInfo.getString("userProfile", null);
             try {
                 JSONObject userProfile = new JSONObject(userProfileString);
+                localInstance.setUpLoggedInUser(userInfo.getInt("userID", -1), userInfo.getString("bearerToken", "Nothing"));
                 localInstance.setUserInfo(userProfile);
             }
             catch (Exception e){
-
+                e.printStackTrace();
             }
         }
     }
 
-
+    //Create buttons and listeners
     private void createBtns(){
         Button mapBtn = findViewById(R.id.mapbtn);
         Button mngGroups = findViewById(R.id.mngGroups);
@@ -105,24 +107,26 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
-
+    //Static intent method for navigation to this activity from others
     public static Intent mainMenuIntent(Context currActivityContext){
         return new Intent(currActivityContext, MainMenuActivity.class);
     }
 
-
+    //Sets the theme of this if the user has purchased it
     public static void setPrefTheme(Context context) {
-
         SharedPreferences prefs = context.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
         String theme = prefs.getString("currentTheme", "");
-        if(theme.equals("Dark Blue Theme"))
-            context.setTheme(R.style.AppTheme_lvl1_NoActionBar);
+        if(theme.equals("Dark Blue Theme")) {
+            context.setTheme(R.style.AppTheme_lvl1);
+        }
     }
 
+    //Set up the action bar
     public void setupToolbar(){
         Toolbar mainMenuToolbar = findViewById(R.id.mainMenuToolbar);
         setSupportActionBar(mainMenuToolbar);
-        getSupportActionBar().setTitle(null);
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setTitle(null);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -130,6 +134,7 @@ public class MainMenuActivity extends AppCompatActivity {
         return true;
     }
 
+    //Set up listeners for the action bar items. All of them are simple static intents
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

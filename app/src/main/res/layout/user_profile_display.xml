@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="0dp"
     android:visibility="visible">
 
 
     <ScrollView
         style="@android:style/Widget.DeviceDefault.Light.ScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_height="match_parent"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@android:drawable/presence_invisible"
+            android:divider="@drawable/divider"
             android:gravity="center"
             android:orientation="vertical"
             android:showDividers="beginning|middle|end"
@@ -32,7 +27,8 @@
 
             <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -41,7 +37,7 @@
                     <TextView
                         android:id="@+id/nameTitle"
                         android:layout_width="250dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/fullname_title" />
                 </TableRow>
 
@@ -52,14 +48,16 @@
                     <TextView
                         android:id="@+id/nameInput"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp" />
                 </TableRow>
 
             </TableLayout>
 
             <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <TableRow
                     android:layout_width="wrap_content"
@@ -68,7 +66,7 @@
                     <TextView
                         android:id="@+id/emailTitle"
                         android:layout_width="250dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/prompt_email" />
                 </TableRow>
 
@@ -79,14 +77,16 @@
                     <TextView
                         android:id="@+id/emailInput"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp" />
                 </TableRow>
 
             </TableLayout>
 
             <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -95,7 +95,7 @@
                     <TextView
                         android:id="@+id/birthYearTitle"
                         android:layout_width="250dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/birthYear" />
                 </TableRow>
 
@@ -107,14 +107,16 @@
                         android:id="@+id/birthYearInput"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ems="10"></TextView>
+                        android:ems="10"
+                        android:textSize="18sp" />
                 </TableRow>
 
             </TableLayout>
 
             <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -123,7 +125,7 @@
                     <TextView
                         android:id="@+id/birthMonthTitle"
                         android:layout_width="250dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/birthMonth" />
                 </TableRow>
 
@@ -134,14 +136,16 @@
                     <TextView
                         android:id="@+id/birthMonthInput"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"></TextView>
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp" />
                 </TableRow>
 
             </TableLayout>
 
             <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -150,7 +154,7 @@
                     <TextView
                         android:id="@+id/homePhoneTitle"
                         android:layout_width="250dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/userAddress" />
                 </TableRow>
 
@@ -161,14 +165,16 @@
                     <TextView
                         android:id="@+id/addressInput"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></TextView>
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp" />
                 </TableRow>
 
             </TableLayout>
 
             <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -177,7 +183,7 @@
                     <TextView
                         android:id="@+id/cellPhoneTitle"
                         android:layout_width="250dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/userCellPhone" />
                 </TableRow>
 
@@ -188,14 +194,16 @@
                     <TextView
                         android:id="@+id/cellPhoneInput"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></TextView>
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp" />
                 </TableRow>
 
             </TableLayout>
 
             <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -204,7 +212,7 @@
                     <TextView
                         android:id="@+id/addressTitle"
                         android:layout_width="250dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/userHomePhone" />
                 </TableRow>
 
@@ -217,14 +225,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        android:textSize="18sp" />
                 </TableRow>
 
             </TableLayout>
 
             <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -233,7 +243,7 @@
                     <TextView
                         android:id="@+id/userTeacherTitle"
                         android:layout_width="250dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/userSchoolGrade" />
                 </TableRow>
 
@@ -245,13 +255,15 @@
                         android:id="@+id/userGradeInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ems="10"></TextView>
+                        android:ems="10"
+                        android:textSize="18sp" />
                 </TableRow>
             </TableLayout>
 
             <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -260,7 +272,7 @@
                     <TextView
                         android:id="@+id/userGradeTitle"
                         android:layout_width="250dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/userSchoolTeacher" />
                 </TableRow>
 
@@ -273,13 +285,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        android:textSize="18sp" />
                 </TableRow>
             </TableLayout>
 
             <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -288,7 +302,7 @@
                     <TextView
                         android:id="@+id/userEmergencyTitle"
                         android:layout_width="250dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/userEmergencyContactInfo" />
                 </TableRow>
 
@@ -301,7 +315,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="textMultiLine" />
+                        android:inputType="textMultiLine"
+                        android:textSize="18sp" />
                 </TableRow>
 
             </TableLayout>

@@ -22,6 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_register);
         serverCallBody = new JSONObject();
         replaceFragment(new MandatoryRegisterInformationFragment());
@@ -71,6 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Private async class to execute the network call to send the information for the new user.
+    //Returns a boolean to indicate success/failure in the operation
     private class asyncRunner extends AsyncTask<Void,Void,Boolean>{
         @Override
         protected Boolean doInBackground(Void... voids) {

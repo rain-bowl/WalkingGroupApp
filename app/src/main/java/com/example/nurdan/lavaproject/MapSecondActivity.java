@@ -41,7 +41,8 @@ public class MapSecondActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-               setContentView(R.layout.activity_map_second);
+        MainMenuActivity.setPrefTheme(this);
+        setContentView(R.layout.activity_map_second);
         allGroupsList = findViewById(R.id.groupListView);
         leaderOfList = findViewById(R.id.leaderGroups);
         memberOfList = findViewById(R.id.memberGroups);
@@ -164,47 +165,52 @@ public class MapSecondActivity extends AppCompatActivity{
         @Override
         protected Void doInBackground(Void... voids) {
             original = currInstance.getGroupList(getApplicationContext());
-            Log.d("testing getgrouplist: ", original.toString());
-            for (int i = 0; i < original.length(); i++) {
-                JSONObject childJSONObject = null;
-                try {
-                    childJSONObject = original.getJSONObject(i);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    if (childJSONObject != null) {
-                        if (!childJSONObject.getString("groupDescription").equals("null")) {
-                            allGroupNameList.add(childJSONObject.getString("groupDescription"));
-                            allGroupIDList.add(childJSONObject.getInt("id"));
 
-                            if (childJSONObject.getJSONObject("leader").getInt("id") == currInstance.getUserID()) {
-                                leaderOfNameList.add(childJSONObject.getString("groupDescription"));
-                                leaderOfIDList.add(childJSONObject.getInt("id"));
-                            }
+            if (original != null) {
+                Log.d("testing getgrouplist: ", original.toString());
 
-                            if (!(childJSONObject.get("memberUsers")).equals("null")){
-                                JSONArray groupMembersList = childJSONObject.getJSONArray("memberUsers");
-                                for (int x = 0; x < groupMembersList.length(); x++) {
-                                    JSONObject member = groupMembersList.getJSONObject(x);
-                                    if (member.getInt("id") == currInstance.getUserID()){
-                                        memberOfNameList.add(childJSONObject.getString("groupDescription"));
-                                        memberOfIDList.add(childJSONObject.getInt("id"));
+                for (int i = 0; i < original.length(); i++) {
+                    JSONObject childJSONObject = null;
+                    try {
+                        childJSONObject = original.getJSONObject(i);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        if (childJSONObject != null) {
+                            if (!childJSONObject.getString("groupDescription").equals("null")) {
+                                allGroupNameList.add(childJSONObject.getString("groupDescription"));
+                                allGroupIDList.add(childJSONObject.getInt("id"));
+
+                                if (childJSONObject.getJSONObject("leader").getInt("id") == currInstance.getUserID()) {
+                                    leaderOfNameList.add(childJSONObject.getString("groupDescription"));
+                                    leaderOfIDList.add(childJSONObject.getInt("id"));
+                                }
+
+                                if (!(childJSONObject.get("memberUsers")).equals("null")) {
+                                    JSONArray groupMembersList = childJSONObject.getJSONArray("memberUsers");
+                                    for (int x = 0; x < groupMembersList.length(); x++) {
+                                        JSONObject member = groupMembersList.getJSONObject(x);
+                                        if (member.getInt("id") == currInstance.getUserID()) {
+                                            memberOfNameList.add(childJSONObject.getString("groupDescription"));
+                                            memberOfIDList.add(childJSONObject.getInt("id"));
+                                        }
                                     }
                                 }
                             }
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
+                Log.d("onpost: all list: ", allGroupNameList.toString());
+                Log.d("onpost: allID list: ", allGroupIDList.toString());
+                Log.d("onpost: leader list: ", leaderOfNameList.toString());
+                Log.d("onpost: LeaderID list: ", leaderOfIDList.toString());
+                Log.d("onpost: member list: ", memberOfNameList.toString());
+                Log.d("onpost: memberID list: ", memberOfIDList.toString());
             }
-            Log.d("onpost: all list: ", allGroupNameList.toString());
-            Log.d("onpost: allID list: ", allGroupIDList.toString());
-            Log.d("onpost: leader list: ", leaderOfNameList.toString());
-            Log.d("onpost: LeaderID list: ", leaderOfIDList.toString());
-            Log.d("onpost: member list: ", memberOfNameList.toString());
-            Log.d("onpost: memberID list: ", memberOfIDList.toString());
+
             return null;
         }
 

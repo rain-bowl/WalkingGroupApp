@@ -64,9 +64,13 @@ public class StoreActivity extends AppCompatActivity {
 
     private void populateStoreList() {
         myItems.add(new StoreItem("Dark Blue Theme", 1, R.drawable.dummyscreenshot));
-        myItems.add(new StoreItem("Test", 2, R.drawable.dummyscreenshot));
-        myItems.add(new StoreItem("Test 2", 10, R.drawable.dummyscreenshot));
-        myItems.add(new StoreItem("Makertest",5,R.drawable.dummyscreenshot));
+        myItems.add(new StoreItem("Icon 1", 1, R.drawable.markericon1));
+        myItems.add(new StoreItem("Icon 2", 1, R.drawable.markericon2));
+        myItems.add(new StoreItem("Icon 3", 1, R.drawable.markericon3));
+        myItems.add(new StoreItem("Icon 4", 1, R.drawable.markericon4));
+        myItems.add(new StoreItem("Icon 5", 1, R.drawable.markericon5));
+        myItems.add(new StoreItem("Icon 6", 1, R.drawable.markericon6));
+        myItems.add(new StoreItem("Icon 7", 1, R.drawable.markericon7));
     }
 
     private void populateStoreListView() {
@@ -125,7 +129,6 @@ public class StoreActivity extends AppCompatActivity {
         public String getTitle() { return title; }
         public int getCost() { return cost; }
         public int getIconId() { return iconId; }
-
     }
 
     private class buyWithXPAsync extends AsyncTask<Integer,Void,Boolean> {
@@ -141,14 +144,15 @@ public class StoreActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean purchased) {
             if(purchased) {
-                SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
-                prefs.edit()
-                        .putString("currentTheme", copyItem)
-                        .apply();
-
+                if(copyItem.equals("Dark Blue Theme")) {
+                    SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+                    prefs.edit()
+                            .putString("currentTheme", copyItem)
+                            .apply();
+                }
                 Toast.makeText(StoreActivity.this, "Purchased " + copyItem, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(StoreActivity.this, "Not enough points", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StoreActivity.this, "Failed to get " + copyItem, Toast.LENGTH_SHORT).show();
             }
         }
     }

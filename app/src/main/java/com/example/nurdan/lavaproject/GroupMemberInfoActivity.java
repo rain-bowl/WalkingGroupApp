@@ -42,6 +42,7 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_group_member_info);
 
         monitorInfoList = findViewById(R.id.monitorInfoList);
@@ -51,12 +52,12 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
         currMemberID = currInstance.getCurrMemberID();
         Log.d("GroupMemberInfoActivity", "currMemberID: " + currMemberID);
 
+        // gathers necessary information on members
         getMemberInfo test = new getMemberInfo();
         test.execute();
-
-        //TODO: set information display for current member, who they're monitored by + their info
     }
 
+    // gatherse contact info for each member, creates output string, stores them in arraylists
     private void getContactInfo (int ID) {
         monitorName = getMonitorInfo("name", ID);
         monitorEmail = getMonitorInfo("email", ID);
@@ -71,6 +72,7 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
         Log.d("GroupMemberInfoActivity", "getContactInfo output: " + output);
     }
 
+    // retrieve monitor's info
     private String getMonitorInfo (String valueName, int ID) {
         monitorInfo = currInstance.getUserByID(ID, getApplicationContext());
         try {
@@ -81,23 +83,18 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
         return monitorValueInfo;
     }
 
+    // setter, sets info
     private void setInfo (String text) {
         currName.setText(text);
     }
 
+    // sets up listview with info
     private void setInfoView(ListView list, ArrayList<String> names) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
         list.setAdapter(adapter);
     }
 
-// need to make it work rip, may change to dialog
-/*    private void setMonitorView(ListView list, ArrayList<String> names, String detail) {
-        ListAdapter adapter = new SimpleAdapter(this, names, android.R.layout.simple_list_item_2, new int[] {android.R.id.text1, android.R.id.text2});
-
-        // Bind to our new adapter.
-        setListAdapter(adapter);
-    }*/
-
+    // retrieve information on members from server, asynchronous
     private class getMemberInfo extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
@@ -122,11 +119,13 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
 
         @Override
         public void onPostExecute (Void voida) {
+            // sets info after gathering
             setInfo(currMemberName);
             setInfoView(monitorInfoList, info);
         }
     }
 
+    //back button
     private void setupBackBtn() {
         Button btn = findViewById(R.id.infoBackBtn);
         btn.setOnClickListener(new View.OnClickListener() {
