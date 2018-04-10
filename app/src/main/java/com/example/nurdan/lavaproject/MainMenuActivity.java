@@ -40,6 +40,7 @@ public class MainMenuActivity extends AppCompatActivity {
             String userProfileString = userInfo.getString("userProfile", null);
             try {
                 JSONObject userProfile = new JSONObject(userProfileString);
+                localInstance.setUpLoggedInUser(userInfo.getInt("userID", -1), userInfo.getString("bearerToken", "Nothing"));
                 localInstance.setUserInfo(userProfile);
             }
             catch (Exception e){

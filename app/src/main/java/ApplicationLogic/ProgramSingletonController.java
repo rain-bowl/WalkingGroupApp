@@ -89,7 +89,11 @@ public class ProgramSingletonController {
     }
 
 
-
+    public void setUpLoggedInUser(int userID, String bearerToken){
+        this.userID = userID;
+        this.bearerToken = bearerToken;
+        currLoggedInUser = new User();
+    }
 
     /**
      * Creates a new user based on the provided information
