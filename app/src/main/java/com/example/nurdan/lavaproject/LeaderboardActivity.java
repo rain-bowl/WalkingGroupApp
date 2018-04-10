@@ -32,12 +32,15 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
         leaderboardDisplay = findViewById(R.id.leaderboard);
+
+        // retrieves list of all users to use
         getUsers getAllUsers = new getUsers();
         getAllUsers.execute();
 
         makeBackBtn();
     }
 
+    // retrieves list of all users
     private class getUsers extends AsyncTask<Void,Void,Void> {
         @Override
         protected Void doInBackground(Void... voids) {
@@ -92,7 +95,9 @@ public class LeaderboardActivity extends AppCompatActivity {
         Collections.reverse(userAccount);
         //Add some titles for 1, 2 and 3rd places
         for(int i = 0; i < userAccount.size(); i++){
+            // create "listing" variable, a string that contains the entry for listview
             String listing = "#" + (i+1);
+            // set titles for top 3 users
             if (i+1 == 1){
                 listing += "   -   Generally General";
             }
@@ -109,6 +114,8 @@ public class LeaderboardActivity extends AppCompatActivity {
             listing += "\n            " + userAccount.get(i).getUserPoints() + " points";
             userNames.add(listing);
         }
+
+        // put entries into listview
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, userNames);
         list.setAdapter(adapter);
     }
