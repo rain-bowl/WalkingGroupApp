@@ -86,25 +86,30 @@ public class MapActivity extends FragmentActivity implements
 
         getLocationPermission();
         initializeMapFrag();
+
         makeListBtn();
         makeCreateBtn();
         setupBackBtn();
         setOnOffBtn();
 
+        // retrive list of groups user is in
         getGroupList test = new getGroupList();
         test.execute();
 
         Toast.makeText(getApplicationContext(), R.string.mapIntroText, Toast.LENGTH_LONG).show();
 
+        // check if user wants to enable tracking
         if (!arrivalFlag){
             handleGPS();
         }
     }
 
+    // check if user has arrived
     private void arrivalCheck() {
         if (monitoredNames.size() != 0 && monitoredLatLng.size() != 0){
             for (int i = 0; i < monitoredNames.size(); i++){
                 LatLng currMonitoredCoord = monitoredLatLng.get(i);
+                // checks if user is within the school area (+- 0.001 latlng)
                 if (currMonitoredCoord.latitude - destinationCoord.latitude <= +- 0.001 && currMonitoredCoord.longitude - destinationCoord.longitude <= +- 0.001){
                     Handler handler = new Handler();
                     Runnable runnableCode = new Runnable() {
@@ -113,6 +118,7 @@ public class MapActivity extends FragmentActivity implements
                             arrivalFlag = true;
                         }
                     };
+                    // checks if user has been within the school area for at least 10 min
                     handler.postDelayed(runnableCode, 600000);
                     handler.post(runnableCode);
                 }
