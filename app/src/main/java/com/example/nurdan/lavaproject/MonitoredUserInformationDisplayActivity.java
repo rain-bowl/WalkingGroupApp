@@ -19,6 +19,7 @@ public class MonitoredUserInformationDisplayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_display_other_user_info);
 
         otherUserID = getIntent().getIntExtra("otherUserID", -1);

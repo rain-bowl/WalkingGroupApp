@@ -27,6 +27,7 @@ public class GroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_group);
 
         localInstance = ProgramSingletonController.getCurrInstance();

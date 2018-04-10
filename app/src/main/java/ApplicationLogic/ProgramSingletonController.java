@@ -138,6 +138,21 @@ public class ProgramSingletonController {
         return logInStatus;
     }
 
+    public void savePurchasedItemsToPrefs(Context appContext) {
+        String purchasedString = "";
+        JSONObject purchasedItems = new JSONObject();
+        try {
+             purchasedString = this.getUserInfo().getString("customJson");
+        } catch (Exception e) {}
+
+        if(purchasedString.toLowerCase().contains(("Dark Blue Theme").toLowerCase())) {
+            SharedPreferences prefs = appContext.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+            prefs.edit()
+                    .putString("currentTheme", "Dark Blue Theme")
+                    .apply();
+        }
+    }
+
     //Discard bearer token on user logout.
     public void userLogout(){
         bearerToken = null;

@@ -41,7 +41,8 @@ public class MapSecondActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-               setContentView(R.layout.activity_map_second);
+        MainMenuActivity.setPrefTheme(this);
+        setContentView(R.layout.activity_map_second);
         allGroupsList = findViewById(R.id.groupListView);
         leaderOfList = findViewById(R.id.leaderGroups);
         memberOfList = findViewById(R.id.memberGroups);

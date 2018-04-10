@@ -30,7 +30,7 @@ public class MessageInboxActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //MainMenuActivity.setPrefTheme(MessageInboxActivity.this);
+        MainMenuActivity.setPrefTheme(MessageInboxActivity.this);
         setContentView(R.layout.activity_message_inbox);
 
         setUpToolbar();

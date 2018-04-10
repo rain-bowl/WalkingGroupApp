@@ -22,6 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_register);
         serverCallBody = new JSONObject();
         replaceFragment(new MandatoryRegisterInformationFragment());

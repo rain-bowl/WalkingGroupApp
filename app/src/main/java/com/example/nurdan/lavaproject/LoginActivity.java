@@ -24,10 +24,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // set preferred theme
-        MainMenuActivity.setPrefTheme(this);
-
         setContentView(R.layout.activity_login);
         loginProgress = findViewById(R.id.loginProgressBar);
         loginProgress.setVisibility(GONE);
@@ -89,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 successFlag = localInstance.logIn(user,pass, getApplicationContext());
                 Log.d("AsyncLogIn", "doInBackground: SuccessFlag " + successFlag);
+                localInstance.savePurchasedItemsToPrefs(LoginActivity.this);
                 //Clear the information so it is not stored inside the app for longer than it has to.
                 pass = "";
                 user = "";

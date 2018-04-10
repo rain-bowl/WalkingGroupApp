@@ -20,6 +20,7 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_user_profile);
         setUpToolbar();
         loadFragment(new UserProfileDisplayFragment());

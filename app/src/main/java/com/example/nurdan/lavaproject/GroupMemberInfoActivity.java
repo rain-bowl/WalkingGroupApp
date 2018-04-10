@@ -42,6 +42,7 @@ public class GroupMemberInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_group_member_info);
 
         monitorInfoList = findViewById(R.id.monitorInfoList);
