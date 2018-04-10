@@ -88,10 +88,15 @@ public class ProgramSingletonController {
         return this.userID;
     }
 
-
+    /**
+     * Sets up the currently logged in user after they close the application and open it again.
+     * @param userID        The user ID recovered from shared preferences
+     * @param bearerToken   Bearer token recovered from shared preferences
+     */
     public void setUpLoggedInUser(int userID, String bearerToken){
         this.userID = userID;
         this.bearerToken = bearerToken;
+        //Create a new user instance to store the user profile in
         currLoggedInUser = new User();
     }
 
