@@ -64,6 +64,7 @@ public class LeaderboardActivity extends AppCompatActivity {
                     LeaderboardMember member = new LeaderboardMember();
                     String[] nameParts = memberJSON.getString("name").split("\\s");
                     member.setFirstName(nameParts[0]);
+                    //check if last name exists
                     if (nameParts.length == 2){
                         member.setLastName(nameParts[1]);
                     }
