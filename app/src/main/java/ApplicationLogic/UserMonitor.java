@@ -24,7 +24,7 @@ import static android.content.ContentValues.TAG;
 /**
  * Class contains all methods related to the monitoring of users
  */
-public class UserMonitor {
+public class  UserMonitor {
 private JSONArray returnArray;
 private boolean successFlag;
 private final String baseURL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443";

@@ -99,7 +99,7 @@ public class MapActivity extends FragmentActivity implements
             handleGPS();
         }
     }
-
+    //check the Gps tracker refresh every 60s in Map
     private void arrivalCheck() {
         if (monitoredNames.size() != 0 && monitoredLatLng.size() != 0){
             for (int i = 0; i < monitoredNames.size(); i++){
@@ -145,7 +145,7 @@ public class MapActivity extends FragmentActivity implements
             }
         });
     }
-
+    // make a handle function and set running Gps every 30s
     private void handleGPS() {
         if (!arrivalFlag){
             Handler handler = new Handler();
@@ -164,6 +164,7 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 
+    //List some Button On the Map to activity others
     private void makeListBtn () {
         Button list = findViewById(R.id.listGroupBtn);
         list.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +175,7 @@ public class MapActivity extends FragmentActivity implements
         });
     }
 
+    //Make a Button jump to Group activity Class
     private void makeCreateBtn () {
         Button list = findViewById(R.id.createGroupBtn);
         list.setOnClickListener(new View.OnClickListener() {
@@ -189,6 +191,7 @@ public class MapActivity extends FragmentActivity implements
         });
     }
 
+    // Set up back Button
     private void setupBackBtn() {
         Button btn = findViewById(R.id.mapBackBtn);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -199,6 +202,7 @@ public class MapActivity extends FragmentActivity implements
         });
     }
 
+    //Initialized the Map fragment
     private void initializeMapFrag() {
         if (mLocationPermissionGranted) {
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -207,6 +211,7 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 
+    //Get the permission and show the Map on the app
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -220,6 +225,7 @@ public class MapActivity extends FragmentActivity implements
         getDeviceLocation();
     }
 
+    //Creat  point method so that users can click on the Map to gain the points
     @Override
     public void onMapClick(LatLng point) {
         if (MarkerPoints.size() > 2) {
@@ -247,6 +253,7 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 
+    //if there is destination, will calculate the length by users maker
     @Override
     public boolean onMarkerClick(Marker marker) {
         marker.showInfoWindow();
@@ -340,6 +347,7 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 
+        //Create the group list to show the all groups----------------
     private class getGroupList extends AsyncTask<Void,Void,Void> {
         JSONArray original;
         ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
@@ -397,6 +405,7 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 
+    //Conver the time and refresh the timer-------------
     private long convertTimeStamp(String timestamp){
         long millis;
         long currmill;
@@ -413,6 +422,7 @@ public class MapActivity extends FragmentActivity implements
         return res;
     }
 
+        //Create the groups maker on the maps then gain there points------------
     private void createGroupMarkers(){
         BitmapDescriptor colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
         for (int i = 0; i < nameList.size() * 2; i += 2){
@@ -448,7 +458,7 @@ public class MapActivity extends FragmentActivity implements
             }
         }
     }
-
+    //Make Maker's features-------
     private void makeMarker(LatLng start, LatLng end, String markerTitle, String markerName, BitmapDescriptor colour){
         MarkerOptions option = new MarkerOptions();
         option.position(start);
@@ -458,6 +468,7 @@ public class MapActivity extends FragmentActivity implements
         mMap.addMarker(option).setTag(end);
     }
 
+        //Get permission to show the location----------
     private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -470,6 +481,7 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 
+        //Refresh the UI permission----------
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
@@ -488,6 +500,7 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 
+        //Updating location on the map--------------
     private void updateLocationUI() {
         if (mMap == null) {
             return;
@@ -507,6 +520,7 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 
+    //innitialize the Gps on the device and show the location on the map------
     private void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
@@ -546,6 +560,8 @@ public class MapActivity extends FragmentActivity implements
             Log.e("Exception: %s", e.getMessage());
         }
     }
+
+    //Related to store activity------reward
     private class rewardUserXP extends AsyncTask<Context,Void,Void> {
         @Override
         protected Void doInBackground(Context... contexts) {

@@ -53,6 +53,7 @@ public class MapSecondActivity extends AppCompatActivity{
         test.execute();
     }
 
+    //Make the toolbar and let users to edit the groups
     private void makeEditBtn() {
         Button editBtn = findViewById(R.id.editBtn);
         editBtn.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +114,7 @@ public class MapSecondActivity extends AppCompatActivity{
         });
     }
 
+    //Make join button and let users join groups
     private void makeJoinBtn () {
         Button removeBtn = findViewById(R.id.SecJoinBtn);
         removeBtn.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +134,7 @@ public class MapSecondActivity extends AppCompatActivity{
         });
     }
 
+    //Make remove button and let user to remove groups
     private void makeRemoveBtn () {
         Button removeBtn = findViewById(R.id.SecRemoveBtn);
         removeBtn.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +158,7 @@ public class MapSecondActivity extends AppCompatActivity{
         });
     }
 
+    //Make the listview and let user to see the group list, main on child monitor------
     private class setupListView extends AsyncTask<Void,Void,Void>{
         JSONArray original;
         @Override
@@ -212,12 +216,14 @@ public class MapSecondActivity extends AppCompatActivity{
         }
     }
 
+    //Uadate the UI when has groups
     private void updateUI(){
         setPickGroup(allGroupsList, allGroupNameList);
         setPickGroup(leaderOfList, leaderOfNameList);
         setPickGroup(memberOfList, memberOfNameList);
     }
 
+    //Let users to pick up which groups-----
     private void setPickGroup(ListView list, ArrayList<String> names) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_multiple_choice, names);
         list.setAdapter(adapter);
@@ -225,6 +231,7 @@ public class MapSecondActivity extends AppCompatActivity{
         list.setAdapter(adapter);
     }
 
+    //Make join group method in the meantime
     private class joinGroup extends AsyncTask<ArrayList<Integer>, Void, Void> {
         @Override
         protected Void doInBackground(ArrayList<Integer>... arrayLists) {
@@ -242,6 +249,7 @@ public class MapSecondActivity extends AppCompatActivity{
         }
     }
 
+    //Make join group when you want to join in that
     private void joinCheckedGroup(ArrayList<Integer> groupIDs, Integer listID) {
         ListView displayList = findViewById(listID);
         SparseBooleanArray checked = displayList.getCheckedItemPositions();
@@ -266,6 +274,7 @@ public class MapSecondActivity extends AppCompatActivity{
         Toast.makeText(this, joinedGorups, Toast.LENGTH_SHORT).show();
     }
 
+    //Make delete group method to delete group-----
     private class deleteGroup extends AsyncTask<ArrayList<Integer>, Void, Void> {
         @Override
         protected Void doInBackground(ArrayList<Integer>... arrayLists) {
@@ -282,6 +291,7 @@ public class MapSecondActivity extends AppCompatActivity{
         }
     }
 
+    //make quit groups method--------
     private class leaveGroup extends AsyncTask<ArrayList<Integer>, Void, Void> {
         @Override
         protected Void doInBackground(ArrayList<Integer>... arrayLists) {
@@ -298,6 +308,7 @@ public class MapSecondActivity extends AppCompatActivity{
         }
     }
 
+    //make quit check method let user quit------
     private void leaveCheckedGroup(ArrayList<Integer> groupIDs, Integer listID) {
         ListView displayList = findViewById(listID);
         SparseBooleanArray checked = displayList.getCheckedItemPositions();
@@ -322,6 +333,7 @@ public class MapSecondActivity extends AppCompatActivity{
         }
     }
 
+    //make delete checked group methods---------
     private void deleteCheckedGroup(ArrayList<Integer> groupIDs, Integer listID) {
         ListView displayList = findViewById(listID);
         SparseBooleanArray checked = displayList.getCheckedItemPositions();
@@ -346,6 +358,7 @@ public class MapSecondActivity extends AppCompatActivity{
         }
     }
 
+    //set back button to back last activity--------------
     private void setupBackbtn() {
         Button btn = findViewById(R.id.MapSecondBackbtn);
         btn.setOnClickListener(new View.OnClickListener() {

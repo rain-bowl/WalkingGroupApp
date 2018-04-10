@@ -66,6 +66,7 @@ public class StoreActivity extends AppCompatActivity {
         myItems.add(new StoreItem("Dark Blue Theme", 1, R.drawable.dummyscreenshot));
         myItems.add(new StoreItem("Test", 2, R.drawable.dummyscreenshot));
         myItems.add(new StoreItem("Test 2", 10, R.drawable.dummyscreenshot));
+        myItems.add(new StoreItem("Makertest",5,R.drawable.dummyscreenshot));
     }
 
     private void populateStoreListView() {
@@ -124,6 +125,7 @@ public class StoreActivity extends AppCompatActivity {
         public String getTitle() { return title; }
         public int getCost() { return cost; }
         public int getIconId() { return iconId; }
+
     }
 
     private class buyWithXPAsync extends AsyncTask<Integer,Void,Boolean> {

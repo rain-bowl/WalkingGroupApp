@@ -4,7 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/LavaProject.iml" filepath="$PROJECT_DIR$/LavaProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/walkinggroupapp.iml" filepath="$PROJECT_DIR$/walkinggroupapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/walkinggroupapptest.iml" filepath="$PROJECT_DIR$/walkinggroupapptest.iml" />
     </modules>
   </component>
 </project>
