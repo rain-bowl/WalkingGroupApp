@@ -382,6 +382,14 @@ public class ProgramSingletonController {
         return this.groupID;
     }
 
+    //retrieves jsonarray containing all users
+    public JSONArray getAllUsers(Context context) {
+        currInstance = new AccountApiInteractions();
+        JSONArray userList = currInstance.getAllUsers(this.bearerToken, context);
+        Log.d(TAG, "getAllUsers: userList: " + userList);
+        return userList;
+    }
+
     //Retreives the information for a user by their ID
     public JSONObject getUserByID(int ID, Context context){
         currInstance = new AccountApiInteractions();

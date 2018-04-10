@@ -55,6 +55,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Button usrMonitor = findViewById(R.id.usrMonitor);
         Button panicBtn = findViewById(R.id.panicBtn);
         Button gotoStore = findViewById(R.id.gotoStore);
+        Button leaderboardBtn = findViewById(R.id.leaderboard_btn);
 
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +95,13 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent store = new Intent(MainMenuActivity.this, StoreActivity.class);
                 startActivity(store);
+            }
+        });
+
+        leaderboardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), LeaderboardActivity.class));
             }
         });
     }
