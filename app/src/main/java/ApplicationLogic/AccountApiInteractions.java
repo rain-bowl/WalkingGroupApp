@@ -716,7 +716,7 @@ public class AccountApiInteractions {
      * @param id                user id
      * @param token             bearer token
      * @param context           Context for library
-     * @return
+     * @return                  Boolean value indicating success of the request to the server
      */
     public boolean changeUserXP(String item, int xp, int id, String token, Context context) {
 

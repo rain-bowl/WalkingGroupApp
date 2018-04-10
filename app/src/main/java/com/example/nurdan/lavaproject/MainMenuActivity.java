@@ -49,7 +49,7 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
-
+    //Create buttons and listeners
     private void createBtns(){
         Button mapBtn = findViewById(R.id.mapbtn);
         Button mngGroups = findViewById(R.id.mngGroups);
@@ -107,12 +107,12 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
-
+    //Static intent method for navigation to this activity from others
     public static Intent mainMenuIntent(Context currActivityContext){
         return new Intent(currActivityContext, MainMenuActivity.class);
     }
 
-
+    //Sets the theme of this if the user has purchased it
     public static void setPrefTheme(Context context) {
         SharedPreferences prefs = context.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
         String theme = prefs.getString("currentTheme", "");
@@ -121,6 +121,7 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
+    //Set up the action bar
     public void setupToolbar(){
         Toolbar mainMenuToolbar = findViewById(R.id.mainMenuToolbar);
         setSupportActionBar(mainMenuToolbar);
@@ -133,6 +134,7 @@ public class MainMenuActivity extends AppCompatActivity {
         return true;
     }
 
+    //Set up listeners for the action bar items. All of them are simple static intents
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

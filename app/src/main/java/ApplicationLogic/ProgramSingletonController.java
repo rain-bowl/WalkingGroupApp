@@ -218,6 +218,7 @@ public class ProgramSingletonController {
         Log.d(TAG, "addUsrMonitorYou: Bearer Token " + this.bearerToken);
         Boolean successFlag;
         AccountApiInteractions getMonitorID = new AccountApiInteractions();
+
         UserMonitor currMonitorInstance = new UserMonitor();
         int tempMonitorID = getMonitorID.getDatabaseUserID(userEmail, appContext, this.bearerToken);
         successFlag = currMonitorInstance.addUsrToMonitorYou(userID, tempMonitorID, this.bearerToken, appContext);
@@ -277,7 +278,7 @@ public class ProgramSingletonController {
         else return null;
     }
 
-
+    //Method to get the users who monitor the logged in user. Returns them in an array list
     public ArrayList<String> getUsersWhoMonitorThis(Context appContext){
         JSONArray tempArr = null;
         UserMonitor currInstance = new UserMonitor();
@@ -293,6 +294,7 @@ public class ProgramSingletonController {
         else return null;
     }
 
+    //Retrieve the ids of the people who monitor the current user
     public ArrayList<Integer> getIDsWhoMonitorThis(Context appContext){
         JSONArray tempArr = null;
         UserMonitor currInstance = new UserMonitor();

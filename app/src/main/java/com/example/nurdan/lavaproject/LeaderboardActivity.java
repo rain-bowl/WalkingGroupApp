@@ -90,7 +90,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         });
 
         Collections.reverse(userAccount);
-
+        //Add some titles for 1, 2 and 3rd places
         for(int i = 0; i < userAccount.size(); i++){
             String listing = "#" + (i+1);
             if (i+1 == 1){
@@ -112,7 +112,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, userNames);
         list.setAdapter(adapter);
     }
-
+    //Create back button for navigation
     private void makeBackBtn(){
         Button back = findViewById(R.id.lb_back_btn);
         back.setOnClickListener(new View.OnClickListener() {

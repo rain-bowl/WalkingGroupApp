@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         return new Intent(actContext, LoginActivity.class);
     }
 
+    //Async class to log the user into their account
     private class async extends AsyncTask<Void,Void,Void>{
         Boolean successFlag;
             @Override

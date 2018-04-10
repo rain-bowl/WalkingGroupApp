@@ -37,7 +37,7 @@ public class MessageInboxActivity extends AppCompatActivity {
         setFragment(new UserInboxDisplayFragment());
     }
 
-
+    //Set up toolbar
     private void setUpToolbar(){
         Toolbar inboxToolBar = (Toolbar) findViewById(R.id.userMessageInboxToolbar);
         setSupportActionBar(inboxToolBar);
@@ -70,6 +70,7 @@ public class MessageInboxActivity extends AppCompatActivity {
         return true;
     }
 
+    //Method to set the container within the layout of this activity to the desired fragment
     public void setFragment(Fragment fragment){
         FragmentTransaction ftInstance = getSupportFragmentManager().beginTransaction();
         ftInstance.replace(R.id.inboxFragmentContainer, fragment);
@@ -81,11 +82,13 @@ public class MessageInboxActivity extends AppCompatActivity {
         return inboxIntent;
     }
 
+    //Method to store choices from the fragments into this parent activity
     public void setGroupID(int id){
         groupID = id;
         Log.d("messageinbox", "setGroupID: id: " + id + "groupid: " + groupID);
     }
 
+    //Store data from fragments ito parent activity
     public Integer getGroupID(){
         Log.d("messageinbox", "getGroupID: groupid: " + groupID);
         return this.groupID;
