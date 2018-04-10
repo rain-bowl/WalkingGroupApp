@@ -54,7 +54,7 @@ public class MapSecondActivity extends AppCompatActivity{
         test.execute();
     }
 
-    //Make the toolbar and let users to edit the groups
+    //Make the toolbar and let users to edit the groups features
     private void makeEditBtn() {
         Button editBtn = findViewById(R.id.editBtn);
         editBtn.setOnClickListener(new View.OnClickListener() {
