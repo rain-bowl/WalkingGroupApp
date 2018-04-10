@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/Base.Theme.AppCompat.Dialog.Alert">
@@ -12,21 +11,29 @@
         android:layout_width="164dp"
         android:layout_height="86dp"
         android:layout_marginEnd="108dp"
+        android:layout_marginLeft="112dp"
+        android:layout_marginStart="112dp"
         android:layout_marginTop="20dp"
         android:text="@string/sendBtnText"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/panicMsgInstructions" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/panicMsgInstructions"
+        android:layout_marginRight="108dp" />
 
     <TextView
         android:id="@+id/panicMsgTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="19dp"
         android:layout_marginEnd="19dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="19dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:text="@string/panicMsgTitle"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -40,18 +47,23 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/panicMsgTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/panicMsgTitle"
+        android:layout_marginRight="29dp"
+        android:layout_marginLeft="30dp" />
 
     <Button
         android:id="@+id/panicMsgCnclBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="32dp"
         android:layout_marginEnd="148dp"
+        android:layout_marginLeft="148dp"
+        android:layout_marginStart="148dp"
         android:layout_marginTop="20dp"
         android:text="@string/panicCancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/panicMsgInput" />
 
     <EditText
@@ -68,7 +80,6 @@
         android:singleLine="false"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/panicMsgSendBtn" />
 </android.support.constraint.ConstraintLayout>

@@ -102,11 +102,11 @@ public class LeaderboardActivity extends AppCompatActivity {
             if (i+1 == 3){
                 listing += "   -   Captain Crunch";
             }
-            listing += "\n     " + userAccount.get(i).getFirstName();
+            listing += "\n            " + userAccount.get(i).getFirstName();
             if (userAccount.get(i).getLastName() != null) {
                 listing += " " + userAccount.get(i).getLastName().charAt(0);
             }
-            listing += "\n     " + userAccount.get(i).getUserPoints() + " points";
+            listing += "\n            " + userAccount.get(i).getUserPoints() + " points";
             userNames.add(listing);
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, userNames);
