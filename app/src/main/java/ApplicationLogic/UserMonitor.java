@@ -21,16 +21,23 @@ import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
 
-/*Class handles retrieval of information from the server which is directly related
-to the monitoring of users or being monitored.
+/**
+ * Class contains all methods related to the monitoring of users
  */
 public class UserMonitor {
 private JSONArray returnArray;
 private boolean successFlag;
 private final String baseURL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443";
 private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
-/*This method adds a user to be monitored by another user.
- */
+
+    /**
+     * Adds a user to be monitored by the current logged in user
+     * @param userID                Id of the user that is logged in(the monitor)
+     * @param monitoredUserID       Id of the user that is to be monitored
+     * @param bearerKey             Bearer token
+     * @param appContext            Context for library
+     * @return                      Boolean flag indicating success
+     */
     public Boolean addMonitoredUser(int userID, int monitoredUserID, String bearerKey, Context appContext){
 
         JSONObject jsonBody = new JSONObject();
@@ -66,8 +73,13 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 
     }
 
-    /*Adds a user to monitor the currently logged in user. Method requires the ID's of both the current user and
-    the one which will monitor the current user.
+    /**
+     * Adds a user to monitor the logged in user
+     * @param userId           Logged in user id
+     * @param monitorID         Id of the user that will monitor the logged in user
+     * @param bearer            Bearer token
+     * @param appContext        context
+     * @return                  Boolean flag indicating status of request
      */
     public Boolean addUsrToMonitorYou(int userId, int monitorID, String bearer, Context appContext){
         Boolean successFlag;
@@ -98,9 +110,13 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 
     }
 
-    /* Class removes a user which is monitored by another. The inputs are as follows:
-    userID corresponds to the user which is monitoring somebody
-    removedUserId corresponds to the user being monitored
+    /**
+     * Method which removes a user from being monitored by the logged in user
+     * @param userID            Id of the logged in user
+     * @param removedUserId     Id of the user we want to stop monitoring
+     * @param bearerKey         Bearer token
+     * @param appContext        Context for library
+     * @return                  Boolean flag indicating success/failure to complete
      */
     public boolean stopMonitoringUser(int userID, int removedUserId, String bearerKey, Context appContext){
         String accessURL = String.format("/users/%d/monitorsUsers/%d", userID, removedUserId);
@@ -123,10 +139,15 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
         }
     }
 
-    // Remove a user who is monitoring you
 
-    //Recovers users which are monitored by the current logged in user. Currently needs
-    //some more work in particular, the case where it is not successful.
+    /**
+     * Retreives all users who are monitored
+     * @param userID        Id of the logged in user
+     * @param bearerToken   Bearer token
+     * @param appContext    Context
+     * @return              Returns a json array containing all of the users
+     * @throws JSONException
+     */
     public JSONArray getMonitoredUsers(int userID, String bearerToken, Context appContext) throws JSONException{
         String URLPath = String.format("/users/%d/monitorsUsers", userID);
         Log.d(TAG, "getMonitoredUsers: Formatted URL" + URLPath);
@@ -152,7 +173,13 @@ private final String apiKey = "F369E8E6-244B-4672-B8A8-1E44A32CA496";
 
     }
 
-    //Synchronous method to retrieve users who are monitoring the logged in user.
+    /**
+     * Retrieves all users who monitor the logged in user
+     * @param userID        Id of the logged in user
+     * @param bearerToken   Bearer token
+     * @param appContext    Context for library
+     * @return              Json array containing all of the users who monitor the logged in user
+     */
     public JSONArray getUsersWhoMonitor(int userID, String bearerToken, Context appContext){
         String URLPath = String.format("/users/%d/monitoredByUsers", userID);
         JSONArray users = null;

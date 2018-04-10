@@ -1,6 +1,8 @@
 package ApplicationLogic;
 
-//Class holds the information for a single permission.
+/**
+ * Class contains the structure of a standard user permission
+ */
 public class Permission {
     String status;                  //Status of permission(Accepted, Denied, Pending)
     String message;                 //Message of request(what the request is about)
@@ -12,7 +14,8 @@ public class Permission {
         this.permissionId = id;
     }
 
-    //no setter methods for this class. An instance is only initialized with values when it is instantiated.
+    //no setter methods for this class. An instance is only initialized with values when it is instantiated
+    // and they are never changed.
     public int getPermissionId() {
         return permissionId;
     }

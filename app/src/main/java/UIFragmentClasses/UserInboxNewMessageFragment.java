@@ -50,6 +50,7 @@ public class UserInboxNewMessageFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         currSingletonInstance = ProgramSingletonController.getCurrInstance();
+        //Grab the list of group ids hosted in singleton
         groupIDList = currSingletonInstance.getGroupIDList();
         final MessageInboxActivity messageInstance = (MessageInboxActivity) getActivity();
         //Attach widgets
@@ -122,6 +123,7 @@ public class UserInboxNewMessageFragment extends Fragment{
             }
         });
 
+        //Listener for text input for the message
         messageBody.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

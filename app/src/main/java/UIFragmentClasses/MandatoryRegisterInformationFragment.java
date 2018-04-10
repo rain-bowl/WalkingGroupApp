@@ -29,13 +29,14 @@ public class MandatoryRegisterInformationFragment extends Fragment{
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
+        //Widget instances
         Button nextBtn = view.findViewById(R.id.nextRegisterBtn);
         EditText nameInput = view.findViewById(R.id.usernameInput);
         final EditText emailInput = view.findViewById(R.id.userEmail);
         EditText passwordInput = view.findViewById(R.id.passwordInput);
         EditText confirmPasswordInput = view.findViewById(R.id.passwordConfirmInput);
 
+        //Listeners for inputs
         nameInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -113,6 +114,7 @@ public class MandatoryRegisterInformationFragment extends Fragment{
                 if(userName == null || userEmail == null || userPassword == null || userConfirmPassword == null){
                     Toast.makeText(getContext(), R.string.missingFields, Toast.LENGTH_LONG).show();
                 }
+                //Check if primary and secondary(confirmation) passwords are equal
                 else if(userPassword.compareTo(userConfirmPassword) == 0) {
                     ((RegisterActivity) getActivity()).addJson("name", userName);
                     ((RegisterActivity) getActivity()).addJson("email", userEmail);

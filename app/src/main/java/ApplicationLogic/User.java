@@ -10,8 +10,11 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 
 
-//This class will store all information regarding the currently logged in user. It will be filled up on login
-// or when a user creates a new account.
+/**
+ * Class which stores the user profile. Contains fields representing all of the information needed throughout the app
+ * To make things easier, we simply store the JSON object containing the user information and then retrieve the entire
+ * object when we need it since most of the time we are modifying the entire set of data nd need to send it ot the server
+ */
 public class User {
     int ID;
     String emailAddress;
@@ -36,8 +39,10 @@ public class User {
     JSONArray pendingPermRequests;
 
 
-    //Takes in json object and sets the user fields according to the information recieved.
-    // The information here is used throughout the entire application.
+    /**
+     * Unpackages the users information from the provided JSON object and loads the local instances with it
+     * @param retrievedInfo             JSON object containing the users profile
+     */
      public void setJsonObject(JSONObject retrievedInfo){
 
         try {
@@ -68,7 +73,10 @@ public class User {
         }
     }
 
-    //Simply returns the Json object which contains the user information to be used.
+    /**
+     * Returns the JSON object which we store as the users profile
+     * @return
+     */
      public JSONObject returnJsonUserInfo(){
         return this.userJsonInformation;
     }
