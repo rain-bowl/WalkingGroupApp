@@ -63,7 +63,8 @@
         <activity android:name=".ViewMembersActivity" />
         <activity android:name=".MonitoredUserInformationDisplayActivity" />
         <activity android:name=".single_message" />
-        <activity android:name=".StoreActivity"></activity>
+        <activity android:name=".StoreActivity" />
+        <activity android:name=".LeaderboardActivity"></activity>
     </application>
 
 </manifest>

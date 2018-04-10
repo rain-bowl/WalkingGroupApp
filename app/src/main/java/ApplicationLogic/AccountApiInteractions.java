@@ -98,6 +98,28 @@ public class AccountApiInteractions {
         }
     }
 
+    public JSONArray getAllUsers (String currToken, Context currContext){
+        String URLPath = baseURL + "/users";
+        JSONArray list = null;
+
+        AndroidNetworking.initialize(currContext);
+        ANRequest usersReq = AndroidNetworking.get(URLPath)
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", currToken)
+                .build();
+
+        ANResponse<JSONArray> serverResponse = usersReq.executeForJSONArray();
+        if (serverResponse.isSuccess()) {
+            list = serverResponse.getResult();
+        } else {
+            Log.d(TAG, "getAllUsers: Error from server" + serverResponse.getError());
+        }
+        if (list != null) {
+            Log.d(TAG, "onResponse: JSONObject b/f return: " + list.toString());
+        }
+        return list;
+    }
+
     public JSONObject getUserByID (String currToken, int ID, Context currContext){
         String URLPath = baseURL + "/users/" + ID;
         JSONObject list = null;
