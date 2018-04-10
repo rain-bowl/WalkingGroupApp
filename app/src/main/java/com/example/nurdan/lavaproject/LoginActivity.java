@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import ApplicationLogic.ProgramSingletonController;
 
@@ -18,6 +19,7 @@ import static android.view.View.GONE;
 
 public class LoginActivity extends AppCompatActivity {
     ProgressBar loginProgress;
+    SharedPreferences prefs;
     private ProgramSingletonController localInstance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,37 +31,21 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         loginProgress = findViewById(R.id.loginProgressBar);
         loginProgress.setVisibility(GONE);
-
-
-        // uses shared preferences to check if user is logged in
-        //checkIfLoggedIn();
+        prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+        if(prefs.getBoolean("isLoggedIn", false)){
+            startNextActivity();
+        }
         //Create the login buttons+listeners
         createLogInBtns();
     }
 
 
-    //The logged in user has their information stored in shared preferences. This method checks if
-    //there is any user information stored there. If there is, then we skip straight to the main menu
-    public void checkIfLoggedIn() {
-        localInstance = ProgramSingletonController.getCurrInstance();
-        // skip login in case user already signed in
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
-        String token = prefs.getString("bearerToken", "");
-        boolean isLoggedIn = prefs.getBoolean("isLoggedIn", false);
-        Integer userID = prefs.getInt("userID", -1);
-
-        Log.d("UserSkipLogin", "id: " + userID + ", token: " + token);
-        if(isLoggedIn && token.length() != 0 && userID != -1) {
-            localInstance.setBearerToken(token);
-            localInstance.setUserID(userID);
-            startNextActivity();
-        }
-    }
+    //Goes to the next activity, main menu in this case
     public void startNextActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);// New activity
-        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent = MainMenuActivity.mainMenuIntent(getApplicationContext());
         startActivity(intent);
     }
+
     //Create references to the UI buttons and their listeners
     public void createLogInBtns(){
         Button loginButton = findViewById(R.id.loginButton);
@@ -70,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 loginProgress.setVisibility(View.VISIBLE);
+                //Execute async class containing networking calls
                 async test = new async();
                 test.execute();
 
@@ -96,34 +83,35 @@ public class LoginActivity extends AppCompatActivity {
                 final EditText usernameText = findViewById(R.id.usernameText);
                 final EditText passText = findViewById(R.id.passText);
                 localInstance = ProgramSingletonController.getCurrInstance();
+                //Grab user input
                 String user = usernameText.getText().toString();
                 String pass = passText.getText().toString();
+
                 successFlag = localInstance.logIn(user,pass, getApplicationContext());
                 Log.d("AsyncLogIn", "doInBackground: SuccessFlag " + successFlag);
-                //Clear the information so it is not stored inside the app.
+                //Clear the information so it is not stored inside the app for longer than it has to.
                 pass = "";
                 user = "";
-                if(successFlag){
-                    SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
-                    prefs.edit()
-                            .putBoolean("isLoggedIn", true)
-                            .apply();
-                    String t = prefs.getString("bearerToken", "");
-                    Log.d("AsyncLogin", "onPostExecute: " + t);
-                }
-                else{
-                    Log.d("UIERROR", "doInBackground: failed login from ui");
-                }
+
                return null;
             }
 
             @Override
             protected void onPostExecute(Void aVoid) {
                 toggleLoadSpinner();
-                if(successFlag)
+                if (successFlag) {
+                    prefs.edit()
+                            .putBoolean("isLoggedIn", true)
+                            .apply();
                     startNextActivity();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Was not able to login. Please try again",Toast.LENGTH_LONG).show();
+                }
             }
     }
+
+    //Toggles the loading spinner on or off depending on its state
     private void toggleLoadSpinner() {
         if(loginProgress.getVisibility() == View.GONE)
             loginProgress.setVisibility(View.VISIBLE);

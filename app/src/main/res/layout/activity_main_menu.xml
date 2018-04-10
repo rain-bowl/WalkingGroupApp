@@ -6,126 +6,89 @@
     android:layout_height="match_parent"
     tools:context="com.example.nurdan.lavaproject.MainMenuActivity">
 
+   <android.support.v7.widget.Toolbar
+        android:id="@+id/mainMenuToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:minHeight="65dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/appTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="80dp"
-        android:layout_marginLeft="80dp"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="45dp"
         android:text="@string/walking_group_project"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/mainMenuToolbar" />
 
     <Button
         android:id="@+id/mapbtn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="118dp"
-        android:layout_marginLeft="118dp"
-        android:layout_marginRight="118dp"
         android:layout_marginStart="118dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="120dp"
         android:text="@string/title_activity_map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/mainMenuToolbar" />
 
     <Button
         android:id="@+id/usrMonitor"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:layout_marginEnd="118dp"
-        android:layout_marginLeft="118dp"
-        android:layout_marginRight="118dp"
         android:layout_marginStart="118dp"
         android:layout_marginTop="16dp"
         android:text="@string/usrMonitors"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapbtn" />
-
-    <Button
-        android:id="@+id/inboxAccessBtn"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="118dp"
-        android:layout_marginLeft="118dp"
-        android:layout_marginRight="118dp"
-        android:layout_marginStart="118dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/messageInboxBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usrMonitor" />
+        app:layout_constraintTop_toBottomOf="@+id/mngGroups" />
 
     <Button
         android:id="@+id/mngGroups"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="118dp"
-        android:layout_marginLeft="118dp"
-        android:layout_marginRight="118dp"
         android:layout_marginStart="118dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="16dp"
         android:text="@string/mngGroups"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inboxAccessBtn" />
-
-    <Button
-        android:id="@+id/profileBtn"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="117dp"
-        android:layout_marginLeft="117dp"
-        android:layout_marginStart="117dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/profileBtnTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mngGroups"
-        app:layout_constraintVertical_chainStyle="spread_inside" />
+        app:layout_constraintTop_toBottomOf="@+id/mapbtn" />
 
     <Button
         android:id="@+id/gotoStore"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="117dp"
-        android:layout_marginLeft="117dp"
         android:layout_marginStart="117dp"
         android:layout_marginTop="16dp"
         android:text="@string/store"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/usrMonitor" />
 
     <Button
         android:id="@+id/panicBtn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="117dp"
-        android:layout_marginLeft="117dp"
         android:layout_marginStart="117dp"
         android:layout_marginTop="16dp"
         android:text="@string/panicBtn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gotoStore" />
 
-    <Button
-        android:id="@+id/usrLogout"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="117dp"
-        android:layout_marginLeft="117dp"
-        android:layout_marginStart="117dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/logout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/panicBtn" />
 </android.support.constraint.ConstraintLayout>
