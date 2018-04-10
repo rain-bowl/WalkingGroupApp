@@ -583,6 +583,16 @@ public class ProgramSingletonController {
     }
 
     /**
+     * Retrieves all pending requests for the logged in user. This could be done from the user profile retreived
+     * from the server during login but if we retrieve them this way, their display is easier to update.
+     * @return  Json array containing the pending permissions
+     */
+    public JSONArray getPendingRequests(){
+        UserPermissions currInstance = new UserPermissions();
+        return currInstance.getPendingRequests(userID, bearerToken);
+    }
+
+    /**
      * Grab the message associated with a request
      * @param messageId         id of request
      * @return                  The message in string format
@@ -601,4 +611,5 @@ public class ProgramSingletonController {
         UserPermissions currInstance = new UserPermissions();
         currInstance.respondToRequest(permId, bearerToken, choice);
     }
+
 }
