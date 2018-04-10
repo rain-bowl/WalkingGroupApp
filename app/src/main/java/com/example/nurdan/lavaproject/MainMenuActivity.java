@@ -123,7 +123,8 @@ public class MainMenuActivity extends AppCompatActivity {
     public void setupToolbar(){
         Toolbar mainMenuToolbar = findViewById(R.id.mainMenuToolbar);
         setSupportActionBar(mainMenuToolbar);
-        getSupportActionBar().setTitle(null);
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setTitle(null);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
