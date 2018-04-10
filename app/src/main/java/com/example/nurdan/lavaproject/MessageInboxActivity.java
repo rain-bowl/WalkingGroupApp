@@ -41,6 +41,7 @@ public class MessageInboxActivity extends AppCompatActivity {
     private void setUpToolbar(){
         Toolbar inboxToolBar = (Toolbar) findViewById(R.id.userMessageInboxToolbar);
         setSupportActionBar(inboxToolBar);
+        getSupportActionBar().setTitle(null);
     }
 
     @Override

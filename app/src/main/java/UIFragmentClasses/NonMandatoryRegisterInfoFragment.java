@@ -36,8 +36,7 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
     EditText emergencyInstrctuctions = view.findViewById(R.id.userEmergencyInput);
     Button newUserBtn = view.findViewById(R.id.registerBtn);
 
-    //Listeners
-
+    //Listeners for all inputs
         birthYearInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -185,7 +184,7 @@ public class NonMandatoryRegisterInfoFragment extends Fragment{
         newUserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Boolean flag;
+                //Add the inputs to the host activity
                 ((RegisterActivity)getActivity()).addJson("birthYear", birthYear);
                 ((RegisterActivity)getActivity()).addJson("birthMonth", birthMonth);
                 ((RegisterActivity)getActivity()).addJson("address", address);

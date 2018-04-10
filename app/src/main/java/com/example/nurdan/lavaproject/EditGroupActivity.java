@@ -25,13 +25,16 @@ import java.util.ArrayList;
 import ApplicationLogic.ProgramSingletonController;
 import ApplicationLogic.User;
 
+/**
+ * This activity edits the information for a particular group which is selected by the logged in user
+ */
 public class EditGroupActivity extends AppCompatActivity {
     ListView currMembers;
     ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
-    int currGroupId;
-    JSONObject currGroupDetails = new JSONObject();
-    String currGroupName;
-    String newGroupName;
+    int currGroupId;                                    //Id of the current group
+    JSONObject currGroupDetails = new JSONObject();     //Will hold group details
+    String currGroupName;           //Group name
+    String newGroupName;            //Possibly hold the new group name if one is provided
     JSONArray latArr = new JSONArray();
     JSONArray lngArr = new JSONArray();
     ArrayList<String> membersNameList = new ArrayList<>();
@@ -65,6 +68,7 @@ public class EditGroupActivity extends AppCompatActivity {
         ListClick(currMembers);
     }
 
+    //Async method to retrieve the group details. Sets the appropriate fields upon completion
     private class editGroup extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void ... voids) {
@@ -74,6 +78,7 @@ public class EditGroupActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void param) {
             try {
+                //Set fields
                 currGroupName = currGroupDetails.getString("groupDescription");
                 latArr = currGroupDetails.getJSONArray("routeLatArray");
                 lngArr = currGroupDetails.getJSONArray("routeLngArray");
@@ -83,10 +88,12 @@ public class EditGroupActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            //Set textview to group name
             TextView edName = findViewById(R.id.editName);
             edName.setText(currGroupName);
         }
     }
+
     //Retrieves the members of a group
     private class getMembers extends AsyncTask<Void,Void,Void> {
         JSONArray original;
@@ -183,10 +190,9 @@ public class EditGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 newGroupName = newName.getText().toString();
-                if (newGroupName == currGroupName) {
+                if (newGroupName.equals(currGroupName)) {
                     startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));
                 }
-                Toast.makeText(getApplicationContext(), "newGroupName: " + newGroupName, Toast.LENGTH_LONG).show();
                 submitEdit test3 = new submitEdit();
                 test3.execute();
                 startActivity(new Intent(getApplicationContext(), MapSecondActivity.class));

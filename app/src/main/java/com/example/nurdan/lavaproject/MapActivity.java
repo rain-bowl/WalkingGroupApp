@@ -34,7 +34,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import ApplicationLogic.ProgramSingletonController;
 
@@ -65,6 +70,7 @@ public class MapActivity extends FragmentActivity implements
     ArrayList<String> monitoredNames = new ArrayList<>();
     ArrayList<LatLng> monitoredLatLng = new ArrayList<>();
     ArrayList<String> monitoredTime = new ArrayList<>();
+    ArrayList<String> monitorPic = new ArrayList<>();
 
     private ProgramSingletonController localInstance = ProgramSingletonController.getCurrInstance();
     private boolean arrivalFlag = true;
@@ -250,12 +256,20 @@ public class MapActivity extends FragmentActivity implements
             destinationCoord = markerTag;
             Log.d("onMarkerClick", "destinationCoord: " + destinationCoord);
         }
+        else if (markerTag == mDefaultLocation){
+            Toast.makeText(this, "To refresh date of marker, click the info window.", Toast.LENGTH_SHORT).show();
+        }
         return false;
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this, "To join group, click 'View Groups'.", Toast.LENGTH_LONG).show();
+        if (marker.getTag() != mDefaultLocation){
+            Toast.makeText(this, "To join group, click 'View Groups'.", Toast.LENGTH_LONG).show();
+        }
+        mMap.clear();
+        createGroupMarkers();
+        createMonitorMarkers();
     }
 
     // setgps for curr user, get gps for monitored users
@@ -284,6 +298,14 @@ public class MapActivity extends FragmentActivity implements
                         lng = childJSONObject.getJSONObject("lastGpsLocation").getDouble("lng");
                         monitoredLatLng.add(new LatLng(lat, lng));
                         monitoredTime.add(childJSONObject.getJSONObject("lastGpsLocation").getString("timestamp"));
+
+                        if (childJSONObject.getString("customJson") != null) {
+                            monitorPic.add(childJSONObject.getString("customJson"));
+                        }
+                        else {
+                            monitorPic.add(null);
+                        }
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -303,8 +325,7 @@ public class MapActivity extends FragmentActivity implements
                 currGPS = localInstance.getLastGpsLocation(localInstance.getUserID(), getApplicationContext());
                 Log.d("test getLastGpsLocation", "curr gps of " + localInstance.getUserID() + ": " + currGPS.toString());
             }
-            if(mLastKnownLocation == null)
-            {
+            if(mLastKnownLocation == null) {
                 Log.d("setLastGpsLocation", "mLastKnownLocation is null");
             }
             return null;
@@ -352,16 +373,13 @@ public class MapActivity extends FragmentActivity implements
                                 latArray.add(0.0);
                                 lngArray.add(0.0);
                             }
-
-                        /*    LatLng end = new LatLng(childJSONObject.getJSONArray("routeLatArray").getDouble(1), childJSONObject.getJSONArray("routeLngArray").getDouble(1));
-                            Log.d("get destination point", "latlng end: " + end);
-                            groupEndPoints.add(end);*/
                         }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+
             Log.d("onpost: test name: ", nameList.toString());
             Log.d("onpost: lat points: ", latArray.toString());
             Log.d("onpost: lng points: ", lngArray.toString());
@@ -380,9 +398,24 @@ public class MapActivity extends FragmentActivity implements
         }
     }
 
+    private long convertTimeStamp(String timestamp){
+        long millis;
+        long currmill;
+        long res = 0;
+        try {
+            millis = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.CANADA).parse(timestamp).getTime();
+            currmill = new Date().getTime();
+            res = currmill - millis;
+            res = res/1000;
+            Log.d(TAG, "time since last monitor update: " + res);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
     private void createGroupMarkers(){
         BitmapDescriptor colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
-
         for (int i = 0; i < nameList.size() * 2; i += 2){
             try {
                 groupStartPoints.add(new LatLng(latArray.get(i), lngArray.get(i)));
@@ -401,11 +434,18 @@ public class MapActivity extends FragmentActivity implements
     }
 
     private void createMonitorMarkers(){
-        if (monitoredNames.size() != 0 && monitoredLatLng.size() != 0 && monitoredTime.size() != 0){
+        if (monitoredNames.size() != 0 && monitoredLatLng.size() != 0 && monitoredTime.size() != 0 && monitorPic.size() != 0){
             for (int i = 0; i < monitoredNames.size(); i++){
                 BitmapDescriptor colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-                makeMarker(monitoredLatLng.get(i), mDefaultLocation, "Monitoring user: " + monitoredNames.get(i), " at: " + monitoredTime.get(i), colour);
-                Log.d(TAG, "createMonitorMarkers, created for user: " + monitoredNames.get(i) + " at: " + monitoredLatLng.get(i) + " at time: " + monitoredTime.get(i));
+                if (monitorPic.get(i) != null){
+                    String image = monitorPic.get(i);
+                    Log.d(TAG, "monitor's purchases: " + image);
+                    String resourceID = "markericon" + image.charAt(image.indexOf("markericon") + 10);
+                    Log.d(TAG, "monitor image: " + resourceID);
+                    colour = BitmapDescriptorFactory.fromResource(getResources().getIdentifier(resourceID, "drawable", getPackageName()));
+                }
+                makeMarker(monitoredLatLng.get(i), mDefaultLocation, "Monitoring user: " + monitoredNames.get(i), ", " + convertTimeStamp(monitoredTime.get(i)) + " seconds ago.", colour);
+                Log.d(TAG, "createMonitorMarkers, created for user: " + monitoredNames.get(i) + " at: " + monitoredLatLng.get(i) + " at time: " + convertTimeStamp(monitoredTime.get(i)));
             }
         }
     }
@@ -415,7 +455,7 @@ public class MapActivity extends FragmentActivity implements
         option.position(start);
         option.title(markerTitle + markerName);
         option.icon(colour);
-        option.alpha(0.7f);
+        option.alpha(0.8f);
         mMap.addMarker(option).setTag(end);
     }
 

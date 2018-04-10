@@ -17,8 +17,10 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-// This class control the entire program and any interaction between UI and the application logic
-// is done through here.
+/**
+ * This is the singleton class which is central to the applictaion. It contains many fields which are used
+ * across the app as well as a front for all of the methods implemented in the other feature specific classes.
+ */
 public class ProgramSingletonController {
     private String bearerToken;
     private int userID;
@@ -80,29 +82,34 @@ public class ProgramSingletonController {
     public void setBearerToken(String token) {
         this.bearerToken = token;
     }
+
     //Returns the id of the currently logged in user
     public int getUserID(){
         return this.userID;
     }
-    //Returns the bearer token for the user
-    public String getBearerToken(){
-        return this.bearerToken;
-    }
-    public User getCurrLoggedInUser(){
-        return this.currLoggedInUser;
-    }
 
-    public User getLoggedInUserProfile(){
-        return this.currLoggedInUser;
-    }
 
-    //Creates a new user
+
+
+    /**
+     * Creates a new user based on the provided information
+     * @param jsonBody          Contains the infomration in JSON format to be sent to the server
+     * @param appContext        Context for networking library
+     * @return                  Boolean status indicatin success or failure
+     */
     public Boolean createNewUser(JSONObject jsonBody, Context appContext){
         currInstance = new AccountApiInteractions();
         return currInstance.createNewUser(jsonBody, appContext);
     }
 
-    //Logs user into their account and creates a new user instance to hold their details.
+    /**
+     * Logs a user into their account and saves their settings into shared preferences so the app can be closed
+     * and opened again
+     * @param email             user email
+     * @param password          user password
+     * @param appContext        context for library
+     * @return                  boolean status to indicate success/failure
+     */
     public Boolean logIn(String email, String password, Context appContext){
        JSONArray tempArr;
        this.currLoggedInUser = new User();
@@ -117,8 +124,10 @@ public class ProgramSingletonController {
             currInstance.getDatabaseUserProfile(email, appContext);
             this.userID = currLoggedInUser.getID();
             Log.d(TAG, "logIn: UserIDTEST " + this.userID);
+
             // Grab the group names of every group that this person is a part of
             getGroupNames(appContext);
+
             //save token in shared preferences, used to keep the user logged in.
             SharedPreferences prefs = appContext.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
             prefs.edit()
@@ -145,6 +154,12 @@ public class ProgramSingletonController {
         return currLoggedInUser.returnJsonUserInfo();
     }
 
+    /**
+     * Retrieves the user information by their id.
+     * @param id                User id
+     * @param appContext        Context for library
+     * @return                  Json object containing the information of the user
+     */
     public JSONObject getUserInfoByID(Integer id, Context appContext) {
         AccountApiInteractions currInstance = new AccountApiInteractions();
         return currInstance.getUserInfoByID(id, this.bearerToken, appContext);
@@ -513,30 +528,52 @@ public class ProgramSingletonController {
         currInstance.setLastGpsLocation(this.bearerToken, this.userID, lastKnown, appContext);
     }
 
+    /**
+     * Retreive last gps location
+     * @param UserID        Logged in user id
+     * @param appContext    Context
+     * @return              Json object containing the gps location
+     */
     public JSONObject getLastGpsLocation(int UserID, Context appContext) {
         currInstance = new AccountApiInteractions();
         return currInstance.getLastGpsLocation(this.bearerToken, UserID, appContext);
     }
 
      /*------------------Everything related to user permissions ------------------------- */
-     //Grab denied requests
+
+    /**
+     * Grab all denied requests
+     * @return  Json array containing all denied requests
+     */
     public JSONArray getDeniedRequests(){
         UserPermissions currInstance = new UserPermissions();
         return currInstance.getDeniedRequests(userID, bearerToken);
     }
 
-    //Grab accepted requests
+    /**
+     * Retrieve all accepted permissions
+     * @return  Json array containing the permissions
+     */
     public JSONArray getAcceptedRequests(){
         UserPermissions currInstance = new UserPermissions();
         return currInstance.getAcceptedRequests(userID, bearerToken);
     }
 
-    //Grab the message associated with a requests(its contents)
+    /**
+     * Grab the message associated with a request
+     * @param messageId         id of request
+     * @return                  The message in string format
+     */
     public String getPermMessage(int messageId){
         UserPermissions currInstance = new UserPermissions();
         return currInstance.getRequestMessage(messageId, bearerToken);
     }
-    //Respond to a certain request identified by its id.
+
+    /**
+     * Respond to a certain permission with the provided status
+     * @param permId    Id of permission
+     * @param choice    Response status. false for deny, true for accept
+     */
     public void respondToRequest(int permId, Boolean choice){
         UserPermissions currInstance = new UserPermissions();
         currInstance.respondToRequest(permId, bearerToken, choice);
