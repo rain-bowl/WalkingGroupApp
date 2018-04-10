@@ -102,6 +102,18 @@ public class UserPermissions {
         return null;
     }
 
+    public JSONArray getPendingRequests(int userID, String bearerToken){
+        ANRequest permRequest = AndroidNetworking.get(baseURL + "/permissions?userId=" + userID + "&statusForUser=PENDING")
+                .addHeaders("apiKey", apiKey)
+                .addHeaders("Authorization", bearerToken)
+                .build();
+
+        ANResponse<JSONArray> permResponse = permRequest.executeForJSONArray();
+        if(permResponse.isSuccess()){
+            return permResponse.getResult();
+        }
+        return null;
+    }
     /**
      * Synchronous method which retrieves the message which is attached to a particular permission. Used to display
      * this to the user.
