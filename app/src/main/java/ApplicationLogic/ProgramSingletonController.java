@@ -138,6 +138,21 @@ public class ProgramSingletonController {
         return logInStatus;
     }
 
+    public void savePurchasedItemsToPrefs() {
+        String purchasedString = "";
+        JSONObject purchasedItems = null;
+        try {
+             purchasedString = this.getUserInfo().getString("customJson");
+             purchasedItems = new JSONObject(purchasedString);
+        } catch (Exception e) {}
+
+        if(purchasedItems != null)
+            Log.d(TAG, "PURCHASED ITEMS " + purchasedItems.toString());
+        else
+
+            Log.d(TAG, "DID NOT PURCHASE " + purchasedString);
+    }
+
     //Discard bearer token on user logout.
     public void userLogout(){
         bearerToken = null;

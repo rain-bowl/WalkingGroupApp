@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:minHeight="100dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageView
         android:id="@+id/store_item_icon"
@@ -17,12 +18,14 @@
         android:layout_height="match_parent">
         <TextView
             android:id="@+id/store_item_title"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
+            android:textColor="@color/black"
             android:id="@+id/store_item_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

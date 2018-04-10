@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         loginProgress.setVisibility(GONE);
         prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
         if(prefs.getBoolean("isLoggedIn", false)){
-            startNextActivity();
+            //startNextActivity();
         }
         //Create the login buttons+listeners
         createLogInBtns();
@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 successFlag = localInstance.logIn(user,pass, getApplicationContext());
                 Log.d("AsyncLogIn", "doInBackground: SuccessFlag " + successFlag);
+                localInstance.savePurchasedItemsToPrefs();
                 //Clear the information so it is not stored inside the app for longer than it has to.
                 pass = "";
                 user = "";
