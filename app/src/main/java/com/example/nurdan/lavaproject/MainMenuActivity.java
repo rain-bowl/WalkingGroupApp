@@ -125,7 +125,7 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.mainMenuInboxItem:
+            case R.id.mailInboxMenuItem:
                 Intent inboxIntent = MessageInboxActivity.getInboxIntent(getApplicationContext());
                 startActivity(inboxIntent);
                 break;
