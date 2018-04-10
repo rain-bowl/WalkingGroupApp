@@ -23,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="50dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginRight="50dp">
 
             <Button
                 android:id="@+id/createGroupBtn"
@@ -40,11 +41,11 @@
                 android:text="@string/viewGroups" />
 
             <Button
-                android:id="@+id/monitorButton"
+                android:id="@+id/onOffBtn"
                 android:layout_width="77dp"
                 android:layout_height="55dp"
                 android:alpha="0.85"
-                android:text="@string/find_child" />
+                android:text="@string/track_on_off" />
 
             <Button
                 android:id="@+id/mapBackBtn"
@@ -54,20 +55,6 @@
                 android:alpha="0.85"
                 android:text="@string/BACK" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="94dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/onOffBtn"
-                android:layout_width="77dp"
-                android:layout_height="55dp"
-                android:alpha="0.85"
-                android:text="@string/track_on_off"
-                android:textSize="14sp" />
         </LinearLayout>
 
     </LinearLayout>

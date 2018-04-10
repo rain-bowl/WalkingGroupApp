@@ -43,7 +43,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 localInstance.setUserInfo(userProfile);
             }
             catch (Exception e){
-
+                e.printStackTrace();
             }
         }
     }

@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/messageInput"
         style="@style/Widget.AppCompat.EditText"
-        android:layout_width="343dp"
-        android:layout_height="276dp"
-        android:layout_marginBottom="12dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="@string/messageHint"
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toTopOf="@+id/sendBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sendToGrpTgl" />
 
     <ToggleButton
         android:id="@+id/sendToPrntsTgl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="37dp"
-        android:layout_marginTop="13dp"
-        android:text="ToggleButton"
+        android:layout_marginEnd="148dp"
+        android:layout_marginLeft="148dp"
+        android:layout_marginRight="148dp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="16dp"
+        android:text=""
         android:textOff="@string/noTgl"
         android:textOn="@string/yesTgl"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sendToPrntsTitle" />
 
@@ -38,24 +40,29 @@
         android:id="@+id/sendToGrpTgl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="38dp"
-        android:layout_marginStart="36dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:text="ToggleButton"
+        android:text=""
         android:textOff="@string/noTgl"
         android:textOn="@string/yesTgl"
-        app:layout_constraintBottom_toTopOf="@+id/messageInput"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendToGrpTitle"
-        app:layout_constraintVertical_bias="0.263" />
+        app:layout_constraintTop_toBottomOf="@+id/sendToGrpTitle" />
 
     <TextView
         android:id="@+id/sendToGrpTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="92dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginRight="92dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="16dp"
         android:text="@string/groupSend"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sendToPrntsTgl" />
 
@@ -63,9 +70,13 @@
         android:id="@+id/sendToPrntsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:text="@string/parentSend"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -73,9 +84,15 @@
         android:id="@+id/sendBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
-        android:layout_marginStart="148dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="129dp"
+        android:layout_marginLeft="128dp"
+        android:layout_marginRight="129dp"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="32dp"
         android:text="@string/sendBtnText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/messageInput" />
 </android.support.constraint.ConstraintLayout>
