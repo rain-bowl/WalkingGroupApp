@@ -66,6 +66,20 @@
         app:layout_constraintTop_toBottomOf="@+id/mapbtn" />
 
     <Button
+        android:id="@+id/leaderboard_btn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="117dp"
+        android:layout_marginLeft="117dp"
+        android:layout_marginRight="117dp"
+        android:layout_marginStart="117dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/leaderboard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mngGroups" />
+
+    <Button
         android:id="@+id/gotoStore"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
@@ -76,7 +90,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usrMonitor" />
+        app:layout_constraintTop_toBottomOf="@+id/leaderboard_btn" />
 
     <Button
         android:id="@+id/panicBtn"
@@ -90,5 +104,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gotoStore" />
+
+
 
 </android.support.constraint.ConstraintLayout>
