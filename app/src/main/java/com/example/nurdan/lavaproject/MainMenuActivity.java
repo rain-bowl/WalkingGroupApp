@@ -12,13 +12,19 @@ import android.view.View;
 import android.widget.Button;
 import android.support.v7.widget.Toolbar;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
+
 import ApplicationLogic.ProgramSingletonController;
 import UIFragmentClasses.PanicMessageFragment;
 
 
 // Class simply creates and contains listeners to help user navigate the application.
 public class MainMenuActivity extends AppCompatActivity {
-    private ProgramSingletonController localInstance;
+    private ProgramSingletonController localInstance = ProgramSingletonController.getCurrInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +32,19 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         setupToolbar();
         createBtns();
+
+        //Load user profile if it is null indicating that the user has closed the app and opened it again.
+        SharedPreferences userInfo = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+        if(userInfo.getBoolean("isLoggedIn", false)){
+            String userProfileString = userInfo.getString("userProfile", null);
+            try {
+                JSONObject userProfile = new JSONObject(userProfileString);
+                localInstance.setUserInfo(userProfile);
+            }
+            catch (Exception e){
+
+            }
+        }
     }
 
 
@@ -119,15 +138,17 @@ public class MainMenuActivity extends AppCompatActivity {
                 ProgramSingletonController currInstence = ProgramSingletonController.getCurrInstance();
                 currInstence.userLogout();
 
-                // reset login credentials
+                // reset login credentials upon logging out
                 SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
                 prefs.edit()
+                        .putBoolean("isLoggedIn", false)
                         .putString("bearerToken", "")
+                        .putString("userProfile" , "")
                         .putInt("userID", -1)
                         .apply();
 
-                Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);// New activity
-                startActivity(intent);
+                Intent loginIntent = LoginActivity.loginActIntent(getApplicationContext());
+                startActivity(loginIntent);
                 finish();
                 break;
         }

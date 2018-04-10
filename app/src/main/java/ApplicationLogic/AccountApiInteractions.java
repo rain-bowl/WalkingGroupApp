@@ -1,5 +1,6 @@
 package ApplicationLogic;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
 
@@ -107,14 +108,10 @@ public class AccountApiInteractions {
                 Log.d(TAG, "userLogIn: Response Good " + responseListenerANResponse.getOkHttpResponse().code());
                 bearerToken = responseListenerANResponse.getOkHttpResponse().header("Authorization");
                 return true;
-            } else {
-                Log.d(TAG, "userLogIn: Response Not Good " + responseListenerANResponse.getOkHttpResponse().code());
-                return false;
             }
-        } else {
-            Log.d(TAG, "userLogIn: Response Error" + responseListenerANResponse.getError());
-            return false;
         }
+        //Return false if log in was unsuccessful
+        return false;
     }
 
     /**
@@ -260,6 +257,11 @@ public class AccountApiInteractions {
                 e.printStackTrace();
             }
             currInstance.setUserInfo(jsonServerResponse);
+            //Store user profile in shared preferences
+            SharedPreferences userData = currContext.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+            userData.edit()
+                    .putString("userProfile", jsonServerResponse.toString())
+                    .apply();
         }
     }
 

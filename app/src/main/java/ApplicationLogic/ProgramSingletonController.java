@@ -88,10 +88,7 @@ public class ProgramSingletonController {
         return this.userID;
     }
 
-    //Returns the bearer token for the user
-    public String getBearerToken(){
-        return this.bearerToken;
-    }
+
 
 
     /**

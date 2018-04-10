@@ -12,6 +12,6 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/mainMenuLogoutItem"
-        android:title="Item"
+        android:title="@string/logout"
         app:showAsAction="never" />
 </menu>
