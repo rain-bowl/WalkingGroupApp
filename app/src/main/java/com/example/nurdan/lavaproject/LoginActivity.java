@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 successFlag = localInstance.logIn(user,pass, getApplicationContext());
                 Log.d("AsyncLogIn", "doInBackground: SuccessFlag " + successFlag);
-                localInstance.savePurchasedItemsToPrefs();
+                localInstance.savePurchasedItemsToPrefs(LoginActivity.this);
                 //Clear the information so it is not stored inside the app for longer than it has to.
                 pass = "";
                 user = "";

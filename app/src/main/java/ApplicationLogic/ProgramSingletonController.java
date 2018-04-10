@@ -138,19 +138,19 @@ public class ProgramSingletonController {
         return logInStatus;
     }
 
-    public void savePurchasedItemsToPrefs() {
+    public void savePurchasedItemsToPrefs(Context appContext) {
         String purchasedString = "";
-        JSONObject purchasedItems = null;
+        JSONObject purchasedItems = new JSONObject();
         try {
              purchasedString = this.getUserInfo().getString("customJson");
-             purchasedItems = new JSONObject(purchasedString);
         } catch (Exception e) {}
 
-        if(purchasedItems != null)
-            Log.d(TAG, "PURCHASED ITEMS " + purchasedItems.toString());
-        else
-
-            Log.d(TAG, "DID NOT PURCHASE " + purchasedString);
+        if(purchasedString.toLowerCase().contains(("Dark Blue Theme").toLowerCase())) {
+            SharedPreferences prefs = appContext.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+            prefs.edit()
+                    .putString("currentTheme", "Dark Blue Theme")
+                    .apply();
+        }
     }
 
     //Discard bearer token on user logout.
