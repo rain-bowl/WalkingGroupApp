@@ -52,8 +52,8 @@ public class UserMonitorActivity extends AppCompatActivity {
     //Listener for different buttons in toolbar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        ListView listMonitorThem = (ListView) findViewById(R.id.usersMonitoredView);
-        ListView listMonitorMe = (ListView) findViewById(R.id.usersWhoMonitoreYouView);
+        ListView listMonitorThem = findViewById(R.id.usersMonitoredView);
+        ListView listMonitorMe = findViewById(R.id.usersWhoMonitoreYouView);
         Integer checkedMonitorThem = listMonitorThem.getCheckedItemPosition();
         Integer checkedMonitorMe = listMonitorMe.getCheckedItemPosition();
         switch (item.getItemId()) {

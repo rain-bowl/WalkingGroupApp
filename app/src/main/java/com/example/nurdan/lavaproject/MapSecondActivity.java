@@ -372,7 +372,9 @@ public class MapSecondActivity extends AppCompatActivity{
             public void onClick(View view) {
                 leaderChecked.clear();
                 memberChecked.clear();
-                startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+
+                // can safely finish activity since there is no direct way to get to it
+                finish();
             }
         });
     }
