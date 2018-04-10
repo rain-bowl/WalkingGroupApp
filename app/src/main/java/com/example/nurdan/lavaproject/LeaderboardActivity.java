@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,6 +25,9 @@ public class LeaderboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
+        getUsers test = new getUsers();
+        test.execute();
+        Log.d("LeaderboardActivity", "list of all users: " + userlist);
 
         makeBackBtn();
     }
