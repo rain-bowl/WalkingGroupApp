@@ -438,10 +438,9 @@ public class MapActivity extends FragmentActivity implements
                 BitmapDescriptor colour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
                 if (monitorPic.get(i) != null){
                     String image = monitorPic.get(i);
-                    Log.d(TAG, "monitor image: " + image);
+                    Log.d(TAG, "monitor's purchases: " + image);
                     String resourceID = "markericon" + image.charAt(image.indexOf("markericon") + 10);
                     Log.d(TAG, "monitor image: " + resourceID);
-
                     colour = BitmapDescriptorFactory.fromResource(getResources().getIdentifier(resourceID, "drawable", getPackageName()));
                 }
                 makeMarker(monitoredLatLng.get(i), mDefaultLocation, "Monitoring user: " + monitoredNames.get(i), ", " + convertTimeStamp(monitoredTime.get(i)) + " seconds ago.", colour);
@@ -455,7 +454,7 @@ public class MapActivity extends FragmentActivity implements
         option.position(start);
         option.title(markerTitle + markerName);
         option.icon(colour);
-        option.alpha(0.9f);
+        option.alpha(0.8f);
         mMap.addMarker(option).setTag(end);
     }
 
