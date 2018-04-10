@@ -26,8 +26,8 @@ public class LeaderboardActivity extends AppCompatActivity {
     private ProgramSingletonController currInstance = ProgramSingletonController.getCurrInstance();
     private JSONArray userlist;
     private int leaderboardSize;
-    private ArrayList<LeaderboardMember> userAccount;
-    private ArrayList<String> userNames;
+    private ArrayList<LeaderboardMember> userAccount = new ArrayList<>();
+    private ArrayList<String> userNames = new ArrayList<>();
     private ListView leaderboardDisplay;
 
     @Override
@@ -50,11 +50,11 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void v) {
-            if(userlist.length() < 50){
+            if(userlist.length() < 100){
                 leaderboardSize = userlist.length();
             }
             else{
-                leaderboardSize = 50;
+                leaderboardSize = 100;
             }
             try{
                 //Iterate through all users to retrieve their information
@@ -62,7 +62,11 @@ public class LeaderboardActivity extends AppCompatActivity {
                     JSONObject memberJSON = userlist.getJSONObject(i);
                     //Create a new member and populate fields
                     LeaderboardMember member = new LeaderboardMember();
-                    member.setFirstName(memberJSON.getString("name"));
+                    String[] nameParts = memberJSON.getString("name").split("\\s");
+                    member.setFirstName(nameParts[0]);
+                    if (nameParts.length == 2){
+                        member.setLastName(nameParts[1]);
+                    }
                     member.setUserPoints(memberJSON.getInt("totalPointsEarned"));
                     //Add to the user list
                     userAccount.add(member);
@@ -84,8 +88,16 @@ public class LeaderboardActivity extends AppCompatActivity {
                return Integer.valueOf(o1.getUserPoints()).compareTo(Integer.valueOf(o2.getUserPoints()));
             }
         });
+
+        Collections.reverse(userAccount);
+
         for(int i = 0; i < userAccount.size(); i++){
-            userNames.add(userAccount.get(i).getFirstName());
+            String listing = "#" + (i+1) + "\n     " + userAccount.get(i).getFirstName();
+            if (userAccount.get(i).getLastName() != null) {
+                listing += " " + userAccount.get(i).getLastName().charAt(0);
+            }
+            listing += "\n     " + userAccount.get(i).getUserPoints() + " points";
+            userNames.add(listing);
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, userNames);
         list.setAdapter(adapter);
