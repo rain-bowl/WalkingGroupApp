@@ -23,6 +23,7 @@ public class single_message extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_single_message);
 
         currSingletonInstance = ProgramSingletonController.getCurrInstance();
@@ -45,8 +46,6 @@ public class single_message extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.single_msg_back:
-                //Intent mainMenu = new Intent(single_message.this, MessageInboxActivity.class);
-                //startActivity(mainMenu);
                 finish();
                 break;
         }

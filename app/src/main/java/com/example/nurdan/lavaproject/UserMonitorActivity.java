@@ -34,6 +34,7 @@ public class UserMonitorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_user_monitor_display);
         displayProgress = findViewById(R.id.displayProgress);
         displayProgress.setVisibility(View.GONE);

@@ -22,10 +22,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // set preferred theme
-        MainMenuActivity.setPrefTheme(this);
-
         setContentView(R.layout.activity_login);
         loginProgress = findViewById(R.id.loginProgressBar);
         loginProgress.setVisibility(GONE);

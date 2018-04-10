@@ -73,6 +73,7 @@ public class MapActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainMenuActivity.setPrefTheme(this);
         setContentView(R.layout.activity_map);
         MarkerPoints = new ArrayList<>();
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
