@@ -145,14 +145,15 @@ public class StoreActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean purchased) {
             if(purchased) {
-                SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
-                prefs.edit()
-                        .putString("currentTheme", copyItem)
-                        .apply();
-
+                if(copyItem.equals("Dark Blue Theme")) {
+                    SharedPreferences prefs = getApplicationContext().getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
+                    prefs.edit()
+                            .putString("currentTheme", copyItem)
+                            .apply();
+                }
                 Toast.makeText(StoreActivity.this, "Purchased " + copyItem, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(StoreActivity.this, "Not enough points", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StoreActivity.this, "Failed to get " + copyItem, Toast.LENGTH_SHORT).show();
             }
         }
     }

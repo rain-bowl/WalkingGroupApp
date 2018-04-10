@@ -113,12 +113,10 @@ public class MainMenuActivity extends AppCompatActivity {
 
 
     public static void setPrefTheme(Context context) {
-
         SharedPreferences prefs = context.getSharedPreferences("appPrefs", Context.MODE_PRIVATE);
         String theme = prefs.getString("currentTheme", "");
         if(theme.equals("Dark Blue Theme")) {
-            context.setTheme(R.style.AppTheme_lvl1_NoActionBar);
-            Log.d("THEME", " changed theme");
+            context.setTheme(R.style.AppTheme_lvl1);
         }
     }
 
