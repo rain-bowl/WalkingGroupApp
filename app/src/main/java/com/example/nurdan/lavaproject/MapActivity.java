@@ -301,11 +301,8 @@ public class MapActivity extends FragmentActivity implements
 
                         if (childJSONObject.getString("customJson") != null) {
                             monitorPic.add(childJSONObject.getString("customJson"));
+                            Log.d(TAG, "added to monitorPic: " + childJSONObject.getString("customJson"));
                         }
-                        else {
-                            monitorPic.add(null);
-                        }
-
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -440,9 +437,11 @@ public class MapActivity extends FragmentActivity implements
                 if (monitorPic.get(i) != null){
                     String image = monitorPic.get(i);
                     Log.d(TAG, "monitor's purchases: " + image);
-                    String resourceID = "markericon" + image.charAt(image.indexOf("markericon") + 10);
-                    Log.d(TAG, "monitor image: " + resourceID);
-                    colour = BitmapDescriptorFactory.fromResource(getResources().getIdentifier(resourceID, "drawable", getPackageName()));
+                    if (!image.equals("null") && image.indexOf("Icon") != 0) {
+                        String resourceID = "markericon" + image.charAt(image.indexOf("Icon") + 5);
+                        Log.d(TAG, "monitor image: " + resourceID);
+                        colour = BitmapDescriptorFactory.fromResource(getResources().getIdentifier(resourceID, "drawable", getPackageName()));
+                    }
                 }
                 makeMarker(monitoredLatLng.get(i), mDefaultLocation, "Monitoring user: " + monitoredNames.get(i), ", " + convertTimeStamp(monitoredTime.get(i)) + " seconds ago.", colour);
                 Log.d(TAG, "createMonitorMarkers, created for user: " + monitoredNames.get(i) + " at: " + monitoredLatLng.get(i) + " at time: " + convertTimeStamp(monitoredTime.get(i)));
