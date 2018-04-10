@@ -125,7 +125,8 @@ public class LeaderboardActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+                // can safely finish activity since there is no direct way to get to it
+                finish();
             }
         });
     }

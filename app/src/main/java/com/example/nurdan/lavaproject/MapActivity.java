@@ -201,7 +201,8 @@ public class MapActivity extends FragmentActivity implements
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+                // can safely finish activity since there is no direct way to get to it
+                finish();
             }
         });
     }
