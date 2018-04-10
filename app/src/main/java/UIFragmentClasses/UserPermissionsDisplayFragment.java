@@ -79,7 +79,7 @@ public class UserPermissionsDisplayFragment extends Fragment{
     private class getAllPermissions extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... voids) {
-            JSONArray deniedPerm, acceptedPerm, pendingPerm = null;
+            JSONArray deniedPerm, acceptedPerm, pendingPerm;
             JSONObject userData;
             userData = currInstance.getUserInfo();
             try{
@@ -90,6 +90,7 @@ public class UserPermissionsDisplayFragment extends Fragment{
             }
             deniedPerm = currInstance.getDeniedRequests();
             acceptedPerm = currInstance.getAcceptedRequests();
+            pendingPerm = currInstance.getPendingRequests();
             makePermissionList(pendingPerm, getString(R.string.pendingStatus));
             makePermissionList(deniedPerm, getString(R.string.denyStatus));
             makePermissionList(acceptedPerm, getString(R.string.acptStatus));
